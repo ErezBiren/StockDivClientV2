@@ -2,11 +2,12 @@ import "./App.css";
 import ErrorNotFound from "./pages/ErrorNotFound";
 import LoginPage from "./pages/LoginPage";
 import { Routes, Route } from "react-router-dom";
+import MainLayout from "./pages/MainLayout";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<MainLayout />} />
       <Route path="/overview" element={<></>} />
       <Route path="/ticker/:ticker" element={<></>} />
       <Route path="/yearlyPaymentMatrix" element={<></>} />
