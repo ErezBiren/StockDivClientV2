@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import LogoImage from "../assets/logo.png";
 
 export default function LoginPage() {
   const [isNewUser, setIsNewUser] = useState(false);
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    if (isNewUser) {
+      //register
+    } else {
+      //login
+    }
+  };
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
@@ -13,7 +23,11 @@ export default function LoginPage() {
             <h1 className="text-xs font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Your portfolio. Your income.
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              action="#"
+              onSubmit={handleSubmit}
+            >
               <div>
                 <label
                   htmlFor="email"
