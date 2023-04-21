@@ -44,6 +44,36 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getDiversity: builder.query({
+      query: (selectedPortfolio) => ({
+        url: `portfolio/${selectedPortfolio}/diversity`,
+        method: "GET",
+      }),
+    }),
+    getPerformance: builder.query({
+      query: (selectedPortfolio) => ({
+        url: `portfolio/${selectedPortfolio}/performance`,
+        method: "GET",
+      }),
+    }),
+    getTimeline: builder.query({
+      query: (selectedPortfolio) => ({
+        url: `portfolio/${selectedPortfolio}/timeline`,
+        method: "GET",
+      }),
+    }),
+    getHighestIncome: builder.query({
+      query: (selectedPortfolio) => ({
+        url: `portfolio/${selectedPortfolio}/highestIncome`,
+        method: "GET",
+      }),
+    }),
+    getNews: builder.query({
+      query: (selectedPortfolio) => ({
+        url: `portfolio/${selectedPortfolio}/news`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
