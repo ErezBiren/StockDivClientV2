@@ -14,6 +14,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    setUserSettings: builder.mutation({
+      query: (editName) => ({
+        url: "user/settings",
+        method: "PATCH",
+        body: { name: editName },
+      }),
+    }),
     getUserMessages: builder.query({
       query: () => ({
         url: "user/name",
@@ -27,4 +34,5 @@ export const {
   useGetUserNameQuery,
   useLazyGetUserSettingsQuery,
   useGetUserMessagesQuery,
+  useSetUserSettingsMutation
 } = usersApiSlice;

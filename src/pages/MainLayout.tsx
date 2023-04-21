@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
+import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
+import { selectCurrentToken } from "../features/auth/authSlice";
 
 function MainLayout() {
-  const { data : userName } = useGetUserNameQuery({});
+  const { data: userName } = useGetUserNameQuery({});
+  const { data: portfolios } = useGetPortfoliosQuery({});
+
+
+
 
   //     const [importFileContent, setImportFileContent] = useState('');
   //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
@@ -122,21 +128,26 @@ function MainLayout() {
   //       });
   //   };
 
-  const store = { portfolios: [], token: "X" };
-  
+  const handleGoToDonate = () => {
+    window.open("https://www.paypal.me/StockDiv", "_blank");
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <header
         className="bg-white shadow-lg"
-        style={{ display: store.token !== "" ? "block" : "none" }}
+        style={{ display: selectCurrentToken !== "" ? "block" : "none" }}
       >
         <div className="container flex justify-between items-center mx-auto py-2">
           <div className="flex items-center">
-            <button className="bg-green-500 text-white rounded px-2 py-1 mr-2">
+            <button
+              className="bg-green-500 text-white rounded px-2 py-1 mr-2"
+              onClick={handleGoToDonate}
+            >
               Donate
             </button>
             <span className="text-indigo font-bold">{`Hello ${userName}`}</span>
-            {store.portfolios.length > 0 && (
+            {portfolios?.length > 0 && (
               <>
                 <button className="text-blue-500 cursor-pointer ml-2">
                   <svg

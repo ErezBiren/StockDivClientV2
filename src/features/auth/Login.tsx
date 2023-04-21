@@ -48,7 +48,6 @@ export default function Login() {
           confirmationCode: codeSent ? confirmationCode : undefined,
         }).unwrap();
 
-        console.log(data.token);
         dispatch(setCredentials({ user: email, accessToken: data.token }));
         setEmail("");
         setPassword("");
