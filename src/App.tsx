@@ -2,7 +2,7 @@ import "./App.css";
 import ErrorNotFound from "./pages/ErrorNotFound";
 import Login from "./features/auth/Login";
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "./features/mainLayout/MainLayout";
+import MainLayout from "./pages/MainLayout";
 
 function App() {
   return (

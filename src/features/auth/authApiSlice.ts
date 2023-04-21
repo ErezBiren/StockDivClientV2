@@ -7,8 +7,7 @@ export interface Credentials {
 }
 
 export const authApiSlice = apiSlice.injectEndpoints({
-  endpoints: (builder: any) => ({
-    // todo: fix any
+  endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials: Credentials) => ({
         url: "user/login",
@@ -16,13 +15,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
-    getUserName: builder.query({
-      query: () => ({
-        url: "user/name",
-        method: "GET",
-      }),
-    }),
   }),
 });
 
-export const { useLoginMutation, useGetUserNameQuery } = authApiSlice;
+export const { useLoginMutation } = authApiSlice;

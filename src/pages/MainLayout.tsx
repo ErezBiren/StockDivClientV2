@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
-import { useGetUserNameQuery } from "../auth/authApiSlice";
+import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 
 function MainLayout() {
-  const { data, isSuccess } = useGetUserNameQuery({});
-
-  if (isSuccess) {
-    console.log(data);
-  }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    console.log(data);
-  };
+  const { data : userName } = useGetUserNameQuery({});
 
   //     const [importFileContent, setImportFileContent] = useState('');
   //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
@@ -135,8 +123,7 @@ function MainLayout() {
   //   };
 
   const store = { portfolios: [], token: "X" };
-  const userName = "erez";
-
+  
   return (
     <div className="flex flex-col h-screen">
       <header
