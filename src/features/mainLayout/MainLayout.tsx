@@ -1,7 +1,21 @@
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetUserNameQuery } from "../auth/authApiSlice";
 
 function MainLayout() {
+  const { data, isSuccess } = useGetUserNameQuery({});
+
+  if (isSuccess) {
+    console.log(data);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    console.log(data);
+  };
+
   //     const [importFileContent, setImportFileContent] = useState('');
   //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
   //     const [feedback, setFeedback] = useState('');

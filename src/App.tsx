@@ -1,13 +1,14 @@
 import "./App.css";
 import ErrorNotFound from "./pages/ErrorNotFound";
-import LoginPage from "./pages/LoginPage";
+import Login from "./features/auth/Login";
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "./pages/MainLayout";
+import MainLayout from "./features/mainLayout/MainLayout";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/mainLayout" element={<MainLayout />} />
       <Route path="/overview" element={<></>} />
       <Route path="/ticker/:ticker" element={<></>} />
       <Route path="/yearlyPaymentMatrix" element={<></>} />
