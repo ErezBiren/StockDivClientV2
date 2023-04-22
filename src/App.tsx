@@ -3,11 +3,12 @@ import ErrorNotFound from "./pages/ErrorNotFound";
 import Login from "./features/auth/Login";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./pages/MainLayout";
+import ImportPortfolio from "./components/ImportPortfolio";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<ImportPortfolio />} />
       <Route path="/mainLayout" element={<MainLayout />} />
       <Route path="/overview" element={<></>} />
       <Route path="/ticker/:ticker" element={<></>} />
