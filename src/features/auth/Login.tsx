@@ -7,9 +7,17 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 
 import { useNavigate } from "react-router-dom";
+import {
+  showAPIError,
+  showNotification,
+  validateEmail,
+} from "../../utils/utils";
+import { useForgotPasswordMutation } from "../users/usersApiSlice";
 
 export default function Login() {
-  const [login, { isLoading }] = useLoginMutation();
+  const [login] = useLoginMutation();
+  const [forgotPassword] = useForgotPasswordMutation();
+
   const dispatch = useDispatch();
 
   const [isNewUser, setIsNewUser] = useState(false);
@@ -20,7 +28,6 @@ export default function Login() {
   const [isRePwd, setIsRePwd] = useState(true);
   const [email, setEmail] = useState<string>();
   //   const [refRePassword, setRefRePassword] = useState<QInput | null>(null);
-  const refEmail = useRef();
   const [newUser, setNewUser] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState("");
@@ -28,6 +35,7 @@ export default function Login() {
   const [disableLetMeIn, setDisableLetMeIn] = useState(false);
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
   const confirmRef = useRef();
+  const emailRef = useRef(null);
 
   const [store, setStore] = useState({});
 
@@ -99,6 +107,57 @@ export default function Login() {
     }
   };
 
+  const handleForgotPassword = () => {
+    if (!validateEmail(email)) {
+      showNotification("Invalid email");
+      emailRef?.current?.focus();
+    } else {
+      processForgotPassword("xxx");
+    }
+  };
+
+  const processForgotPassword = async (password: string) => {
+    setDisableLetMeIn(true);
+
+    const data = await forgotPassword({
+      email: email?.toLowerCase(),
+      password,
+      confirmationCode: codeSent ? confirmationCode : undefined,
+    })
+      .unwrap()
+      .then((response) => {
+        console.log(111);
+        console.log(response);
+
+        // if (response.data.result) {
+        //   if (!this.confirmationCode) {
+        //     this.codeSent = true;
+        //     this.forgotPasswordMode = true;
+        //     setTimeout(() => {
+        //       this.confirmationCodeRef?.focus();
+        //     }, 500);
+        //   } else {
+        //     this.codeSent = false;
+        //     this.password = password;
+        //     this.forgotPasswordMode = false;
+        //     this.letMeIn();
+        //   }
+        // } else {
+        //   showNotification(
+        //     response.data.error
+        //       ? response.data.error
+        //       : "Oops, there was a problem"
+        //   );
+        // }
+      })
+      .catch((err) => {
+        showAPIError(err);
+      })
+      .finally(() => {
+        setDisableLetMeIn(false);
+      });
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -121,6 +180,7 @@ export default function Login() {
                   Your email
                 </label>
                 <input
+                  ref={emailRef}
                   type="email"
                   name="email"
                   id="email"
@@ -154,7 +214,7 @@ export default function Login() {
                     Confirm Password
                   </label>
                   <input
-                    type="confirm"
+                    type="password"
                     name="confirm"
                     id="confirm"
                     placeholder=" Confirm Password"
@@ -197,6 +257,7 @@ export default function Login() {
                   </div>
                 </div> */}
                 <a
+                  onClick={handleForgotPassword}
                   href="#"
                   className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >

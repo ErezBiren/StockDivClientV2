@@ -1,10 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
-
-export interface Credentials {
-  email: string;
-  password: string;
-  confirmationCode: string;
-}
+import { Credentials } from "../../utils/types.ts";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

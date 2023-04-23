@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
+import { Credentials } from "../../utils/types.ts";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,6 +28,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: "messages",
       }),
     }),
+    forgotPassword: builder.mutation({
+      query: (credentials: Credentials) => ({
+        url: "user/forgotPassword",
+        method: "post",
+        body: { ...credentials },
+      }),
+    }),
   }),
 });
 
@@ -34,5 +42,6 @@ export const {
   useGetUserNameQuery,
   useLazyGetUserSettingsQuery,
   useGetUserMessagesQuery,
-  useSetUserSettingsMutation
+  useSetUserSettingsMutation,
+  useForgotPasswordMutation
 } = usersApiSlice;
