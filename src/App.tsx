@@ -6,14 +6,15 @@ import MainLayout from "./pages/MainLayout";
 import ImportPortfolio from "./components/ImportPortfolio";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Overview from "./pages/Overview";
 
 function App() {
   return (
     <div>
+      <MainLayout />
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/mainLayout" element={<MainLayout />} />
-        <Route path="/overview" element={<></>} />
+        <Route path="/overview" element={<Overview />} />
         <Route path="/ticker/:ticker" element={<></>} />
         <Route path="/yearlyPaymentMatrix" element={<></>} />
         <Route path="/monthlyDividendsView/:month" element={<></>} />

@@ -81,7 +81,7 @@ export default function Login() {
           dispatch(setCredentials({ user: email, accessToken: data.token }));
           setEmail("");
           setPassword("");
-          navigate("/mainLayout");
+          navigate("/overview");
         } catch (error) {
           showAPIError(error);
         }

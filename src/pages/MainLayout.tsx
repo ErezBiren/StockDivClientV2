@@ -133,26 +133,26 @@ function MainLayout() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col">
       <header
         className="bg-white shadow-lg"
         style={{ display: selectCurrentToken !== "" ? "block" : "none" }}
       >
-        <div className="container flex justify-between items-center mx-auto py-2">
+        <div className="container flex items-center justify-between py-2 mx-auto">
           <div className="flex items-center">
             <button
-              className="bg-green-500 text-white rounded px-2 py-1 mr-2"
+              className="px-2 py-1 mr-2 text-white bg-green-500 rounded"
               onClick={handleGoToDonate}
             >
               Donate
             </button>
-            <span className="text-indigo font-bold">{`Hello ${userName}`}</span>
+            <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
             {portfolios?.length > 0 && (
               <>
-                <button className="text-blue-500 cursor-pointer ml-2">
+                <button className="ml-2 text-blue-500 cursor-pointer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 inline-block"
+                    className="inline-block w-6 h-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -166,10 +166,10 @@ function MainLayout() {
                   </svg>
                   <span className="ml-1">Settings</span>
                 </button>
-                <button className="text-blue-500 cursor-pointer ml-2">
+                <button className="ml-2 text-blue-500 cursor-pointer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 inline-block"
+                    className="inline-block w-6 h-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
