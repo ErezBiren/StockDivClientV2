@@ -2,7 +2,7 @@ import { SyntheticEvent, useRef, useState } from "react";
 import LogoImage from "../../assets/logo.png";
 import axios from "axios";
 
-import { useLoginMutation } from "./authApiSlice";
+import { useLoginMutation, useRegisterMutation } from "./authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 
@@ -19,6 +19,8 @@ import {
 
 export default function Login() {
   const [login] = useLoginMutation();
+  const [register] = useRegisterMutation();
+
   const [forgotPassword] = useForgotPasswordMutation();
 
   const dispatch = useDispatch();
@@ -37,9 +39,10 @@ export default function Login() {
   const [disableLetMeIn, setDisableLetMeIn] = useState(false);
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
 
-  const refRePassword = useRef(null);
-  const refEmail = useRef(null);
+  const rePasswordRef = useRef(null);
+  const emailRef = useRef(null);
   const refConfirmationCode = useRef(null);
+  const confirmationCodeRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -66,10 +69,11 @@ export default function Login() {
     } else if (isNewUser && password !== rePassword) {
       showNotification("Passwords do not match");
     } else {
-      if (!isNewUser) {
+      setDisableLetMeIn(true);
+      if (codeSent || !isNewUser) {
         try {
           const data = await login({
-            email: email?.toLowerCase(),
+            email: email?.toLowerCase() ?? "",
             password,
             confirmationCode: codeSent ? confirmationCode : undefined,
           }).unwrap();
@@ -79,50 +83,45 @@ export default function Login() {
           setPassword("");
           navigate("/mainLayout");
         } catch (error) {
-          console.log(error);
           showAPIError(error);
-          // todo:30:06
         }
-
-        // axios
-        //   .post(`user/${command}`, {
-        //     email: email?.toLowerCase(),
-        //     password: password,
-        //     confirmationCode: codeSent ? confirmationCode : undefined,
-        //   })
-        //   .then((response) => {
-        //     if (response.data.result || response.data.token) {
-        //       if (response.data.result) {
-        //         setCodeSent(true);
-        //         setTimeout(() => {
-        //           //confirmationCodeRef?.focus(); //field where user enter confirmation code sent via email
-        //         }, 500);
-        //       } else {
-        //         setStore((prev) => ({ ...prev, token: response.data.token }));
-        //         dispatch(
-        //           setCredentials({
-        //             user: email,
-        //             accessToken: response.data.token,
-        //           })
-        //         );
-        //       }
-        //     } else {
-        //       //   showNotification(
-        //       //     response.data.error
-        //       //       ? response.data.error
-        //       //       : 'Oops, there was a problem'
-        //       //   );
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     //showAPIError(err);
-        //     console.error(err);
-        //   })
-        //   .finally(() => {
-        //     setDisableLetMeIn(false);
-        //   });
       } else {
-        //login
+        await register({
+          email: email?.toLowerCase() ?? "",
+          password,
+          confirmationCode: codeSent ? confirmationCode : undefined,
+        })
+          .unwrap()
+          .then((response) => {
+            if (response.result || response.token) {
+              if (response.result) {
+                setCodeSent(true);
+                setTimeout(() => {
+                  confirmationCodeRef?.current?.focus();
+                }, 500);
+              } else {
+                dispatch(
+                  setCredentials({
+                    user: email,
+                    accessToken: response.data.token,
+                  })
+                );
+                //bus.emit("transactionChange");
+              }
+            } else {
+              showNotification(
+                response.data.error
+                  ? response.data.error
+                  : "Oops, there was a problem"
+              );
+            }
+          })
+          .catch((error) => {
+            showAPIError(error);
+          })
+          .finally(() => {
+            setDisableLetMeIn(false);
+          });
       }
     }
   };
@@ -130,7 +129,7 @@ export default function Login() {
   const handleForgotPassword = () => {
     if (!validateEmail(email)) {
       showNotification("Invalid email");
-      refEmail?.current?.focus();
+      emailRef?.current?.focus();
     } else {
       processForgotPassword("xxx");
     }
@@ -139,8 +138,8 @@ export default function Login() {
   const processForgotPassword = async (password: string) => {
     setDisableLetMeIn(true);
 
-    const data = await forgotPassword({
-      email: email?.toLowerCase(),
+    await forgotPassword({
+      email: email?.toLowerCase() ?? "",
       password,
       confirmationCode: codeSent ? confirmationCode : undefined,
     })
@@ -154,7 +153,7 @@ export default function Login() {
             setCodeSent(true);
             setForgotPasswordMode(true);
             setTimeout(() => {
-              refConfirmationCode?.current.focus();
+              refConfirmationCode?.current?.focus();
             }, 500);
           } else {
             setCodeSent(false);
@@ -205,7 +204,7 @@ export default function Login() {
                   Your email
                 </label>
                 <input
-                  ref={refEmail}
+                  ref={emailRef}
                   type="email"
                   name="email"
                   id="email"
@@ -239,7 +238,7 @@ export default function Login() {
                     Confirm Password
                   </label>
                   <input
-                    ref={refRePassword}
+                    ref={rePasswordRef}
                     type="password"
                     name="confirm"
                     id="confirm"
@@ -265,24 +264,6 @@ export default function Login() {
                     New User
                   </label>
                 </div>
-                {/* <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="remember"
-                      className="text-gray-500 dark:text-gray-300"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                </div> */}
                 <a
                   onClick={handleForgotPassword}
                   href="#"
@@ -291,6 +272,26 @@ export default function Login() {
                   Forgot password?
                 </a>
               </div>
+              {codeSent && (
+                <div>
+                  <label
+                    htmlFor="confirmationCode"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    A confirmation code was sent to your email
+                  </label>
+                  <input
+                    ref={confirmationCodeRef}
+                    type="text"
+                    name="confirmationCode"
+                    id="confirmationCode"
+                    placeholder=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setConfirmationCode(e.target.value)}
+                  />
+                </div>
+              )}
+
               <button
                 disabled={disableLetMeIn}
                 type="submit"
