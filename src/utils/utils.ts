@@ -35,12 +35,13 @@ export const isNumber = (str: string): boolean => {
 
 export const showAPIError = (apiError: unknown) => {
   let err = "Unknown error";
-  if (apiError instanceof AxiosError) {
-    let helper: AxiosResponse | null = null;
-    if (apiError.response) helper = apiError.response;
-    if (helper == null) err = apiError.message;
-    else err = helper.data.error;
-  } else if (apiError instanceof Error) err = apiError.message;
+
+  try {
+    err = apiError.data.error;
+  } catch (error) {
+    err = "Unknown error";
+  }
+
   showNotification(err);
 };
 

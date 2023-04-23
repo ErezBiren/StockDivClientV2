@@ -12,7 +12,10 @@ import {
   showNotification,
   validateEmail,
 } from "../../utils/utils";
-import { useForgotPasswordMutation } from "../users/usersApiSlice";
+import {
+  useForgotPasswordMutation,
+  usersApiSlice,
+} from "../users/usersApiSlice";
 
 export default function Login() {
   const [login] = useLoginMutation();
@@ -27,90 +30,107 @@ export default function Login() {
   const [isPwd, setIsPwd] = useState(true);
   const [isRePwd, setIsRePwd] = useState(true);
   const [email, setEmail] = useState<string>();
-  //   const [refRePassword, setRefRePassword] = useState<QInput | null>(null);
   const [newUser, setNewUser] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [disableLetMeIn, setDisableLetMeIn] = useState(false);
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
-  const confirmRef = useRef();
-  const emailRef = useRef(null);
 
-  const [store, setStore] = useState({});
+  const refRePassword = useRef(null);
+  const refEmail = useRef(null);
+  const refConfirmationCode = useRef(null);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    const command = "login";
-
-    axios.defaults.baseURL = "https://stockdiv.com:8445/api";
-
-    if (!isNewUser) {
-      try {
-        const data = await login({
-          email: email?.toLowerCase(),
-          password,
-          confirmationCode: codeSent ? confirmationCode : undefined,
-        }).unwrap();
-
-        dispatch(setCredentials({ user: email, accessToken: data.token }));
-        setEmail("");
-        setPassword("");
-        navigate("/mainLayout");
-      } catch (error) {
-        console.log(error);
-        // todo:30:06
-      }
-
-      // axios
-      //   .post(`user/${command}`, {
-      //     email: email?.toLowerCase(),
-      //     password: password,
-      //     confirmationCode: codeSent ? confirmationCode : undefined,
+  const letMeIn = async () => {
+    if (forgotPasswordMode) {
+      // this.$q
+      //   .dialog({
+      //     position: "bottom",
+      //     title: "Change password",
+      //     message: "Your new password",
+      //     prompt: {
+      //       model: "",
+      //       isValid: (val: string) => val.length > 7,
+      //       type: "password",
+      //     },
       //   })
-      //   .then((response) => {
-      //     if (response.data.result || response.data.token) {
-      //       if (response.data.result) {
-      //         setCodeSent(true);
-      //         setTimeout(() => {
-      //           //confirmationCodeRef?.focus(); //field where user enter confirmation code sent via email
-      //         }, 500);
-      //       } else {
-      //         setStore((prev) => ({ ...prev, token: response.data.token }));
-      //         dispatch(
-      //           setCredentials({
-      //             user: email,
-      //             accessToken: response.data.token,
-      //           })
-      //         );
-      //       }
-      //     } else {
-      //       //   showNotification(
-      //       //     response.data.error
-      //       //       ? response.data.error
-      //       //       : 'Oops, there was a problem'
-      //       //   );
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     //showAPIError(err);
-      //     console.error(err);
-      //   })
-      //   .finally(() => {
-      //     setDisableLetMeIn(false);
+      //   .onOk((newPassword: string) => {
+      //     processForgotPassword(newPassword);
       //   });
+    } else if (!validateEmail(email)) {
+      showNotification("Invalid email");
+    } else if (password.length < 8) {
+      showNotification("Password must have at least 8 characters");
+    } else if (isNewUser && password !== rePassword) {
+      showNotification("Passwords do not match");
     } else {
-      //login
+      if (!isNewUser) {
+        try {
+          const data = await login({
+            email: email?.toLowerCase(),
+            password,
+            confirmationCode: codeSent ? confirmationCode : undefined,
+          }).unwrap();
+
+          dispatch(setCredentials({ user: email, accessToken: data.token }));
+          setEmail("");
+          setPassword("");
+          navigate("/mainLayout");
+        } catch (error) {
+          console.log(error);
+          showAPIError(error);
+          // todo:30:06
+        }
+
+        // axios
+        //   .post(`user/${command}`, {
+        //     email: email?.toLowerCase(),
+        //     password: password,
+        //     confirmationCode: codeSent ? confirmationCode : undefined,
+        //   })
+        //   .then((response) => {
+        //     if (response.data.result || response.data.token) {
+        //       if (response.data.result) {
+        //         setCodeSent(true);
+        //         setTimeout(() => {
+        //           //confirmationCodeRef?.focus(); //field where user enter confirmation code sent via email
+        //         }, 500);
+        //       } else {
+        //         setStore((prev) => ({ ...prev, token: response.data.token }));
+        //         dispatch(
+        //           setCredentials({
+        //             user: email,
+        //             accessToken: response.data.token,
+        //           })
+        //         );
+        //       }
+        //     } else {
+        //       //   showNotification(
+        //       //     response.data.error
+        //       //       ? response.data.error
+        //       //       : 'Oops, there was a problem'
+        //       //   );
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     //showAPIError(err);
+        //     console.error(err);
+        //   })
+        //   .finally(() => {
+        //     setDisableLetMeIn(false);
+        //   });
+      } else {
+        //login
+      }
     }
   };
 
   const handleForgotPassword = () => {
     if (!validateEmail(email)) {
       showNotification("Invalid email");
-      emailRef?.current?.focus();
+      refEmail?.current?.focus();
     } else {
       processForgotPassword("xxx");
     }
@@ -129,26 +149,26 @@ export default function Login() {
         console.log(111);
         console.log(response);
 
-        // if (response.data.result) {
-        //   if (!this.confirmationCode) {
-        //     this.codeSent = true;
-        //     this.forgotPasswordMode = true;
-        //     setTimeout(() => {
-        //       this.confirmationCodeRef?.focus();
-        //     }, 500);
-        //   } else {
-        //     this.codeSent = false;
-        //     this.password = password;
-        //     this.forgotPasswordMode = false;
-        //     this.letMeIn();
-        //   }
-        // } else {
-        //   showNotification(
-        //     response.data.error
-        //       ? response.data.error
-        //       : "Oops, there was a problem"
-        //   );
-        // }
+        if (response.data.result) {
+          if (!confirmationCode) {
+            setCodeSent(true);
+            setForgotPasswordMode(true);
+            setTimeout(() => {
+              refConfirmationCode?.current.focus();
+            }, 500);
+          } else {
+            setCodeSent(false);
+            setPassword(password);
+            setForgotPasswordMode(false);
+            letMeIn();
+          }
+        } else {
+          showNotification(
+            response.data.error
+              ? response.data.error
+              : "Oops, there was a problem"
+          );
+        }
       })
       .catch((err) => {
         showAPIError(err);
@@ -156,6 +176,11 @@ export default function Login() {
       .finally(() => {
         setDisableLetMeIn(false);
       });
+  };
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    letMeIn();
   };
 
   return (
@@ -180,7 +205,7 @@ export default function Login() {
                   Your email
                 </label>
                 <input
-                  ref={emailRef}
+                  ref={refEmail}
                   type="email"
                   name="email"
                   id="email"
@@ -214,11 +239,13 @@ export default function Login() {
                     Confirm Password
                   </label>
                   <input
+                    ref={refRePassword}
                     type="password"
                     name="confirm"
                     id="confirm"
                     placeholder=" Confirm Password"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setRePassword(e.target.value)}
                   />
                 </div>
               )}
@@ -265,6 +292,7 @@ export default function Login() {
                 </a>
               </div>
               <button
+                disabled={disableLetMeIn}
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
