@@ -77,4 +77,13 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetPortfoliosQuery } = portFolioApiSlice;
+export const {
+  useGetPortfoliosQuery,
+  useGetMarketValueQuery,
+  useGetRoiMeterQuery,
+  useGetCurrencyQuery,
+  useGetDiversityQuery,
+  useGetDailyChangeQuery,
+  useGetInvestedQuery,
+  useGetHighestIncomeQuery,
+} = portFolioApiSlice;
