@@ -3,7 +3,7 @@ import { RootState } from "../store";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://stockdiv.com:8445/api",
-   //credentials: "include",
+  //credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {
@@ -11,7 +11,7 @@ const baseQuery = fetchBaseQuery({
     }
     return headers;
   },
-} );
+});
 
 export const apiSlice = createApi({
   baseQuery,

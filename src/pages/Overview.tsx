@@ -338,9 +338,8 @@ const Overview = () => {
         <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
 
         {next?.tickers.map((ticker: string, index: number) => (
-          <div className="flex flex-column ">
+          <div key={index} className="flex flex-column ">
             <div
-              key={index}
               className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
               title={`Next Dividend: ${formatToCurrency(
                 next?.amouts?.[index]

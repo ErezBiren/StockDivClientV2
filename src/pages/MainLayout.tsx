@@ -126,28 +126,13 @@ function MainLayout() {
   //       });
   //   };
 
-  const navigate = useNavigate();
-
-  
-  useEffect(() => {
-
-    const token = selectCurrentToken;
-  if(selectCurrentToken == null || selectCurrentToken == ""){
-    navigate('/login');
-  }
-  }, [])
-  
-
   const handleGoToDonate = () => {
     window.open("https://www.paypal.me/StockDiv", "_blank");
   };
 
   return (
     <div className="flex flex-col">
-      <header
-        className="bg-white shadow-lg"
-        style={{ display: selectCurrentToken !== "" ? "block" : "none" }}
-      >
+      <header className="bg-white shadow-lg">
         <div className="container flex items-center justify-between py-2 mx-auto">
           <div className="flex items-center">
             <button
