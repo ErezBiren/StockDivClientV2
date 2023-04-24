@@ -9,8 +9,10 @@ import {
   useGetPeriodsQuery,
   useGetMonthsProjectionQuery,
   useGetRoiMeterQuery,
+  useGetDiversityQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFilters from "../hooks/useFilters";
+import { IDiversification } from "../utils/interfaces/IDiversification";
 
 const Overview = () => {
   const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
@@ -155,6 +157,103 @@ const Overview = () => {
 
   const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
 
+  const { data: diversity, isSuccess: isSuccessDiversity } =
+    useGetDiversityQuery(selectedPortfolio);
+
+  const [diversificationChartOptions, setDiversificationChartOptions] =
+    useState<ApexOptions>({
+      tooltip: {
+        enabled: false,
+      },
+      chart: {
+        toolbar: {
+          show: true,
+        },
+      },
+      title: {
+        align: "center",
+        text: "Diversification",
+      },
+      legend: {
+        show: false,
+      },
+      colors: [
+        "#90EE90",
+        "#ADD8E6",
+        "#CBC3E3",
+        "#29008b",
+        "#89d74d",
+        "#bef0d2",
+        "#9179b3",
+        "#466c8e",
+        "#add06c",
+        "#aee104",
+        "#14f8b0",
+        "#361ae0",
+        "#f5e28f",
+        "#c45201",
+        "#f59095",
+        "#ecdc68",
+        "#6a0553",
+        "#94aa32",
+        "#a43afa",
+        "#adc181",
+      ],
+      labels: [],
+      fill: {
+        type: "gradient",
+      },
+      dataLabels: {
+        enabled: true,
+        style: {
+          colors: ["black", "black", "black"],
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        formatter: function (_val: number, opt: any) {
+          return filters.formatToPercentage(
+            opt.w.config.series[opt.seriesIndex]
+          );
+        },
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              name: {
+                show: true,
+              },
+              value: {
+                show: true,
+                formatter: function (val: string) {
+                  return filters.formatToPercentage(Number(val));
+                },
+              },
+              total: {
+                show: false,
+                showAlways: false,
+              },
+            },
+          },
+        },
+      },
+    });
+
+  const [diversificationChartSeries, setDiversificationChartSeries] =
+    useState<number[]>({});
+
+  useEffect(() => {
+    if (isSuccessDiversity) {
+      setDiversificationChartOptions((prev) => ({
+        ...prev,
+        labels: diversity.map((item: IDiversification) => item.sector),
+      }));
+      setDiversificationChartSeries(
+        diversity.map((item: IDiversification) => item.percentage)
+      );
+    }
+  }, [diversity, isSuccessDiversity]);
+
   const [roiChartOptions, setRoiChartOptions] = useState({});
   const [roiChartSeries, setRoiChartSeries] = useState<
     [{ data: number[] }, { data: number[] }]
@@ -267,7 +366,6 @@ const Overview = () => {
     if (isSuccessDividendsSoFar) {
       console.log(1);
       setRoiChartSeries((prev) => {
-
         const res: [{ data: number[] }, { data: number[] }] = [
           { data: [dividendsSoFar] },
           { ...prev[1] },
@@ -509,7 +607,6 @@ const Overview = () => {
       type: "bar",
     },
     title: {
-      show: true,
       text: "10 years projection",
       align: "center",
     },
@@ -615,7 +712,7 @@ const Overview = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (_, opt: any) {
+      formatter: function (_val: number, opt: any) {
         return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
       },
     },
@@ -860,8 +957,15 @@ const Overview = () => {
           type="bar"
           options={roiChartOptions}
           series={roiChartSeries}
-          width={500}
           height={320}
+        />
+      </div>
+      <div className="bg-[#cce7ff] shadow-lg">
+        <Chart 
+          type="donut"
+          options={diversificationChartOptions}
+          series={diversificationChartSeries}
+          height={300}
         />
       </div>
     </div>
