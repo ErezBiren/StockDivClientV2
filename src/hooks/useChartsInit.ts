@@ -1,14 +1,14 @@
 import { ApexOptions } from "apexcharts";
 
-import useFilters from "./useFilters";
+import useFormatHelper from "./useFormatHelper";
 import { useState } from "react";
 import {
   useGetInvestedQuery,
   useGetSoFarQuery,
 } from "../features/portfolio/portfolioApiSlice";
 
-const useChartsInit = ({ selectedPortfolio }) => {
-  const { filters } = useFilters();
+const useChartsInit = ({selectedPortfolio}) => {
+  const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const [portfolioMarketValue, setPortfolioMarketValue] = useState(0);
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
@@ -53,7 +53,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val: number) {
-        return filters.formatToCurrency(val);
+        return formatToCurrency(val);
       },
       offsetY: -20,
       style: {
@@ -92,7 +92,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       labels: {
         show: true,
         formatter: function (val: number) {
-          return filters.formatToCurrency(val);
+          return formatToCurrency(val);
         },
       },
     },
@@ -147,7 +147,9 @@ const useChartsInit = ({ selectedPortfolio }) => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return filters.formatToPercentage(opt.w.config.series[opt.seriesIndex]);
+        return formatToPercentage(
+          opt.w.config.series[opt.seriesIndex]
+        );
       },
     },
     plotOptions: {
@@ -161,7 +163,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
             value: {
               show: true,
               formatter: function (val: string) {
-                return filters.formatToPercentage(Number(val));
+                return formatToPercentage(Number(val));
               },
             },
             total: {
@@ -221,7 +223,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       title: {},
       labels: {
         formatter: function (val: number) {
-          return filters.formatToPercentage(val);
+          return formatToPercentage(val);
         },
       },
     },
@@ -279,7 +281,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val: number) {
-        return filters.formatToCurrency(val);
+        return formatToCurrency(val);
       },
       offsetY: -20,
       style: {
@@ -318,7 +320,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       labels: {
         show: true,
         formatter: function (val: number) {
-          return filters.formatToCurrency(val);
+          return formatToCurrency(val);
         },
       },
     },
@@ -332,7 +334,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       enabled: true,
       y: {
         formatter: function (value: number) {
-          return filters.formatToCurrency(value);
+          return formatToCurrency(value);
         },
       },
     },
@@ -351,7 +353,9 @@ const useChartsInit = ({ selectedPortfolio }) => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+        return formatToCurrency(
+          opt.w.config.series[opt.seriesIndex]
+        );
       },
     },
     plotOptions: {
@@ -371,7 +375,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
               label: "Month",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter: function (w: any) {
-                return filters.formatToCurrency(
+                return formatToCurrency(
                   w.globals.seriesTotals.reduce((a: number, b: number) => {
                     return a + b;
                   }, 0)
@@ -389,7 +393,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       enabled: true,
       y: {
         formatter: function (value: number) {
-          return filters.formatToCurrency(value);
+          return formatToCurrency(value);
         },
       },
     },
@@ -408,7 +412,9 @@ const useChartsInit = ({ selectedPortfolio }) => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+        return formatToCurrency(
+          opt.w.config.series[opt.seriesIndex]
+        );
       },
     },
     plotOptions: {
@@ -428,7 +434,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
               label: "Year",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter: function (w: any) {
-                return filters.formatToCurrency(
+                return formatToCurrency(
                   w.globals.seriesTotals.reduce((a: number, b: number) => {
                     return a + b;
                   }, 0)
@@ -446,7 +452,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       enabled: true,
       y: {
         formatter: function (value: number) {
-          return filters.formatToCurrency(value);
+          return formatToCurrency(value);
         },
       },
     },
@@ -461,8 +467,10 @@ const useChartsInit = ({ selectedPortfolio }) => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (val: number, opt: any) {
-        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+      formatter: function (_val: number, opt: any) {
+        return formatToCurrency(
+          opt.w.config.series[opt.seriesIndex]
+        );
       },
     },
     plotOptions: {
@@ -482,7 +490,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
               label: "Week",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               formatter: function (w: any) {
-                return filters.formatToCurrency(
+                return formatToCurrency(
                   w.globals.seriesTotals.reduce((a: number, b: number) => {
                     return a + b;
                   }, 0)
@@ -524,7 +532,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val: number) {
-        return filters.formatToCurrency(val);
+        return formatToCurrency(val);
       },
       offsetY: -20,
       style: {
@@ -576,7 +584,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       labels: {
         show: true,
         formatter: function (val: number) {
-          return filters.formatToCurrency(val);
+          return formatToCurrency(val);
         },
       },
     },
@@ -620,7 +628,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val: number) {
-        return filters.formatToCurrency(val);
+        return formatToCurrency(val);
       },
       offsetY: -20,
       style: {
@@ -659,7 +667,7 @@ const useChartsInit = ({ selectedPortfolio }) => {
       labels: {
         show: true,
         formatter: function (val: number) {
-          return filters.formatToCurrency(val);
+          return formatToCurrency(val);
         },
       },
     },

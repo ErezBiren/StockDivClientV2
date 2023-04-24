@@ -10,7 +10,7 @@ const initialState = {
   selectedPortfolio: '',
   portfolioCurrency: '',
   settings: {
-    dateFormat: 'YYYY-MM-DD',
+    dateFormat: 'yyyy-MM-dd',
     defaultTax: 0,
     decimalDigits: 2,
     portfolioView: {

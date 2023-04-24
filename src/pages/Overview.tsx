@@ -13,13 +13,15 @@ import {
   useGetPerformanceQuery,
   useGetNewsQuery,
 } from "../features/portfolio/portfolioApiSlice";
-import useFilters from "../hooks/useFilters";
+import useFormatHelper from "../hooks/useFormatHelper";
 import { IDiversification } from "../utils/interfaces/IDiversification";
 import { IPriceAndDate } from "../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../hooks/useChartsInit";
+import { ITickerNews } from "../utils/interfaces/ITickerNews";
 
 const Overview = () => {
-  const { filters } = useFilters();
+  const { formatToCurrency, formatToPercentage, formatToDate } =
+    useFormatHelper();
   const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
   const {
     monthsProjectionChartOptionsInit,
@@ -31,7 +33,7 @@ const Overview = () => {
     weekChartOptions,
     projectionChartOptions,
     highestIncomeChartOptions,
-  } = useChartsInit({ selectedPortfolio });
+  } = useChartsInit({ setSelectedPortfolio });
 
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");
@@ -72,7 +74,7 @@ const Overview = () => {
       },
     ]);
 
-  const { data: news } = useGetNewsQuery(selectedPortfolio);
+  const { data: newsItems } = useGetNewsQuery(selectedPortfolio);
 
   const { data: performance, isSuccess: isSuccessPerformance } =
     useGetPerformanceQuery(selectedPortfolio);
@@ -166,7 +168,7 @@ const Overview = () => {
       dataLabels: {
         enabled: true,
         formatter: function (val: number) {
-          return filters.formatToCurrency(val);
+          return formatToCurrency(val);
         },
         style: {
           fontSize: "1em",
@@ -186,7 +188,7 @@ const Overview = () => {
               formatter: () => {
                 return portfolioInvested === 0
                   ? ""
-                  : `${filters.formatToPercentage(
+                  : `${formatToPercentage(
                       (dividendsSoFar / portfolioInvested) * 100
                     )} | Approximately ${roiMeterText} to 100% ROI`;
               },
@@ -205,7 +207,7 @@ const Overview = () => {
         opacity: 1,
       },
     });
-  }, [dividendsSoFar, filters, portfolioInvested, roiMeterText]);
+  }, [dividendsSoFar, portfolioInvested, roiMeterText]);
 
   useEffect(() => {
     if (isSuccessMonthsProjection) {
@@ -235,24 +237,21 @@ const Overview = () => {
         setNextDividendInfo("Nothing in the next 31 days...");
       else if (next.days === 0)
         setNextDividendInfo(
-          `Today you should get ${filters.formatToCurrency(next.amount)}`
+          `Today you should get ${formatToCurrency(next.amount)}`
         );
       else if (next.days === 1)
         setNextDividendInfo(
-          `Tomorrow you should get ${filters.formatToCurrency(next.amount)}`
+          `Tomorrow you should get ${formatToCurrency(next.amount)}`
         );
       else
         setNextDividendInfo(
-          `In ${next.days} days you should get ${filters.formatToCurrency(
-            next.amount
-          )}`
+          `In ${next.days} days you should get ${formatToCurrency(next.amount)}`
         );
     }
-  }, [filters, isSuccessNext, next]);
+  }, [formatToCurrency, isSuccessNext, next]);
 
   useEffect(() => {
     if (isSuccessDividendsSoFar) {
-      console.log(1);
       setRoiChartSeries((prev) => {
         const res: [{ data: number[] }, { data: number[] }] = [
           { data: [dividendsSoFar] },
@@ -265,7 +264,6 @@ const Overview = () => {
 
   useEffect(() => {
     if (isSuccessPortfolioInvested) {
-      console.log(1);
       setRoiChartSeries((prev) => {
         const res: [{ data: number[] }, { data: number[] }] = [
           { ...prev[0] },
@@ -318,6 +316,10 @@ const Overview = () => {
     setShowReinvest((prev) => !prev);
   };
 
+  const gotoNews = (url: string) => {
+    window.open(url, "_blank");
+  };
+
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="bg-[#cce7ff] shadow-lg">
@@ -331,7 +333,7 @@ const Overview = () => {
       </div>
       <div className="bg-[#cce7ff] shadow-lg">
         <div className="justify-center text-h6 q-mt-sm row no-wrap">
-          Dividends so far: {filters.formatToCurrency(dividendsSoFar)}
+          Dividends so far: {formatToCurrency(dividendsSoFar)}
         </div>
         <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
 
@@ -340,7 +342,7 @@ const Overview = () => {
             <div
               key={index}
               className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
-              title={`Next Dividend: ${filters.formatToCurrency(
+              title={`Next Dividend: ${formatToCurrency(
                 next?.amouts?.[index]
               )}`}
             >
@@ -435,7 +437,19 @@ const Overview = () => {
         />
       </div>
       <div className="bg-[#cce7ff] shadow-lg">
-        <div className="justify-center text-h6">News</div>
+        <span className="justify-center text-xl font-body">News</span>
+        {newsItems?.map((newsItem: ITickerNews, index: number) => (
+          <div
+            key={index}
+            className="py-2 px-2 border-gray-300 cursor-pointer border-b-[1px] hover:bg-gray-300"
+            onClick={() => gotoNews(newsItem.link)}
+          >
+            <div className="text-xs text-gray-800">
+              {formatToDate(newsItem.date.substring(0, 10))}
+            </div>
+            <div className="text-xs text-gray-500">{newsItem.title}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
