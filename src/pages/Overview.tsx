@@ -5,6 +5,8 @@ import {
   useGetMarketValueQuery,
   useGetInvestedQuery,
   useGetSoFarQuery,
+  useGetNextQuery,
+  useGetPeriodsQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFilters from "../hooks/useFilters";
 
@@ -14,11 +16,30 @@ const Overview = () => {
   const [portfolioInvested, setPortfolioInvested] = useState(1);
   const [dividendsSoFar, setDividendsSoFar] = useState(1);
   const [showReinvest, setShowReinvest] = useState(false);
-  const nextDividendInfo = "XXX";
+  const [nextDividendInfo, setNextDividendInfo] = useState("");
 
   const { filters } = useFilters();
 
   const [portfolioChartSeries, setPortfolioChartSeries] =
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0],
+      },
+    ]);
+
+  const [yearlyChartSeries, setYearlyChartSeries] =
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0],
+      },
+    ]);
+  const [monthlyChartSeries, setMonthlyChartSeries] =
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0],
+      },
+    ]);
+  const [weeklyChartSeries, setWeeklyChartSeries] =
     useState<ApexAxisChartSeries>([
       {
         data: [0, 0, 0, 0],
@@ -31,6 +52,43 @@ const Overview = () => {
     useGetMarketValueQuery(selectedPortfolio);
   const { data: soFar, isSuccess: isSuccessSoFar } =
     useGetSoFarQuery(selectedPortfolio);
+
+  const { data: next, isSuccess: isSuccessNext } =
+    useGetNextQuery(selectedPortfolio);
+
+  const { data: periods, isSuccess: isSuccessPeriods } =
+    useGetPeriodsQuery(selectedPortfolio);
+
+  useEffect(() => {
+    if (isSuccessPeriods) {
+      setYearlyChartSeries(periods.yearDividend);
+      setMonthlyChartSeries(periods.monthDividend);
+      setWeeklyChartSeries(periods.weekDividend);
+    }
+  }, [isSuccessPeriods, periods]);
+
+  useEffect(() => {
+    if (isSuccessNext) {
+      console.log(next);
+
+      if (next.days === -1)
+        setNextDividendInfo("Nothing in the next 31 days...");
+      else if (next.days === 0)
+        setNextDividendInfo(
+          `Today you should get ${filters.formatToCurrency(next.amount)}`
+        );
+      else if (next.days === 1)
+        setNextDividendInfo(
+          `Tomorrow you should get ${filters.formatToCurrency(next.amount)}`
+        );
+      else
+        setNextDividendInfo(
+          `In ${next.days} days you should get ${filters.formatToCurrency(
+            next.amount
+          )}`
+        );
+    }
+  }, [filters, isSuccessNext, next]);
 
   useEffect(() => {
     if (isSuccessSoFar) {
@@ -73,24 +131,6 @@ const Overview = () => {
   ];
 
   const projectionChartSeries: ApexAxisChartSeries = [
-    {
-      data: [30, 40, 35, 50],
-    },
-  ];
-
-  const yearlyChartSeries: ApexAxisChartSeries = [
-    {
-      data: [30, 40, 35, 50],
-    },
-  ];
-
-  const monthlyChartSeries: ApexAxisChartSeries = [
-    {
-      data: [30, 40, 35, 50],
-    },
-  ];
-
-  const weeklyChartSeries: ApexAxisChartSeries = [
     {
       data: [30, 40, 35, 50],
     },
@@ -599,6 +639,10 @@ const Overview = () => {
     setShowReinvest((prev) => !prev);
   };
 
+  if (next) {
+    console.log(next);
+  }
+
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="bg-[#cce7ff] shadow-lg">
@@ -615,10 +659,21 @@ const Overview = () => {
           Dividends so far: {filters.formatToCurrency(dividendsSoFar)}
         </div>
         <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
-        <div className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-          <div className="mt-px">teal</div>
-        </div>
-        {/* todo: image */}
+
+        {next?.tickers.map((ticker: string, index: number) => (
+          <div className="flex flex-column ">
+            <div
+              key={index}
+              className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
+              title={`Next Dividend: ${filters.formatToCurrency(
+                next?.amouts?.[index]
+              )}`}
+            >
+              <div className="mt-px">{ticker}</div>
+            </div>
+            <img src={next?.logos[index]} className="h-[32px] w-[32px]" />
+          </div>
+        ))}
         <div className="justify-center row">
           <Chart
             type="donut"
