@@ -74,6 +74,12 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSoFar: builder.query({
+        query: (selectedPortfolio) => ({
+          url: `dividend/portfolio/${selectedPortfolio}/soFar`,
+          method: "GET",
+        }),
+      }),
   }),
 });
 
@@ -86,4 +92,6 @@ export const {
   useGetDailyChangeQuery,
   useGetInvestedQuery,
   useGetHighestIncomeQuery,
+  useGetSoFarQuery
+
 } = portFolioApiSlice;

@@ -1,28 +1,54 @@
 import { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import { useGetMarketValueQuery } from "../features/portfolio/portfolioApiSlice";
+import {
+  useGetMarketValueQuery,
+  useGetInvestedQuery,
+  useGetSoFarQuery,
+} from "../features/portfolio/portfolioApiSlice";
 
 const Overview = () => {
-  const [selectedPortfolio, setSelectedPortfolio] = useState("portfolio");
-
-  const { data: marketValue, isSuccess } =
-    useGetMarketValueQuery(selectedPortfolio);
-
-  if (isSuccess) {
-    console.log(marketValue);
-  }
-
+  const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
   const [portfolioMarketValue, setPortfolioMarketValue] = useState(1);
   const [portfolioInvested, setPortfolioInvested] = useState(1);
   const [dividendsSoFar, setDividendsSoFar] = useState(1);
   const [showReinvest, setShowReinvest] = useState(false);
 
-  const portfolioChartSeries: ApexAxisChartSeries = [
-    {
-      data: [30, 40, 35, 50],
-    },
-  ];
+  const [portfolioChartSeries, setPortfolioChartSeries] =
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0],
+      },
+    ]);
+
+  const { data: investedValue, isSuccess: isSuccessInvestValue } =
+    useGetInvestedQuery(selectedPortfolio);
+  const { data: marketValue, isSuccess: isSuccessMarketValue } =
+    useGetMarketValueQuery(selectedPortfolio);
+  const { data: soFar, isSuccess: isSuccessSoFar } =
+    useGetSoFarQuery(selectedPortfolio);
+
+  useEffect(() => {
+    if (isSuccessInvestValue && isSuccessMarketValue && isSuccessSoFar) {
+      setPortfolioChartSeries([
+        {
+          data: [
+            investedValue,
+            marketValue,
+            marketValue - investedValue,
+            marketValue - investedValue + soFar,
+          ],
+        },
+      ]);
+    }
+  }, [
+    investedValue,
+    isSuccessInvestValue,
+    isSuccessMarketValue,
+    isSuccessSoFar,
+    marketValue,
+    soFar,
+  ]);
 
   const monthsProjectionChartSeries: ApexAxisChartSeries = [
     {
