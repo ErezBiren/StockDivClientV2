@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
 import { selectCurrentToken } from "../features/auth/authSlice";
+import { Outlet, useNavigate } from "react-router-dom";
 
 function MainLayout() {
   const { data: userName } = useGetUserNameQuery({});
   const { data: portfolios } = useGetPortfoliosQuery({});
-
-
-
 
   //     const [importFileContent, setImportFileContent] = useState('');
   //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
@@ -128,6 +126,18 @@ function MainLayout() {
   //       });
   //   };
 
+  const navigate = useNavigate();
+
+  
+  useEffect(() => {
+
+    const token = selectCurrentToken;
+  if(selectCurrentToken == null || selectCurrentToken == ""){
+    navigate('/login');
+  }
+  }, [])
+  
+
   const handleGoToDonate = () => {
     window.open("https://www.paypal.me/StockDiv", "_blank");
   };
@@ -180,6 +190,9 @@ function MainLayout() {
           </div>
         </div>
       </header>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 }

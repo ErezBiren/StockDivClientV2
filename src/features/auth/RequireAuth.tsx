@@ -1,4 +1,3 @@
-import React from "react";
 import { selectCurrentToken } from "./authSlice";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
