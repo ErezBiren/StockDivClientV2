@@ -10,9 +10,11 @@ import {
   useGetMonthsProjectionQuery,
   useGetRoiMeterQuery,
   useGetDiversityQuery,
+  useGetPerformanceQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFilters from "../hooks/useFilters";
 import { IDiversification } from "../utils/interfaces/IDiversification";
+import { IPriceAndDate } from "../utils/interfaces/IPriceAndDate";
 
 const Overview = () => {
   const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
@@ -139,6 +141,9 @@ const Overview = () => {
       },
     ]);
 
+  const { data: performance, isSuccess: isSuccessPerformance } =
+    useGetPerformanceQuery(selectedPortfolio);
+
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
   const { data: marketValue, isSuccess: isSuccessMarketValue } =
@@ -239,8 +244,99 @@ const Overview = () => {
       },
     });
 
-  const [diversificationChartSeries, setDiversificationChartSeries] =
-    useState<number[]>({});
+  const [diversificationChartSeries, setDiversificationChartSeries] = useState<
+    number[]
+  >([]);
+
+  const [performanceChartSeries, setPerformanceChartSeries] = useState<
+    { name: string; data: number[] }[]
+  >([{ name: "", data: [] }]);
+
+  const [performanceChartOptions, setPerformanceChartOptions] =
+    useState<ApexOptions>({
+      chart: {
+        type: "line",
+        dropShadow: {
+          enabled: true,
+          color: "#000",
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2,
+        },
+        toolbar: {
+          show: true,
+        },
+        animations: {
+          enabled: true,
+        },
+        zoom: {
+          enabled: false,
+        },
+      },
+      colors: ["#77B6EA", "#A1EA77"],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "smooth",
+      },
+      title: {
+        align: "center",
+        text: `${selectedPortfolio} vs S&P500`,
+      },
+      markers: {
+        size: 1,
+      },
+      xaxis: {
+        type: "datetime",
+        categories: [],
+      },
+      tooltip: {
+        shared: true,
+        intersect: false,
+      },
+      yaxis: {
+        title: {},
+        labels: {
+          formatter: function (val: number) {
+            return filters.formatToPercentage(val);
+          },
+        },
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        floating: true,
+        offsetY: -25,
+        offsetX: -5,
+      },
+    });
+
+  useEffect(() => {
+    if (isSuccessPerformance) {
+      setPerformanceChartOptions((prev) => ({
+        ...prev,
+        xaxis: {
+          categories: performance.sp500.map(
+            (item: IPriceAndDate) => item.valueDate
+          ),
+        },
+      }));
+      setPerformanceChartSeries([
+        {
+          name: "S&P500",
+          data: performance.sp500.map((item: IPriceAndDate) => item.value),
+        },
+        {
+          name: "Your portfolio",
+          data: performance.thePortfolio.map(
+            (item: IPriceAndDate) => item.value
+          ),
+        },
+      ]);
+    }
+  }, [performance, isSuccessPerformance]);
 
   useEffect(() => {
     if (isSuccessDiversity) {
@@ -823,7 +919,7 @@ const Overview = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (val: number, opt: any) {
+      formatter: function (_val: number, opt: any) {
         return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
       },
     },
@@ -961,11 +1057,20 @@ const Overview = () => {
         />
       </div>
       <div className="bg-[#cce7ff] shadow-lg">
-        <Chart 
+        <Chart
           type="donut"
           options={diversificationChartOptions}
           series={diversificationChartSeries}
           height={300}
+        />
+      </div>
+      <div className="bg-[#cce7ff] shadow-lg">
+        <Chart
+          type="line"
+          options={performanceChartOptions}
+          series={performanceChartSeries}
+          height={300}
+          width={500}
         />
       </div>
     </div>

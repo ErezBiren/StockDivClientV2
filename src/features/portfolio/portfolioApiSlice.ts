@@ -101,5 +101,6 @@ export const {
   useGetNextQuery,
   useGetPeriodsQuery,
   useGetAlertsQuery,
-  useGetMonthsProjectionQuery
+  useGetMonthsProjectionQuery,
+  useGetPerformanceQuery
 } = portFolioApiSlice;
