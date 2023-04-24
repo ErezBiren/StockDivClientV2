@@ -3,6 +3,12 @@ import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
 import { selectCurrentToken } from "../features/auth/authSlice";
 import { Outlet, useNavigate } from "react-router-dom";
+import {FaHome} from "react-icons/fa"
+import {IoMdSettings} from "react-icons/io"
+import {FiLogOut} from "react-icons/fi"
+import {MdAnnouncement} from "react-icons/md"
+
+
 
 function MainLayout() {
   const { data: userName } = useGetUserNameQuery({});
@@ -126,23 +132,28 @@ function MainLayout() {
   //       });
   //   };
 
-  const handleGoToDonate = () => {
+  const goToDonate = () => {
     window.open("https://www.paypal.me/StockDiv", "_blank");
   };
 
   return (
-    <div className="flex flex-col">
-      <header className="bg-white shadow-lg">
+    <div className="flex flex-col gap-10">
+      <header className="bg-[#c8e6c9] shadow-lg">
         <div className="container flex items-center justify-between py-2 mx-auto">
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <button
-              className="px-2 py-1 mr-2 text-white bg-green-500 rounded"
-              onClick={handleGoToDonate}
+              className="px-2 py-1 mr-2 text-white bg-green-700 rounded"
+              onClick={goToDonate}
+              title="donating is caring :)"
             >
               Donate
             </button>
             <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
-            {portfolios?.length > 0 && (
+             <span className="cursor-pointer" title="Settings"><IoMdSettings /></span>
+             <span className="cursor-pointer" title="Overview"><FaHome/></span>
+             <span className="cursor-pointer" title="Announcements"><MdAnnouncement/></span>
+             <span className="cursor-pointer" title="LogOut"><FiLogOut/></span>
+            {/* {portfolios?.length > 0 && (
               <>
                 <button className="ml-2 text-blue-500 cursor-pointer">
                   <svg
@@ -171,7 +182,7 @@ function MainLayout() {
                   />
                 </button>
               </>
-            )}
+            )} */}
           </div>
         </div>
       </header>
