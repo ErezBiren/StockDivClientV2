@@ -6,6 +6,7 @@ import {
   useGetInvestedQuery,
   useGetSoFarQuery,
 } from "../features/portfolio/portfolioApiSlice";
+import useFilters from "../hooks/useFilters";
 
 const Overview = () => {
   const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
@@ -13,6 +14,9 @@ const Overview = () => {
   const [portfolioInvested, setPortfolioInvested] = useState(1);
   const [dividendsSoFar, setDividendsSoFar] = useState(1);
   const [showReinvest, setShowReinvest] = useState(false);
+  const nextDividendInfo = "XXX";
+
+  const { filters } = useFilters();
 
   const [portfolioChartSeries, setPortfolioChartSeries] =
     useState<ApexAxisChartSeries>([
@@ -27,6 +31,12 @@ const Overview = () => {
     useGetMarketValueQuery(selectedPortfolio);
   const { data: soFar, isSuccess: isSuccessSoFar } =
     useGetSoFarQuery(selectedPortfolio);
+
+  useEffect(() => {
+    if (isSuccessSoFar) {
+      setDividendsSoFar(soFar);
+    }
+  }, [isSuccessSoFar, soFar]);
 
   useEffect(() => {
     if (isSuccessInvestValue && isSuccessMarketValue && isSuccessSoFar) {
@@ -130,9 +140,9 @@ const Overview = () => {
     },
     dataLabels: {
       enabled: true,
-      //   formatter: function (val: number) {
-      //     return filters.formatToCurrency(val);
-      //   },
+      formatter: function (val: number) {
+        return filters.formatToCurrency(val);
+      },
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -169,9 +179,9 @@ const Overview = () => {
       },
       labels: {
         show: true,
-        // formatter: function (val: number) {
-        //   return filters.formatToCurrency(val);
-        // },
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
       },
     },
     title: {
@@ -208,9 +218,9 @@ const Overview = () => {
     },
     dataLabels: {
       enabled: true,
-      //   formatter: function (val: number) {
-      //     return filters.formatToCurrency(val);
-      //   },
+      formatter: function (val: number) {
+        return filters.formatToCurrency(val);
+      },
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -247,9 +257,9 @@ const Overview = () => {
       },
       labels: {
         show: true,
-        // formatter: function (val: number) {
-        //   return filters.formatToCurrency(val);
-        // },
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
       },
     },
   };
@@ -283,9 +293,9 @@ const Overview = () => {
     },
     dataLabels: {
       enabled: true,
-      //   formatter: function (val: number) {
-      //     return filters.formatToCurrency(val);
-      //   },
+      formatter: function (val: number) {
+        return filters.formatToCurrency(val);
+      },
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -322,9 +332,9 @@ const Overview = () => {
       },
       labels: {
         show: true,
-        // formatter: function (val: number) {
-        //   return filters.formatToCurrency(val);
-        // },
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
       },
     },
   };
@@ -358,9 +368,9 @@ const Overview = () => {
     },
     dataLabels: {
       enabled: true,
-      //   formatter: function (val: number) {
-      //     return filters.formatToCurrency(val);
-      //   },
+      formatter: function (val: number) {
+        return filters.formatToCurrency(val);
+      },
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -410,9 +420,9 @@ const Overview = () => {
       },
       labels: {
         show: true,
-        // formatter: function (val: number) {
-        //   return filters.formatToCurrency(val);
-        // },
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
       },
     },
   };
@@ -421,9 +431,9 @@ const Overview = () => {
     tooltip: {
       enabled: true,
       y: {
-        // formatter: function (value: number) {
-        //   return filters.formatToCurrency(value);
-        // },
+        formatter: function (value: number) {
+          return filters.formatToCurrency(value);
+        },
       },
     },
     colors: ["#90EE90", "#ADD8E6", "#CBC3E3"],
@@ -440,11 +450,9 @@ const Overview = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      //   formatter: function (val: number, opt: any) {
-      //     return filters.formatToCurrency(
-      //       opt.w.config.series[opt.seriesIndex]
-      //     );
-      //   },
+      formatter: function (_, opt: any) {
+        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+      },
     },
     plotOptions: {
       pie: {
@@ -462,13 +470,13 @@ const Overview = () => {
               showAlways: true,
               label: "Year",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              //   formatter: function (w: any) {
-              //     return filters.formatToCurrency(
-              //       w.globals.seriesTotals.reduce((a: number, b: number) => {
-              //         return a + b;
-              //       }, 0)
-              //     );
-              //   },
+              formatter: function (w: any) {
+                return filters.formatToCurrency(
+                  w.globals.seriesTotals.reduce((a: number, b: number) => {
+                    return a + b;
+                  }, 0)
+                );
+              },
             },
           },
         },
@@ -480,9 +488,9 @@ const Overview = () => {
     tooltip: {
       enabled: true,
       y: {
-        // formatter: function (value: number) {
-        //   return filters.formatToCurrency(value);
-        // },
+        formatter: function (value: number) {
+          return filters.formatToCurrency(value);
+        },
       },
     },
     colors: ["#90EE90", "#ADD8E6", "#CBC3E3"],
@@ -496,11 +504,9 @@ const Overview = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      //   formatter: function (val: number, opt: any) {
-      //     return filters.formatToCurrency(
-      //       opt.w.config.series[opt.seriesIndex]
-      //     );
-      //   },
+      formatter: function (val: number, opt: any) {
+        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+      },
     },
     plotOptions: {
       pie: {
@@ -518,13 +524,13 @@ const Overview = () => {
               showAlways: true,
               label: "Week",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              //   formatter: function (w: any) {
-              //     return filters.formatToCurrency(
-              //       w.globals.seriesTotals.reduce((a: number, b: number) => {
-              //         return a + b;
-              //       }, 0)
-              //     );
-              //   },
+              formatter: function (w: any) {
+                return filters.formatToCurrency(
+                  w.globals.seriesTotals.reduce((a: number, b: number) => {
+                    return a + b;
+                  }, 0)
+                );
+              },
             },
           },
         },
@@ -536,9 +542,9 @@ const Overview = () => {
     tooltip: {
       enabled: true,
       y: {
-        // formatter: function (value: number) {
-        //   return filters.formatToCurrency(value);
-        // },
+        formatter: function (value: number) {
+          return filters.formatToCurrency(value);
+        },
       },
     },
     legend: {
@@ -555,11 +561,9 @@ const Overview = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      //   formatter: function (val: number, opt: any) {
-      //     return filters.formatToCurrency(
-      //       opt.w.config.series[opt.seriesIndex]
-      //     );
-      //   },
+      formatter: function (val: number, opt: any) {
+        return filters.formatToCurrency(opt.w.config.series[opt.seriesIndex]);
+      },
     },
     plotOptions: {
       pie: {
@@ -577,13 +581,13 @@ const Overview = () => {
               showAlways: true,
               label: "Month",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              //   formatter: function (w: any) {
-              //     return filters.formatToCurrency(
-              //       w.globals.seriesTotals.reduce((a: number, b: number) => {
-              //         return a + b;
-              //       }, 0)
-              //     );
-              //   },
+              formatter: function (w: any) {
+                return filters.formatToCurrency(
+                  w.globals.seriesTotals.reduce((a: number, b: number) => {
+                    return a + b;
+                  }, 0)
+                );
+              },
             },
           },
         },
@@ -608,13 +612,9 @@ const Overview = () => {
       </div>
       <div className="bg-[#cce7ff] shadow-lg">
         <div className="justify-center text-h6 q-mt-sm row no-wrap">
-          Dividends so far: XXX
-          {/* Dividends so far: {{ filters.formatToCurrency(dividendsSoFar) }} */}
+          Dividends so far: {filters.formatToCurrency(dividendsSoFar)}
         </div>
-        <div className="text-h6 q-mt-sm">
-          nextDividendInfo - XXX
-          {/* {{ nextDividendInfo }} */}
-        </div>
+        <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
         <div className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
           <div className="mt-px">teal</div>
         </div>

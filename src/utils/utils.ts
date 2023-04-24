@@ -52,29 +52,7 @@ export const getTodayDate = (full: boolean): string => {
   return str;
 };
 
-// export const filters = {
-//   formatToCurrency(value: number, currency?: string): string {
-//     const formatter = new Intl.NumberFormat('en-US', {
-//       style: 'currency',
-//       currency: currency
-//         ? currency
-//         : store.portfolioCurrency
-//         ? store.portfolioCurrency
-//         : 'USD',
-//       maximumFractionDigits: store.settings.decimalDigits,
-//     });
-//     return formatter.format(value);
-//   },
-//   formatToPercentage(value: number): string {
-//     return `${value.toFixed(2)}%`;
-//   },
-//   formatToDate(value: string): string {
-//     return date.formatDate(value, store.settings.dateFormat);
-//   },
-//   formatToNumber(value: number): string {
-//     return `${value.toFixed(2)}`;
-//   },
-// };
+
 
 export const getCurrencySymbol = (currency: string): string => {
   return new Intl.NumberFormat("en-US", {
