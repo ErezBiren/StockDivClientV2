@@ -79,6 +79,12 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getMonthsProjection: builder.query({
+        query: (selectedPortfolio) => ({
+          url: `dividend/portfolio/${selectedPortfolio}/monthsProjection`,
+          method: "GET",
+        }),
+      }),
   }),
 });
 
@@ -95,4 +101,5 @@ export const {
   useGetNextQuery,
   useGetPeriodsQuery,
   useGetAlertsQuery,
+  useGetMonthsProjectionQuery
 } = portFolioApiSlice;

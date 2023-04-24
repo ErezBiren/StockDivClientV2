@@ -7,16 +7,100 @@ import {
   useGetSoFarQuery,
   useGetNextQuery,
   useGetPeriodsQuery,
+  useGetMonthsProjectionQuery,
+  useGetRoiMeterQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFilters from "../hooks/useFilters";
 
 const Overview = () => {
   const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
   const [portfolioMarketValue, setPortfolioMarketValue] = useState(1);
-  const [portfolioInvested, setPortfolioInvested] = useState(1);
-  const [dividendsSoFar, setDividendsSoFar] = useState(1);
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");
+
+  const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
+    useState<ApexOptions>({
+      chart: {
+        type: "bar",
+        toolbar: {
+          tools: {
+            zoomin: false,
+            zoomout: false,
+            pan: false,
+            reset: false,
+            zoom: false,
+          },
+        },
+      },
+      title: {
+        text: "12 months projection",
+        align: "center",
+      },
+      grid: {
+        yaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      tooltip: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          dataLabels: {
+            position: "top",
+          },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
+        offsetY: -20,
+        style: {
+          colors: ["#304758"],
+        },
+      },
+      xaxis: {
+        categories: [],
+        position: "bottom",
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        crosshairs: {
+          fill: {
+            type: "gradient",
+            gradient: {
+              colorFrom: "#D8E3F0",
+              colorTo: "#BED1E6",
+              stops: [0, 100],
+              opacityFrom: 0.4,
+              opacityTo: 0.5,
+            },
+          },
+        },
+      },
+      yaxis: {
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+        labels: {
+          show: true,
+          formatter: function (val: number) {
+            return filters.formatToCurrency(val);
+          },
+        },
+      },
+    });
 
   const { filters } = useFilters();
 
@@ -46,11 +130,18 @@ const Overview = () => {
       },
     ]);
 
-  const { data: investedValue, isSuccess: isSuccessInvestValue } =
+  const [monthsProjectionChartSeries, setMonthsProjectionChartSeries] =
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+    ]);
+
+  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
   const { data: marketValue, isSuccess: isSuccessMarketValue } =
     useGetMarketValueQuery(selectedPortfolio);
-  const { data: soFar, isSuccess: isSuccessSoFar } =
+  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
     useGetSoFarQuery(selectedPortfolio);
 
   const { data: next, isSuccess: isSuccessNext } =
@@ -58,6 +149,90 @@ const Overview = () => {
 
   const { data: periods, isSuccess: isSuccessPeriods } =
     useGetPeriodsQuery(selectedPortfolio);
+
+  const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
+    useGetMonthsProjectionQuery(selectedPortfolio);
+
+  const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
+
+  const [roiChartOptions, setRoiChartOptions] = useState({});
+  const [roiChartSeries, setRoiChartSeries] = useState<
+    [{ data: number[] }, { data: number[] }]
+  >([{ data: [0] }, { data: [0] }]);
+
+  useEffect(() => {
+    setRoiChartOptions({
+      chart: {
+        type: "bar",
+        stacked: true,
+      },
+      tooltip: {
+        enabled: false,
+      },
+      grid: {
+        yaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: function (val: number) {
+          return filters.formatToCurrency(val);
+        },
+        style: {
+          fontSize: "1em",
+          colors: ["#304758"],
+        },
+      },
+      legend: {
+        show: false,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          borderRadius: 10,
+          dataLabels: {
+            total: {
+              enabled: true,
+              formatter: () => {
+                return portfolioInvested === 0
+                  ? ""
+                  : `${filters.formatToPercentage(
+                      (dividendsSoFar / portfolioInvested) * 100
+                    )} | Approximately ${roiMeterText} to 100% ROI`;
+              },
+            },
+          },
+        },
+      },
+      yaxis: {
+        show: false,
+      },
+      xaxis: {
+        type: "string",
+        categories: ["ROI"],
+      },
+      fill: {
+        opacity: 1,
+      },
+    });
+  }, [dividendsSoFar, filters, portfolioInvested, roiMeterText]);
+
+  useEffect(() => {
+    if (isSuccessMonthsProjection) {
+      setMonthsProjectionChartOptions({
+        xaxis: {
+          categories: monthsProjection.map((item: [string, number]) => item[0]),
+        },
+      });
+
+      setMonthsProjectionChartSeries(
+        monthsProjection.map((item: [string, number]) => item[1])
+      );
+    }
+  }, [isSuccessMonthsProjection, monthsProjection]);
 
   useEffect(() => {
     if (isSuccessPeriods) {
@@ -69,8 +244,6 @@ const Overview = () => {
 
   useEffect(() => {
     if (isSuccessNext) {
-      console.log(next);
-
       if (next.days === -1)
         setNextDividendInfo("Nothing in the next 31 days...");
       else if (next.days === 0)
@@ -91,38 +264,57 @@ const Overview = () => {
   }, [filters, isSuccessNext, next]);
 
   useEffect(() => {
-    if (isSuccessSoFar) {
-      setDividendsSoFar(soFar);
+    if (isSuccessDividendsSoFar) {
+      console.log(1);
+      setRoiChartSeries((prev) => {
+
+        const res: [{ data: number[] }, { data: number[] }] = [
+          { data: [dividendsSoFar] },
+          { ...prev[1] },
+        ];
+        return res;
+      });
     }
-  }, [isSuccessSoFar, soFar]);
+  }, [isSuccessDividendsSoFar, dividendsSoFar]);
 
   useEffect(() => {
-    if (isSuccessInvestValue && isSuccessMarketValue && isSuccessSoFar) {
+    if (isSuccessPortfolioInvested) {
+      console.log(1);
+      setRoiChartSeries((prev) => {
+        const res: [{ data: number[] }, { data: number[] }] = [
+          { ...prev[0] },
+          { data: [portfolioInvested] },
+        ];
+        return res;
+      });
+    }
+  }, [isSuccessPortfolioInvested, portfolioInvested]);
+
+  useEffect(() => {
+    if (
+      isSuccessPortfolioInvested &&
+      isSuccessMarketValue &&
+      isSuccessDividendsSoFar
+    ) {
       setPortfolioChartSeries([
         {
           data: [
-            investedValue,
+            portfolioInvested,
             marketValue,
-            marketValue - investedValue,
-            marketValue - investedValue + soFar,
+            marketValue - portfolioInvested,
+            marketValue - portfolioInvested + dividendsSoFar,
           ],
         },
       ]);
     }
   }, [
-    investedValue,
-    isSuccessInvestValue,
+    portfolioInvested,
+    isSuccessPortfolioInvested,
     isSuccessMarketValue,
-    isSuccessSoFar,
+    isSuccessDividendsSoFar,
     marketValue,
-    soFar,
+    dividendsSoFar,
   ]);
-
-  const monthsProjectionChartSeries: ApexAxisChartSeries = [
-    {
-      data: [30, 40, 35, 50],
-    },
-  ];
 
   const highestIncomeChartSeries: ApexAxisChartSeries = [
     {
@@ -229,87 +421,20 @@ const Overview = () => {
     },
   };
 
-  const monthsProjectionChartOptions: ApexOptions = {
-    chart: {
-      type: "bar",
-    },
-    title: {
-      show: true,
-      text: "12 months projection",
-      align: "center",
-    },
-    grid: {
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-    },
-    tooltip: {
-      enabled: false,
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 10,
-        dataLabels: {
-          position: "top",
-        },
-      },
-    },
-    dataLabels: {
-      enabled: true,
-      formatter: function (val: number) {
-        return filters.formatToCurrency(val);
-      },
-      offsetY: -20,
-      style: {
-        colors: ["#304758"],
-      },
-    },
-    xaxis: {
-      categories: [],
-      position: "bottom",
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      crosshairs: {
-        fill: {
-          type: "gradient",
-          gradient: {
-            colorFrom: "#D8E3F0",
-            colorTo: "#BED1E6",
-            stops: [0, 100],
-            opacityFrom: 0.4,
-            opacityTo: 0.5,
-          },
-        },
-      },
-    },
-    yaxis: {
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: true,
-        formatter: function (val: number) {
-          return filters.formatToCurrency(val);
-        },
-      },
-    },
-  };
-
   const highestIncomeChartOptions: ApexOptions = {
     chart: {
       type: "bar",
+      toolbar: {
+        tools: {
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false,
+          zoom: false,
+        },
+      },
     },
     title: {
-      show: true,
       text: "Highest income tickers",
       align: "center",
     },
@@ -639,10 +764,6 @@ const Overview = () => {
     setShowReinvest((prev) => !prev);
   };
 
-  if (next) {
-    console.log(next);
-  }
-
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="bg-[#cce7ff] shadow-lg">
@@ -737,8 +858,8 @@ const Overview = () => {
       <div className="bg-[#cce7ff] shadow-lg">
         <Chart
           type="bar"
-          options={highestIncomeChartOptions}
-          series={highestIncomeChartSeries}
+          options={roiChartOptions}
+          series={roiChartSeries}
           width={500}
           height={320}
         />
