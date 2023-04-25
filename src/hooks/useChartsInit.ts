@@ -597,7 +597,7 @@ const useChartsInit = () => {
     },
   };
 
-  const highestIncomeChartOptions: ApexOptions = {
+  const highestIncomeChartOptionsInit: ApexOptions = {
     chart: {
       type: "bar",
       toolbar: {
@@ -689,7 +689,7 @@ const useChartsInit = () => {
     yearChartOptions,
     weekChartOptions,
     projectionChartOptions,
-    highestIncomeChartOptions,
+    highestIncomeChartOptionsInit,
   };
 };
 

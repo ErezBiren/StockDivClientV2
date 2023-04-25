@@ -196,9 +196,9 @@ function MainLayout() {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="M19 9l-7 7-7-7"
                 ></path>
               </svg>
@@ -252,7 +252,7 @@ function MainLayout() {
               <input
                 type="text"
                 id="success"
-                className="bg-green-50 border-b-2 border-green-500 text-green-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5 "
+                className="bg-green-50 border-b-2 border-green-500 text-green-900  placeholder-green-700  text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5 "
               />
               <span className="mt-2 text-xs">Search ticker/name</span>
             </div>

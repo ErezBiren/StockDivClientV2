@@ -12,6 +12,7 @@ import {
   useGetDiversityQuery,
   useGetPerformanceQuery,
   useGetNewsQuery,
+  useGetHighestIncomeQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IDiversification } from "../utils/interfaces/IDiversification";
@@ -22,7 +23,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 
 const Overview = () => {
-
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
   );
@@ -38,7 +38,7 @@ const Overview = () => {
     yearChartOptions,
     weekChartOptions,
     projectionChartOptions,
-    highestIncomeChartOptions,
+    highestIncomeChartOptionsInit,
   } = useChartsInit();
 
   const [showReinvest, setShowReinvest] = useState(false);
@@ -47,6 +47,13 @@ const Overview = () => {
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
     useState<ApexOptions>(monthsProjectionChartOptionsInit);
 
+  const [highestIncomeChartSeries, setHighestIncomeChartSeries] = useState<
+    [{ data: number[] }]
+  >([{ data: [] }]);
+
+  const [highestIncomeChartOptions, setHighestIncomeChartOptions] =
+    useState<ApexOptions>(highestIncomeChartOptionsInit);
+
   const [portfolioChartSeries, setPortfolioChartSeries] =
     useState<ApexAxisChartSeries>([
       {
@@ -54,24 +61,9 @@ const Overview = () => {
       },
     ]);
 
-  const [yearlyChartSeries, setYearlyChartSeries] =
-    useState<ApexAxisChartSeries>([
-      {
-        data: [0, 0, 0, 0],
-      },
-    ]);
-  const [monthlyChartSeries, setMonthlyChartSeries] =
-    useState<ApexAxisChartSeries>([
-      {
-        data: [0, 0, 0, 0],
-      },
-    ]);
-  const [weeklyChartSeries, setWeeklyChartSeries] =
-    useState<ApexAxisChartSeries>([
-      {
-        data: [0, 0, 0, 0],
-      },
-    ]);
+  const [yearlyChartSeries, setYearlyChartSeries] = useState<number[]>([]);
+  const [monthlyChartSeries, setMonthlyChartSeries] = useState<number[]>([]);
+  const [weeklyChartSeries, setWeeklyChartSeries] = useState<number[]>([]);
 
   const [monthsProjectionChartSeries, setMonthsProjectionChartSeries] =
     useState<ApexAxisChartSeries>([
@@ -99,6 +91,10 @@ const Overview = () => {
   const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
   const { data: diversity, isSuccess: isSuccessDiversity } =
     useGetDiversityQuery(selectedPortfolio);
+
+  const { data: highestIncome, isSuccess: isSuccessHighestIncome } =
+    useGetHighestIncomeQuery(selectedPortfolio);
+
   const [diversificationChartOptions, setDiversificationChartOptions] =
     useState<ApexOptions>(diversificationChartOptionsInit);
 
@@ -306,11 +302,26 @@ const Overview = () => {
     dividendsSoFar,
   ]);
 
-  const highestIncomeChartSeries: ApexAxisChartSeries = [
-    {
-      data: [0, 0, 0, 0],
-    },
-  ];
+  useEffect(() => {
+    if (isSuccessHighestIncome) {
+      setHighestIncomeChartSeries([
+        {
+          data: [...highestIncome.map((item: [string, number]) => item[1])],
+        },
+      ]);
+    }
+  }, [highestIncome, isSuccessHighestIncome]);
+
+  useEffect(() => {
+    if (isSuccessHighestIncome) {
+      setHighestIncomeChartOptions((prev) => ({
+        ...prev,
+        xaxis: {
+          categories: highestIncome.map((item: [string, number]) => item[0]),
+        },
+      }));
+    }
+  }, [highestIncome, isSuccessHighestIncome]);
 
   const projectionChartSeries: ApexAxisChartSeries = [
     {
