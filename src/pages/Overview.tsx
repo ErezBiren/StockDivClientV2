@@ -328,7 +328,7 @@ const Overview = () => {
 
   return (
     <div className="flex flex-col items-center gap-8">
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
           options={portfolioChartOptions}
@@ -337,7 +337,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <div className="justify-center text-h6 q-mt-sm row no-wrap">
           Dividends so far: {formatToCurrency(dividendsSoFar)}
         </div>
@@ -377,7 +377,7 @@ const Overview = () => {
           />
         </div>
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
           options={monthsProjectionChartOptions}
@@ -386,7 +386,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
           options={highestIncomeChartOptions}
@@ -395,7 +395,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <label className="relative inline-flex items-center mt-2 cursor-pointer">
           <input
             type="checkbox"
@@ -416,7 +416,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
           options={roiChartOptions}
@@ -424,7 +424,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="donut"
           options={diversificationChartOptions}
@@ -432,7 +432,7 @@ const Overview = () => {
           height={300}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="line"
           options={performanceChartOptions}
@@ -441,7 +441,7 @@ const Overview = () => {
           width={500}
         />
       </div>
-      <div className="bg-[#cce7ff] shadow-lg">
+      <div className="bg-[#E1F5FE] shadow-lg">
         <span className="justify-center text-xl font-body">News</span>
         {newsItems?.map((newsItem: ITickerNews, index: number) => (
           <div
