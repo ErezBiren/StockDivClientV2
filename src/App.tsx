@@ -13,6 +13,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Overview from "./pages/Overview";
 import RequireAuth from "./features/auth/RequireAuth";
+import { useEffect } from "react";
+import { setSelectedPortfolio } from "./features/stockdivSlice";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +38,7 @@ const router = createBrowserRouter(
 );
 
 function App() {
+
   return (
     <>
       <RouterProvider router={router} />

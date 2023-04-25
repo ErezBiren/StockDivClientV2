@@ -5,9 +5,8 @@ import { ViewModeEnum } from '../utils/enums/ViewModeEnum';
 import { IDividendAlert } from '../utils/interfaces/IDividendAlert';
 
 const initialState = {
-  token: '',
   portfolios: [],
-  selectedPortfolio: '',
+  selectedPortfolio: 'Portfolio',
   portfolioCurrency: '',
   settings: {
     dateFormat: 'yyyy-MM-dd',
@@ -34,9 +33,6 @@ export const stockdivSlice = createSlice({
   name: 'stockdiv',
   initialState,
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
     setPortfolios: (state, action) => {
       state.portfolios = action.payload;
     },
@@ -71,7 +67,6 @@ export const stockdivSlice = createSlice({
 });
 
 export const {
-  setToken,
   setPortfolios,
   setSelectedPortfolio,
   setPortfolioCurrency,

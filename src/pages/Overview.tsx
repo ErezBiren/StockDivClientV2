@@ -18,11 +18,17 @@ import { IDiversification } from "../utils/interfaces/IDiversification";
 import { IPriceAndDate } from "../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../hooks/useChartsInit";
 import { ITickerNews } from "../utils/interfaces/ITickerNews";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 const Overview = () => {
+
+  const selectedPortfolio: string = useSelector(
+    (state: RootState) => state.stockdiv.selectedPortfolio
+  );
+
   const { formatToCurrency, formatToPercentage, formatToDate } =
     useFormatHelper();
-  const [selectedPortfolio, setSelectedPortfolio] = useState("Portfolio");
   const {
     monthsProjectionChartOptionsInit,
     diversificationChartOptionsInit,
@@ -33,7 +39,7 @@ const Overview = () => {
     weekChartOptions,
     projectionChartOptions,
     highestIncomeChartOptions,
-  } = useChartsInit({ setSelectedPortfolio });
+  } = useChartsInit();
 
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");

@@ -6,8 +6,15 @@ import {
   useGetInvestedQuery,
   useGetSoFarQuery,
 } from "../features/portfolio/portfolioApiSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
-const useChartsInit = ({selectedPortfolio}) => {
+const useChartsInit = () => {
+
+  const selectedPortfolio: string = useSelector(
+    (state: RootState) => state.stockdiv.selectedPortfolio
+  );
+
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const [portfolioMarketValue, setPortfolioMarketValue] = useState(0);
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
