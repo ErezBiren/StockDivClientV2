@@ -1,38 +1,24 @@
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
-import {
-  useGetInvestedQuery,
-  useGetMarketValueQuery,
-  useGetPortfoliosQuery,
-} from "../features/portfolio/portfolioApiSlice";
+import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
 import { logOut, selectCurrentToken } from "../features/auth/authSlice";
 import { Outlet, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { MdAnnouncement } from "react-icons/md";
-import { RootState } from "../app/store";
+import HeaderPortfolioPanel from "../components/HeaderPortfolioPanel";
 import { useSelector } from "react-redux";
-import { HiBellAlert } from "react-icons/hi2";
-import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
-
-import { BiCalendarEvent } from "react-icons/bi";
-import useFormatHelper from "../hooks/useFormatHelper";
+import { RootState } from "../app/store";
 
 function MainLayout() {
   const navigate = useNavigate();
+
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
   );
 
   const { data: userName } = useGetUserNameQuery({});
   const { data: portfolios } = useGetPortfoliosQuery({});
-  const { formatToCurrency, formatToPercentage } = useFormatHelper();
-  const {
-    data: portfolioMarketValue,
-    isSuccess: isSuccessPortfolioMarketValue,
-  } = useGetMarketValueQuery(selectedPortfolio);
-  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
-    useGetInvestedQuery(selectedPortfolio);
 
   //     const [importFileContent, setImportFileContent] = useState('');
   //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
@@ -161,17 +147,6 @@ function MainLayout() {
     navigate("/login");
   };
 
-  const plPercentage = (): number => {
-    if (portfolioInvested !== 0) {
-      return (
-        (Math.abs(portfolioMarketValue - portfolioInvested) /
-          portfolioInvested) *
-        100 *
-        (portfolioMarketValue > portfolioInvested ? 1 : -1)
-      );
-    } else return 0;
-  };
-
   return (
     <div className="flex flex-col gap-10">
       <header className="fixed top-0 z-50 w-full">
@@ -288,33 +263,7 @@ function MainLayout() {
           </div>
         </div>
         <div className="flex justify-center">
-          <div className="bg-[#E1F5FE] shadow-lg h-20 w-3/5 p-2">
-            <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
-              <span className="text-2xl justify-self-start">
-                {selectedPortfolio}
-              </span>
-              <span className="flex items-center gap-1 row">
-                <span title="Show Divident Alerts" className="cursor-pointer">
-                  <HiBellAlert />
-                </span>
-                <span title="Show Current Month" className="cursor-pointer">
-                  <BiCalendarEvent />
-                </span>
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="mt-1 text-xl text-green-600">
-                {formatToCurrency(portfolioMarketValue)}(
-                {portfolioMarketValue - portfolioInvested < 0 ? (
-                  <HiTrendingDown className="inline"/>
-                ) : (
-                  <HiTrendingUp className="inline"/>
-                )}
-                {formatToPercentage(plPercentage())})
-              </span>
-              <div>$11</div>
-            </div>
-          </div>
+          <HeaderPortfolioPanel />
         </div>
       </header>
       <main>
