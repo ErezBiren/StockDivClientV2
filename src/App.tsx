@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Overview from "./pages/Overview";
 import RequireAuth from "./features/auth/RequireAuth";
+import Portfolio from "./pages/Portfolio";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +26,7 @@ const router = createBrowserRouter(
           <Route path="/monthlyDividendsView/:month" element={<></>} />
           <Route path="/dividendAlerts" element={<></>} />
           <Route path="/announcements" element={<></>} />
-          <Route path="/portfolio" element={<></>} />
+          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/screener" element={<></>} />
           <Route path="*" element={<ErrorNotFound />} />
         </Route>
@@ -35,7 +36,6 @@ const router = createBrowserRouter(
 );
 
 function App() {
-
   return (
     <>
       <RouterProvider router={router} />

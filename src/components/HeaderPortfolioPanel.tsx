@@ -10,8 +10,10 @@ import {
   useGetLastTotalDividendQuery,
   useGetMarketValueQuery,
 } from "../features/portfolio/portfolioApiSlice";
+import { useNavigate } from "react-router-dom";
 
 const HeaderPortfolioPanel = () => {
+  const navigate = useNavigate();
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
 
   const selectedPortfolio: string = useSelector(
@@ -19,7 +21,8 @@ const HeaderPortfolioPanel = () => {
   );
 
   const { data: dailyChange } = useGetDailyChangeQuery(selectedPortfolio);
-  const { data: portfolioLastTotalDividend } = useGetLastTotalDividendQuery(selectedPortfolio);
+  const { data: portfolioLastTotalDividend } =
+    useGetLastTotalDividendQuery(selectedPortfolio);
 
   const {
     data: portfolioMarketValue,
@@ -45,26 +48,37 @@ const HeaderPortfolioPanel = () => {
     } else return 0;
   };
 
-  const getPortfolioDivYield = ()=> {
+  const getPortfolioDivYield = () => {
     return portfolioMarketValue === 0
       ? 0
       : (portfolioLastTotalDividend / portfolioMarketValue) * 100;
-  }
-  const getPortfolioYOC=()=> {
+  };
+  const getPortfolioYOC = () => {
     return portfolioInvested === 0
       ? 0
       : (portfolioLastTotalDividend / portfolioInvested) * 100;
-  }
+  };
+
+  const handleShowAssest = () => {
+    navigate("/portfolio");
+  };
 
   return (
-    <div className="bg-[#E1F5FE] shadow-lg w-3/5 p-2">
+    <div className="bg-[#E1F5FE] shadow-lg p-2">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
         <span className="flex items-center gap-1 row">
-          <span title="Show Divident Alerts" className="cursor-pointer">
+          <span title="Show Dividend Alerts" className="cursor-pointer">
             <HiBellAlert />
           </span>
           <span title="Show Current Month" className="cursor-pointer">
+            <BiCalendarEvent />
+          </span>
+          <span
+            title="Show Assets"
+            className="cursor-pointer"
+            onClick={handleShowAssest}
+          >
             <BiCalendarEvent />
           </span>
         </span>
@@ -91,7 +105,7 @@ const HeaderPortfolioPanel = () => {
               dailyChange < 0 ? "text-red-600" : "text-[#4caf50]"
             }`}
           >
-            {`Daily PL: ${ formatToCurrency(dailyChange) }(`}
+            {`Daily PL: ${formatToCurrency(dailyChange)}(`}
             {dailyChange < 0 ? (
               <HiTrendingDown className="inline" />
             ) : (
@@ -102,10 +116,10 @@ const HeaderPortfolioPanel = () => {
           </span>
           <span className="w-[1px] bg-gray-300 h-6"></span>
           <span>
-          Yield/YOC:
-          { formatToPercentage(getPortfolioDivYield()) } 
-          {" / "}
-          { formatToPercentage(getPortfolioYOC()) }
+            Yield/YOC:
+            {formatToPercentage(getPortfolioDivYield())}
+            {" / "}
+            {formatToPercentage(getPortfolioYOC())}
           </span>
         </div>
       </div>

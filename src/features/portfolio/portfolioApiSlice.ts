@@ -10,6 +10,10 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
     getPortfolios: builder.query({
       query: () => GetPortfolioQuery("all", ""),
     }),
+    getAssets: builder.query({
+      query: (selectedPortfolio) =>
+        GetPortfolioQuery(selectedPortfolio, "assets"),
+    }),
     getMarketValue: builder.query({
       query: (selectedPortfolio) =>
         GetPortfolioQuery(selectedPortfolio, "marketValue"),
@@ -80,11 +84,11 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getMonthsProjection: builder.query({
-        query: (selectedPortfolio) => ({
-          url: `dividend/portfolio/${selectedPortfolio}/monthsProjection`,
-          method: "GET",
-        }),
+      query: (selectedPortfolio) => ({
+        url: `dividend/portfolio/${selectedPortfolio}/monthsProjection`,
+        method: "GET",
       }),
+    }),
   }),
 });
 
@@ -104,5 +108,6 @@ export const {
   useGetMonthsProjectionQuery,
   useGetPerformanceQuery,
   useGetNewsQuery,
-  useGetLastTotalDividendQuery
+  useGetLastTotalDividendQuery,
+  useGetAssetsQuery,
 } = portFolioApiSlice;

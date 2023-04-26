@@ -162,22 +162,26 @@ function MainLayout() {
               </button>
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
               <span className="cursor-pointer" title="Settings">
-                <IoMdSettings class="fill-[#2196f3]"/>
+                <IoMdSettings class="fill-[#2196f3]" />
               </span>
-              <span className="cursor-pointer" title="Overview">
-                <FaHome class="fill-[#2196f3]"/>
+              <span
+                className="cursor-pointer"
+                title="Overview"
+                onClick={() => navigate("/overview")}
+              >
+                <FaHome class="fill-[#2196f3] cursor-pointer" />
               </span>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <span className="cursor-pointer" title="Announcements">
-                <MdAnnouncement class="fill-[#2196f3]"/>
+                <MdAnnouncement class="fill-[#2196f3]" />
               </span>
               <span
                 className="cursor-pointer"
                 title="LogOut"
                 onClick={handleLogOut}
               >
-                <FiLogOut class="stroke-[#2196f3]"/>
+                <FiLogOut class="stroke-[#2196f3]" />
               </span>
             </span>
           </div>
