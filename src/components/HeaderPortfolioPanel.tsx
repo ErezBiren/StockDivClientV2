@@ -9,9 +9,7 @@ import {
   useGetInvestedQuery,
   useGetLastTotalDividendQuery,
   useGetMarketValueQuery,
-  useGetPortfoliosQuery,
 } from "../features/portfolio/portfolioApiSlice";
-import { useEffect, useState } from "react";
 
 const HeaderPortfolioPanel = () => {
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
