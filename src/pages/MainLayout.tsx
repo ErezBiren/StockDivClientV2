@@ -162,22 +162,22 @@ function MainLayout() {
               </button>
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
               <span className="cursor-pointer" title="Settings">
-                <IoMdSettings />
+                <IoMdSettings class="fill-[#2196f3]"/>
               </span>
               <span className="cursor-pointer" title="Overview">
-                <FaHome />
+                <FaHome class="fill-[#2196f3]"/>
               </span>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <span className="cursor-pointer" title="Announcements">
-                <MdAnnouncement />
+                <MdAnnouncement class="fill-[#2196f3]"/>
               </span>
               <span
                 className="cursor-pointer"
                 title="LogOut"
                 onClick={handleLogOut}
               >
-                <FiLogOut />
+                <FiLogOut class="stroke-[#2196f3]"/>
               </span>
             </span>
           </div>

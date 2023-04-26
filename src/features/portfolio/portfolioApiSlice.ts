@@ -104,4 +104,5 @@ export const {
   useGetMonthsProjectionQuery,
   useGetPerformanceQuery,
   useGetNewsQuery,
+  useGetLastTotalDividendQuery
 } = portFolioApiSlice;
