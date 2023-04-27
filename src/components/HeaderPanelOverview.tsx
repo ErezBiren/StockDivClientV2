@@ -12,7 +12,7 @@ import {
 } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 
-const HeaderPortfolioPanel = () => {
+const HeaderPanelOverview = () => {
   const navigate = useNavigate();
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
 
@@ -127,4 +127,4 @@ const HeaderPortfolioPanel = () => {
   );
 };
 
-export default HeaderPortfolioPanel;
+export default HeaderPanelOverview;

@@ -1,17 +1,19 @@
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
 import { logOut, selectCurrentToken } from "../features/auth/authSlice";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { MdAnnouncement } from "react-icons/md";
-import HeaderPortfolioPanel from "../components/HeaderPortfolioPanel";
+import HeaderPanelOverview from "../components/HeaderPanelOverview";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import HeaderPanelPortfolio from "../components/HeaderPanelPortfolio";
 
 function MainLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
@@ -20,123 +22,8 @@ function MainLayout() {
   const { data: userName } = useGetUserNameQuery({});
   const { data: portfolios } = useGetPortfoliosQuery({});
 
-  //     const [importFileContent, setImportFileContent] = useState('');
-  //     const dateFormatOptions = ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'];
-  //     const [feedback, setFeedback] = useState('');
-  //     const [showContactWindow, setShowContactWindow] = useState(false);
-  //     const [userName, setUserName] = useState('');
-  //     const [loginLoading, setLoginLoading] = useState(false);
-  //     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
-  //     const [userNameEdit, setUserNameEdit] = useState('');
-  //     const [csvToImport, setCsvToImport] = useState(null);
-  //     const [importInProcess, setImportInProcess] = useState(false);
-  //     const [isSharePrice, setIsSharePrice] = useState(false);
-  //     const [dateFormat, setDateFormat] = useState('YYYY-MM-DD');
-  //     const searchTickerInput = useRef(null);
-  //     const [dataToSearch, setDataToSearch] = useState('');
-  //     const [searchListOptions, setSearchListOptions] = useState([]);
-  //     const [showSearchResultsMenu, setShowSearchResultsMenu] = useState(false);
-  //     const [showNoTransactionsDialog, setShowNoTransactionsDialog] = useState(false);
-  //     const [defaultTax, setDefaultTax] = useState(0);
-  //     const [decimalDigits, setDecimalDigits] = useState(2);
-  //     const [savingSettings, setSavingSettings] = useState(false);
-  //     const [sendingFeedback, setSendingFeedback] = useState(false);
-
-  //   const searchKeyDown = (e) => {
-  //     if (/[^A-Za-z&]$/.test(e.key)) {
-  //       e.preventDefault();
-  //     }
-  //   };
-
-  //   const sendFeedback = () => {
-  //     setSendingFeedback(true);
-  //     axios
-  //       .post('user/contact', { feedback })
-  //       .then((response) => {
-  //         if (response.data.error) {
-  //           showNotification(response.data.error);
-  //         } else {
-  //           setShowContactWindow(false);
-  //           setFeedback('');
-  //           showNotification("Thank you for your feedback, we'll be in touch");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         showAPIError(err);
-  //       })
-  //       .finally(() => {
-  //         setSendingFeedback(false);
-  //       });
-  //   };
-
-  //   const showContactUsWindow = () => {
-  //     setShowContactWindow(true);
-  //     setShowSettingsPopup(false);
-  //   };
-
-  //   const showAnnouncements = () => {
-  //     // router.push({ path: '/announcements' });
-  //   };
-
-  //   const gotoYearlyPaymentMatrix = () => {
-  //     // router.push({ path: '/yearlyPaymentMatrix' });
-  //   };
-
-  //   const importTransactionsWindow = () => {
-  //     setShowNoTransactionsDialog(true);
-  //   };
-
-  //   const exportTransactions = () => {
-  //     setSavingSettings(true);
-  //     axios
-  //       .get('user/exportTransactions')
-  //       .then((response) => {
-  //         if (response.data.error) {
-  //           showNotification(response.data.error);
-  //         } else {
-  //           const blob = new Blob([response.data]);
-  //           const url = window.URL.createObjectURL(blob);
-  //           const link = document.createElement('a');
-  //           link.href = url;
-  //           let fileName = 'transactions.csv';
-  //           link.setAttribute('download', fileName);
-  //           document.body.appendChild(link);
-  //           link.click();
-  //           link.remove();
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         showAPIError(err);
-  //       })
-  //       .finally(() => {
-  //         setSavingSettings(false);
-  //       });
-  //   };
-
-  //   const handlePasswordChange = () => {
-  //     setSavingSettings(true);
-  //     axios
-  //       .patch('user/password', {
-  //         oldPassword,
-  //         newPassword,
-  //       })
-  //       .then((response) => {
-  //         if (response.data.error) {
-  //           showNotification(response.data.error);
-  //         } else {
-  //           showNotification(
-  //             'Password was changed successfully, you must re-login'
-  //           );
-  //           logout();
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         showAPIError(err);
-  //       })
-  //       .finally(() => {
-  //         setSavingSettings(false);
-  //       });
-  //   };
+  const currentRoute = location.pathname;
+  console.log(currentRoute);
 
   const goToDonate = () => {
     window.open("https://www.paypal.me/StockDiv", "_blank");
@@ -267,7 +154,7 @@ function MainLayout() {
           </div>
         </div>
         <div className="flex justify-center">
-          <HeaderPortfolioPanel />
+          {currentRoute === "/portfolio" ? <HeaderPanelPortfolio/> : <HeaderPanelOverview />}
         </div>
       </header>
       <main>
