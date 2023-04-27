@@ -23,7 +23,6 @@ function MainLayout() {
   const { data: portfolios } = useGetPortfoliosQuery({});
 
   const currentRoute = location.pathname;
-  console.log(currentRoute);
 
   const goToDonate = () => {
     window.open("https://www.paypal.me/StockDiv", "_blank");
@@ -49,26 +48,26 @@ function MainLayout() {
               </button>
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
               <span className="cursor-pointer" title="Settings">
-                <IoMdSettings class="fill-[#2196f3]" />
+                <IoMdSettings className="fill-[#2196f3]" />
               </span>
               <span
                 className="cursor-pointer"
                 title="Overview"
                 onClick={() => navigate("/overview")}
               >
-                <FaHome class="fill-[#2196f3] cursor-pointer" />
+                <FaHome className="fill-[#2196f3] cursor-pointer" />
               </span>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <span className="cursor-pointer" title="Announcements">
-                <MdAnnouncement class="fill-[#2196f3]" />
+                <MdAnnouncement className="fill-[#2196f3]" />
               </span>
               <span
                 className="cursor-pointer"
                 title="LogOut"
                 onClick={handleLogOut}
               >
-                <FiLogOut class="stroke-[#2196f3]" />
+                <FiLogOut className="stroke-[#2196f3]" />
               </span>
             </span>
           </div>
@@ -157,7 +156,7 @@ function MainLayout() {
           {currentRoute === "/portfolio" ? <HeaderPanelPortfolio/> : <HeaderPanelOverview />}
         </div>
       </header>
-      <main>
+      <main className="mt-[160px]">       {/* TODO: set the top dynamically*/}
         <Outlet />
       </main>
     </div>
