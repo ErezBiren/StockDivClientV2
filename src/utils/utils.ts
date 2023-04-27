@@ -52,8 +52,6 @@ export const getTodayDate = (full: boolean): string => {
   return str;
 };
 
-
-
 export const getCurrencySymbol = (currency: string): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -61,4 +59,12 @@ export const getCurrencySymbol = (currency: string): string => {
   })
     .format(1)
     .substring(0, 1);
+};
+
+export const isSameDate = (date1: Date, date2: Date): boolean => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
 };
