@@ -32,73 +32,116 @@ const getExPayColor = (params: { value: any }) => {
       : { backgroundColor: bgDatePurple };
 };
 
-const columnDefs = [
-  {
-    field: "ticker",
-    cellStyle: { backgroundColor: "#cfdef5" },
-  },
-  { field: "name" },
-  { field: "sector" },
-  { field: "shares" },
-  { field: "averagePrice" },
-  { field: "sharePrice" },
-  { field: "invested" },
-  { field: "marketValue" },
-  { field: "income" },
-  { field: "yield" },
-  { field: "yoc" },
-  { field: "frequency" },
-  {
-    field: "PL",
-  },
-  {
-    field: "PLPercent",
-    headerName: "PL%",
-    cellStyle: (params) => {
-      if (!params.value) return;
-
-      const value = Number(params.value.replace("%", ""));
-
-      if (value > 0) {
-        return { backgroundColor: bgGreen };
-      }
-      return { backgroundColor: bgRed };
-    },
-  },
-  { field: "annualized" },
-  {
-    field: "Change",
-  },
-  {
-    field: "ChangePercent",
-    headerName: "Change%",
-    cellStyle: (params) => {
-      if (!params.value) return {};
-
-      if (params.value[0] !== "-") {
-        return { backgroundColor: bgGreen };
-      }
-      return { backgroundColor: bgRed };
-    },
-  },
-  { field: "tax" },
-  {
-    field: "ex",
-    cellStyle: getExPayColor,
-  },
-  { field: "pay", cellStyle: getExPayColor },
-  { field: "dividend" },
-  { field: "total" },
-  { field: "lastTotalDividendYearly" },
-  { field: "mvPortion", headerName: "Portion% (MV)" },
-  { field: "investedPortion", headerName: "Portion% (invested)" },
-];
+const tickerCellRenderer = (props) => {
+  return <span>{props.value}</span>;
+};
 
 const AssetsGridView = () => {
   const { formatToCurrency, formatToPercentage, formatToNumber, formatToDate } =
     useFormatHelper();
   const navigate = useNavigate();
-  const [rowData, setRowData] = useState([]);
+  const [rowDataAssets, setRowDataAssets] = useState<IPortfolioAsset[]>([]);
+  const currencyValueFormatter = (params) =>
+    params.value ? formatToCurrency(params.value) : "";
+  const percentageValueFormatter = (params) =>
+    params.value ? formatToPercentage(params.value) : "";
+
+  const columnDefs = [
+    {
+      field: "ticker",
+      cellStyle: { backgroundColor: "#cfdef5" },
+      cellRenderer: tickerCellRenderer,
+    },
+    { field: "name" },
+    { field: "sector" },
+    { field: "shares" },
+    {
+      field: "averagePrice",
+      valueFormatter: currencyValueFormatter,
+    },
+    { field: "sharePrice", valueFormatter: currencyValueFormatter },
+    { field: "invested", valueFormatter: currencyValueFormatter },
+    { field: "marketValue", valueFormatter: currencyValueFormatter },
+    {
+      field: "income",
+      valueFormatter: currencyValueFormatter,
+    },
+    {
+      field: "dividendYield",
+      headerName: "Yield",
+      valueFormatter: percentageValueFormatter,
+    },
+    {
+      field: "yoc",
+      headerName: "YOC",
+      valueFormatter: percentageValueFormatter,
+    },
+    { field: "dividendFrequency", headerName: "Frequency" },
+    {
+      field: "profitLoss",
+      headerName: "PL%",
+      valueFormatter: currencyValueFormatter,
+    },
+    {
+      field: "profitLossPercent",
+      headerName: "PL%",
+      valueFormatter: percentageValueFormatter,
+      cellStyle: (params) => {
+        if (!params?.value) return {};
+
+        if (params.value > 0) {
+          return { backgroundColor: bgGreen };
+        }
+        return { backgroundColor: bgRed };
+      },
+    },
+    { field: "annualized", valueFormatter: percentageValueFormatter },
+    {
+      field: "dailyChange",
+      headerName: "Change",
+      valueFormatter: currencyValueFormatter,
+    },
+    {
+      field: "dailyChangePercent",
+      headerName: "Change%",
+      valueFormatter: percentageValueFormatter,
+      cellStyle: (params) => {
+        if (!params.value) return {};
+
+        if (params.value[0] !== "-") {
+          return { backgroundColor: bgGreen };
+        }
+        return { backgroundColor: bgRed };
+      },
+    },
+    { field: "tax", valueFormatter: percentageValueFormatter },
+    {
+      field: "lastExDay",
+      headerName: "ex",
+      cellStyle: getExPayColor,
+    },
+    { field: "lastPayDay", headerName: "pay", cellStyle: getExPayColor },
+    {
+      field: "dividendAmount",
+      headerName: "dividend",
+      valueFormatter: currencyValueFormatter,
+    },
+    {
+      field: "lastTotalDividend",
+      headerName: "total",
+      valueFormatter: currencyValueFormatter,
+    },
+    {
+      field: "mvPortion",
+      headerName: "Portion% (MV)",
+      valueFormatter: percentageValueFormatter,
+    },
+    {
+      field: "investedPortion",
+      headerName: "Portion% (invested)",
+      valueFormatter: percentageValueFormatter,
+    },
+  ];
 
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
@@ -109,68 +152,40 @@ const AssetsGridView = () => {
 
   useEffect(() => {
     if (!isSuccessAssets) return;
-    const changedAssets = assets?.map((asset: IPortfolioAsset) => ({
-      ticker: asset.ticker,
-      name: asset.name,
-      sector: asset.sector,
-      shares: asset.shares,
-      averagePrice: formatToCurrency(asset.averagePrice),
-      sharePrice: formatToCurrency(asset.sharePrice),
-      marketValue: formatToCurrency(asset.marketValue),
-      income: formatToCurrency(asset.income),
-      invested: formatToCurrency(asset.invested),
-      yield: formatToPercentage(asset.dividendYield),
-      yoc: formatToPercentage(asset.yoc),
-      frequency: asset.dividendFrequency,
-      PL: formatToCurrency(asset.profitLoss),
-      PLPercent: formatToPercentage(asset.profitLossPercent),
-      annualized: formatToPercentage(asset.annualized),
-      Change: formatToCurrency(asset.dailyChange),
-      ChangePercent: formatToPercentage(asset.dailyChangePercent),
-      tax: formatToPercentage(asset.tax),
-      ex: formatToDate(asset.lastExDay),
-      pay: formatToDate(asset.lastPayDay),
-      dividend: formatToCurrency(asset.dividendAmount),
-      total: formatToCurrency(asset.lastTotalDividend),
-      mvPortion: formatToPercentage(asset.mvPortion),
-      investedPortion: formatToPercentage(asset.investedPortion),
-    }));
 
     const sums = {
-      pl: 0,
+      profitLoss: 0,
       invested: 0,
       marketValue: 0,
       income: 0,
-      yield: 0,
+      dividendYield: 0,
       yoc: 0,
-      change: 0,
+      dailyChange: 0,
     };
 
     assets.forEach((element: IPortfolioAsset) => {
-      sums.pl += element.profitLoss;
+      sums.profitLoss += element.profitLoss;
       sums.invested += element.invested;
       sums.income += element.income;
       sums.marketValue += element.marketValue;
-      sums.yield += element.dividendYield;
+      sums.dividendYield += element.dividendYield;
       sums.yoc += element.yoc;
-      sums.change += element.dailyChange;
+      sums.dailyChange += element.dailyChange;
     });
 
     const sumRow = {
       id: "sum",
-      PL: formatToCurrency(sums.pl),
-      invested: formatToCurrency(sums.invested),
-      income: formatToCurrency(sums.income),
-      marketValue: formatToCurrency(sums.marketValue),
-      yield: formatToCurrency(sums.yield),
-      yoc: formatToCurrency(sums.yoc),
-      change: formatToCurrency(sums.change),
+      profitLoss: sums.profitLoss,
+      invested: sums.invested,
+      income: sums.income,
+      marketValue: sums.marketValue,
+      dividendYield: sums.dividendYield,
+      yoc: sums.yoc,
+      dailyChange: sums.dailyChange,
     };
 
-    changedAssets.push(sumRow);
-
-    setRowData(changedAssets);
-  }, [assets, formatToCurrency, formatToPercentage, isSuccessAssets]);
+    setRowDataAssets([...assets, sumRow]);
+  }, [isSuccessAssets, assets]);
 
   const gotoTickerPage = (ticker: string) => {
     navigate(`/ticker/${ticker}`);
@@ -185,7 +200,7 @@ const AssetsGridView = () => {
   return (
     <div className="ag-theme-alpine " style={{ height: 500 }}>
       <AgGridReact
-        rowData={rowData}
+        rowData={rowDataAssets}
         columnDefs={columnDefs}
         getRowStyle={getRowStyle}
       />

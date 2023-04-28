@@ -28,30 +28,3 @@ export interface IPortfolioAsset {
   mvPortion: number;
   investedPortion: number;
 }
-
-export type PortfolioAssetDataGrid = {
-  ticker: string;
-  name: string;
-  sector: string;
-  shares: number;
-  averagePrice: string;
-  sharePrice: string;
-  marketValue: string;
-  income: string;
-  invested: string;
-  yield: string;
-  yoc: string;
-  frequency: string;
-  PL: string;
-  PLPercent: string;
-  annualized: string;
-  Change: string;
-  ChangePercent: string;
-  tax: string;
-  ex: string;
-  pay: string;
-  dividend: string;
-  total: string;
-  mvPortion: string;
-  investedPortion: string;
-};
