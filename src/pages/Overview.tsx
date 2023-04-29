@@ -219,9 +219,11 @@ const Overview = () => {
         },
       });
 
-      setMonthsProjectionChartSeries(
-        monthsProjection.map((item: [string, number]) => item[1])
-      );
+      setMonthsProjectionChartSeries([
+        {
+          data: monthsProjection.map((item: [string, number]) => item[1]),
+        },
+      ]);
     }
   }, [isSuccessMonthsProjection, monthsProjection]);
 
@@ -338,7 +340,7 @@ const Overview = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8">
+    <div className="flex flex-col items-center gap-8 text-center">
       <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
