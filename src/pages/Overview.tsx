@@ -13,6 +13,8 @@ import {
   useGetPerformanceQuery,
   useGetNewsQuery,
   useGetHighestIncomeQuery,
+  useGetIncomeLastYearQuery,
+  useGetAverageIncreaseQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IDiversification } from "../utils/interfaces/IDiversification";
@@ -37,7 +39,7 @@ const Overview = () => {
     monthChartOptions,
     yearChartOptions,
     weekChartOptions,
-    projectionChartOptions,
+    projectionChartOptionsInit,
     highestIncomeChartOptionsInit,
   } = useChartsInit();
 
@@ -46,6 +48,10 @@ const Overview = () => {
 
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
     useState<ApexOptions>(monthsProjectionChartOptionsInit);
+
+    const [projectionChartOptions, setProjectionChartOptions] =
+    useState<ApexOptions>(projectionChartOptionsInit);
+
 
   const [highestIncomeChartSeries, setHighestIncomeChartSeries] = useState<
     [{ data: number[] }]
@@ -73,6 +79,12 @@ const Overview = () => {
     ]);
 
   const { data: newsItems } = useGetNewsQuery(selectedPortfolio);
+
+  const { data: averageIncrease, isSuccess: isSuccessAverageIncrease } =
+    useGetAverageIncreaseQuery(selectedPortfolio);
+
+  const { data: incomeLastYear, isSuccess: isSuccessIncomeLastYear } =
+    useGetIncomeLastYearQuery(selectedPortfolio);
 
   const { data: performance, isSuccess: isSuccessPerformance } =
     useGetPerformanceQuery(selectedPortfolio);
@@ -228,6 +240,22 @@ const Overview = () => {
   }, [isSuccessMonthsProjection, monthsProjection]);
 
   useEffect(() => {
+    if (isSuccessProjection) {
+      setMonthsProjectionChartOptions({
+        xaxis: {
+          categories: monthsProjection.map((item: [string, number]) => item[0]),
+        },
+      });
+
+      setMonthsProjectionChartSeries([
+        {
+          data: monthsProjection.map((item: [string, number]) => item[1]),
+        },
+      ]);
+    }
+  }, [isSuccessMonthsProjection, monthsProjection]);
+
+  useEffect(() => {
     if (isSuccessPeriods) {
       setYearlyChartSeries(periods.yearDividend);
       setMonthlyChartSeries(periods.monthDividend);
@@ -324,12 +352,7 @@ const Overview = () => {
       }));
     }
   }, [highestIncome, isSuccessHighestIncome]);
-
-  const projectionChartSeries: ApexAxisChartSeries = [
-    {
-      data: [0, 0, 0, 0],
-    },
-  ];
+ 
 
   const handleReinvestChanged = () => {
     setShowReinvest((prev) => !prev);

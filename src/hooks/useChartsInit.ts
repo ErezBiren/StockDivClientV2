@@ -510,7 +510,7 @@ const useChartsInit = () => {
     },
   };
 
-  const projectionChartOptions: ApexOptions = {
+  const projectionChartOptionsInit: ApexOptions = {
     chart: {
       type: "bar",
     },
@@ -688,7 +688,7 @@ const useChartsInit = () => {
     monthChartOptions,
     yearChartOptions,
     weekChartOptions,
-    projectionChartOptions,
+    projectionChartOptionsInit,
     highestIncomeChartOptionsInit,
   };
 };

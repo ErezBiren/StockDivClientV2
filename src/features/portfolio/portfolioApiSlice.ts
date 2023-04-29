@@ -1,98 +1,103 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
 
-const GetPortfolioQuery = (selectedPortfolio: string, endpoint: string) => ({
+const getPortfolioQuery = (selectedPortfolio: string, endpoint: string) => ({
   url: `portfolio/${selectedPortfolio}/${endpoint}`,
+  method: "GET",
+});
+
+const getDividendQuery = (selectedPortfolio: string, endpoint: string) => ({
+  url: `dividend/portfolio/${selectedPortfolio}/${endpoint}`,
   method: "GET",
 });
 
 export const portFolioApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPortfolios: builder.query({
-      query: () => GetPortfolioQuery("all", ""),
+      query: () => getPortfolioQuery("all", ""),
     }),
     getAssets: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "assets"),
+        getPortfolioQuery(selectedPortfolio, "assets"),
     }),
     getMarketValue: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "marketValue"),
+        getPortfolioQuery(selectedPortfolio, "marketValue"),
     }),
     getInvested: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "invested"),
+        getPortfolioQuery(selectedPortfolio, "invested"),
     }),
     getDailyChange: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "dailyChange"),
+        getPortfolioQuery(selectedPortfolio, "dailyChange"),
     }),
     getLastTotalDividend: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "lastTotalDividend"),
+        getPortfolioQuery(selectedPortfolio, "lastTotalDividend"),
     }),
     getCurrency: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "currency"),
+        getPortfolioQuery(selectedPortfolio, "currency"),
     }),
     getRoiMeter: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "roiMeter"),
+        getPortfolioQuery(selectedPortfolio, "roiMeter"),
     }),
     getDiversity: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "diversity"),
+        getPortfolioQuery(selectedPortfolio, "diversity"),
     }),
     getPerformance: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "performance"),
+        getPortfolioQuery(selectedPortfolio, "performance"),
     }),
     getTimeline: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "timeline"),
+        getPortfolioQuery(selectedPortfolio, "timeline"),
     }),
     getHighestIncome: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "highestIncome"),
+        getPortfolioQuery(selectedPortfolio, "highestIncome"),
     }),
     getNews: builder.query({
       query: (selectedPortfolio) =>
-        GetPortfolioQuery(selectedPortfolio, "news"),
+        getPortfolioQuery(selectedPortfolio, "news"),
     }),
 
     getSoFar: builder.query({
-      query: (selectedPortfolio) => ({
-        url: `dividend/portfolio/${selectedPortfolio}/soFar`,
-        method: "GET",
-      }),
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "soFar"),
     }),
+
     getNext: builder.query({
-      query: (selectedPortfolio) => ({
-        url: `dividend/portfolio/${selectedPortfolio}/next`,
-        method: "GET",
-      }),
+      query: (selectedPortfolio) => getDividendQuery(selectedPortfolio, "next"),
     }),
     getPeriods: builder.query({
-      query: (selectedPortfolio) => ({
-        url: `dividend/portfolio/${selectedPortfolio}/periods`,
-        method: "GET",
-      }),
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "periods"),
     }),
     getAlerts: builder.query({
-      query: (selectedPortfolio) => ({
-        url: `dividend/portfolio/${selectedPortfolio}/alerts`,
-        method: "GET",
-      }),
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "alerts"),
     }),
     getMonthsProjection: builder.query({
-      query: (selectedPortfolio) => ({
-        url: `dividend/portfolio/${selectedPortfolio}/monthsProjection`,
-        method: "GET",
-      }),
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "monthsProjection"),
+    }),
+    getIncomeLastYear: builder.query({
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "incomeLastYear"),
+    }),
+    getAverageIncrease: builder.query({
+      query: (selectedPortfolio) =>
+        getDividendQuery(selectedPortfolio, "averageIncrease"),
     }),
   }),
 });
 
 export const {
+  useGetAverageIncreaseQuery,
+  useGetIncomeLastYearQuery,
   useGetPortfoliosQuery,
   useGetMarketValueQuery,
   useGetRoiMeterQuery,
