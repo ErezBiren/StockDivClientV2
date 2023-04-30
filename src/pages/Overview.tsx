@@ -49,10 +49,6 @@ const Overview = () => {
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
     useState<ApexOptions>(monthsProjectionChartOptionsInit);
 
-    const [projectionChartOptions, setProjectionChartOptions] =
-    useState<ApexOptions>(projectionChartOptionsInit);
-
-
   const [highestIncomeChartSeries, setHighestIncomeChartSeries] = useState<
     [{ data: number[] }]
   >([{ data: [] }]);
@@ -85,6 +81,60 @@ const Overview = () => {
 
   const { data: incomeLastYear, isSuccess: isSuccessIncomeLastYear } =
     useGetIncomeLastYearQuery(selectedPortfolio);
+
+  const [projectionChartSeries, setProjectionChartSeries] = useState<
+    [{ data: number[] }]
+  >([{ data: [] }]);
+
+  useEffect(() => {
+    if (!isSuccessIncomeLastYear || !isSuccessAverageIncrease) return;
+
+    setProjectionWithReinvestChartSeries([{ data: [incomeLastYear] }]);
+    setProjectionChartSeries([{ data: [incomeLastYear] }]);
+
+    const tempProjectionChartSeries = { ...projectionChartSeries };
+    let tempIncomeLastYear = incomeLastYear;
+
+    for (let i = 0; i < 11; i++) {
+      tempProjectionChartSeries[0].data.push(
+        tempIncomeLastYear *
+          (1 +
+            (i < 5
+              ? averageIncrease.averageIncrease5y
+              : averageIncrease.averageIncrease10y))
+      );
+      tempIncomeLastYear *=
+        1 +
+        (i < 5
+          ? averageIncrease.averageIncrease5y
+          : averageIncrease.averageIncrease10y);
+    }
+    setProjectionActualChartSeries(tempProjectionChartSeries);
+  }, [
+    incomeLastYear,
+    isSuccessIncomeLastYear,
+    averageIncrease,
+    isSuccessAverageIncrease,
+    projectionChartSeries,
+  ]);
+
+  const [projectionActualChartSeries, setProjectionActualChartSeries] =
+    useState<[{ data: number[] }]>([{ data: [] }]);
+
+  const [
+    projectionWithReinvestChartSeries,
+    setProjectionWithReinvestChartSeries,
+  ] = useState<[{ data: number[] }]>([{ data: [] }]);
+
+  const toggleReinvest = () => {
+    setShowReinvest((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (showReinvest)
+      setProjectionActualChartSeries(projectionWithReinvestChartSeries);
+    else setProjectionActualChartSeries(projectionChartSeries);
+  }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
 
   const { data: performance, isSuccess: isSuccessPerformance } =
     useGetPerformanceQuery(selectedPortfolio);
@@ -240,22 +290,6 @@ const Overview = () => {
   }, [isSuccessMonthsProjection, monthsProjection]);
 
   useEffect(() => {
-    if (isSuccessProjection) {
-      setMonthsProjectionChartOptions({
-        xaxis: {
-          categories: monthsProjection.map((item: [string, number]) => item[0]),
-        },
-      });
-
-      setMonthsProjectionChartSeries([
-        {
-          data: monthsProjection.map((item: [string, number]) => item[1]),
-        },
-      ]);
-    }
-  }, [isSuccessMonthsProjection, monthsProjection]);
-
-  useEffect(() => {
     if (isSuccessPeriods) {
       setYearlyChartSeries(periods.yearDividend);
       setMonthlyChartSeries(periods.monthDividend);
@@ -352,11 +386,6 @@ const Overview = () => {
       }));
     }
   }, [highestIncome, isSuccessHighestIncome]);
- 
-
-  const handleReinvestChanged = () => {
-    setShowReinvest((prev) => !prev);
-  };
 
   const gotoNews = (url: string) => {
     window.open(url, "_blank");
@@ -437,7 +466,7 @@ const Overview = () => {
             type="checkbox"
             checked={showReinvest}
             className="sr-only peer"
-            onChange={handleReinvestChanged}
+            onChange={toggleReinvest}
           />
           <div className="w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
           <span className="ml-3 text-sm font-medium text-gray-900 ">
@@ -446,8 +475,8 @@ const Overview = () => {
         </label>
         <Chart
           type="bar"
-          options={projectionChartOptions}
-          series={projectionChartSeries}
+          options={projectionChartOptionsInit}
+          series={projectionActualChartSeries}
           width={500}
           height={320}
         />
