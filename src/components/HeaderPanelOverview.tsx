@@ -67,19 +67,21 @@ const HeaderPanelOverview = () => {
     <div className="bg-[#E1F5FE] shadow-lg p-2">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
-        <span className="flex items-center gap-1 row">
-          <span title="Show Dividend Alerts" className="cursor-pointer">
-            <HiBellAlert />
-          </span>
-          <span title="Show Current Month" className="cursor-pointer">
-            <BiCalendarEvent />
-          </span>
+        <span className="flex items-center gap-2 row">
+          <HiBellAlert
+            className="fill-[#f44336] cursor-pointer"
+            title="Show Dividend Alerts"
+          />
+          <BiCalendarEvent
+            className="fill-[#2196f3] cursor-pointer"
+            title="Show Current Month"
+          />
           <span
             title="Show Assets"
             className="cursor-pointer"
             onClick={handleShowAssest}
           >
-            <BiCalendarEvent />
+            <BiCalendarEvent className="fill-[#2196f3]" />
           </span>
         </span>
       </div>
