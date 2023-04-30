@@ -9,21 +9,20 @@ import {
   useGetPeriodsQuery,
   useGetMonthsProjectionQuery,
   useGetRoiMeterQuery,
-  useGetDiversityQuery,
-  useGetPerformanceQuery,
   useGetNewsQuery,
-  useGetHighestIncomeQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
   useGetLastTotalDividendQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../hooks/useFormatHelper";
-import { IDiversification } from "../utils/interfaces/IDiversification";
 import { IPriceAndDate } from "../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../hooks/useChartsInit";
 import { ITickerNews } from "../utils/interfaces/ITickerNews";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import HighestIncomeTickers from "../components/overviewCharts/HighestIncomeTickers";
+import DiversificationChart from "../components/overviewCharts/DiversificationChart";
+import PortfolioVsSNP500 from "../components/overviewCharts/PortfolioVsSNP500";
 
 const Overview = () => {
   const selectedPortfolio: string = useSelector(
@@ -34,22 +33,19 @@ const Overview = () => {
     useFormatHelper();
   const {
     monthsProjectionChartOptionsInit,
-    diversificationChartOptionsInit,
     performanceChartOptionsInit,
     portfolioChartOptions,
     monthChartOptions,
     yearChartOptions,
     weekChartOptions,
     projectionChartOptionsInit,
-    highestIncomeChartOptionsInit,
   } = useChartsInit();
 
   const {
     data: portfolioLastTotalDividend,
     isSuccess: isSuccessPortfolioLastTotalDividend,
   } = useGetLastTotalDividendQuery(selectedPortfolio);
-  const { data: performance, isSuccess: isSuccessPerformance } =
-    useGetPerformanceQuery(selectedPortfolio);
+
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
   const {
@@ -65,38 +61,12 @@ const Overview = () => {
   const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
     useGetMonthsProjectionQuery(selectedPortfolio);
   const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
-  const { data: diversity, isSuccess: isSuccessDiversity } =
-    useGetDiversityQuery(selectedPortfolio);
-
-  const { data: highestIncome, isSuccess: isSuccessHighestIncome } =
-    useGetHighestIncomeQuery(selectedPortfolio);
-
-  const [diversificationChartOptions, setDiversificationChartOptions] =
-    useState<ApexOptions>(diversificationChartOptionsInit);
-
-  const [diversificationChartSeries, setDiversificationChartSeries] = useState<
-    number[]
-  >([]);
-
-  const [performanceChartSeries, setPerformanceChartSeries] = useState<
-    { name: string; data: number[] }[]
-  >([{ name: "", data: [] }]);
-
-  const [performanceChartOptions, setPerformanceChartOptions] =
-    useState<ApexOptions>(performanceChartOptionsInit);
 
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");
 
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
     useState<ApexOptions>(monthsProjectionChartOptionsInit);
-
-  const [highestIncomeChartSeries, setHighestIncomeChartSeries] = useState<
-    [{ data: number[] }]
-  >([{ data: [] }]);
-
-  const [highestIncomeChartOptions, setHighestIncomeChartOptions] =
-    useState<ApexOptions>(highestIncomeChartOptionsInit);
 
   const [portfolioChartSeries, setPortfolioChartSeries] =
     useState<ApexAxisChartSeries>([
@@ -141,7 +111,7 @@ const Overview = () => {
       ? 0
       : (portfolioLastTotalDividend / portfolioMarketValue) * 100;
   }, [portfolioLastTotalDividend, portfolioMarketValue]);
-  
+
   useEffect(() => {
     if (!isSuccessIncomeLastYear || !isSuccessAverageIncrease) return;
 
@@ -195,8 +165,6 @@ const Overview = () => {
     projectionWithReinvestChartSeries,
   ]);
 
-
-
   const toggleReinvest = () => {
     setShowReinvest((prev) => !prev);
   };
@@ -206,43 +174,6 @@ const Overview = () => {
       setProjectionActualChartSeries(projectionWithReinvestChartSeries);
     else setProjectionActualChartSeries(projectionChartSeries);
   }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
-
-  useEffect(() => {
-    if (isSuccessPerformance) {
-      setPerformanceChartOptions((prev) => ({
-        ...prev,
-        xaxis: {
-          categories: performance.sp500.map(
-            (item: IPriceAndDate) => item.valueDate
-          ),
-        },
-      }));
-      setPerformanceChartSeries([
-        {
-          name: "S&P500",
-          data: performance.sp500.map((item: IPriceAndDate) => item.value),
-        },
-        {
-          name: "Your portfolio",
-          data: performance.thePortfolio.map(
-            (item: IPriceAndDate) => item.value
-          ),
-        },
-      ]);
-    }
-  }, [performance, isSuccessPerformance]);
-
-  useEffect(() => {
-    if (isSuccessDiversity) {
-      setDiversificationChartOptions((prev) => ({
-        ...prev,
-        labels: diversity.map((item: IDiversification) => item.sector),
-      }));
-      setDiversificationChartSeries(
-        diversity.map((item: IDiversification) => item.percentage)
-      );
-    }
-  }, [diversity, isSuccessDiversity]);
 
   const [roiChartOptions, setRoiChartOptions] = useState({});
   const [roiChartSeries, setRoiChartSeries] = useState<
@@ -307,7 +238,13 @@ const Overview = () => {
         opacity: 1,
       },
     });
-  }, [dividendsSoFar, portfolioInvested, roiMeterText]);
+  }, [
+    dividendsSoFar,
+    formatToCurrency,
+    formatToPercentage,
+    portfolioInvested,
+    roiMeterText,
+  ]);
 
   useEffect(() => {
     if (isSuccessMonthsProjection) {
@@ -402,27 +339,6 @@ const Overview = () => {
     dividendsSoFar,
   ]);
 
-  useEffect(() => {
-    if (isSuccessHighestIncome) {
-      setHighestIncomeChartSeries([
-        {
-          data: [...highestIncome.map((item: [string, number]) => item[1])],
-        },
-      ]);
-    }
-  }, [highestIncome, isSuccessHighestIncome]);
-
-  useEffect(() => {
-    if (isSuccessHighestIncome) {
-      setHighestIncomeChartOptions((prev) => ({
-        ...prev,
-        xaxis: {
-          categories: highestIncome.map((item: [string, number]) => item[0]),
-        },
-      }));
-    }
-  }, [highestIncome, isSuccessHighestIncome]);
-
   const gotoNews = (url: string) => {
     window.open(url, "_blank");
   };
@@ -487,15 +403,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="bar"
-          options={highestIncomeChartOptions}
-          series={highestIncomeChartSeries}
-          width={500}
-          height={320}
-        />
-      </div>
+      <HighestIncomeTickers />
       <div className="bg-[#E1F5FE] shadow-lg">
         <label className="relative inline-flex items-center mt-2 cursor-pointer">
           <input
@@ -525,23 +433,8 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="donut"
-          options={diversificationChartOptions}
-          series={diversificationChartSeries}
-          height={300}
-        />
-      </div>
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="line"
-          options={performanceChartOptions}
-          series={performanceChartSeries}
-          height={300}
-          width={500}
-        />
-      </div>
+      <DiversificationChart />
+      <PortfolioVsSNP500 />
       <div className="bg-[#E1F5FE] shadow-lg">
         <span className="justify-center text-xl font-body">News</span>
         {newsItems?.map((newsItem: ITickerNews, index: number) => (
