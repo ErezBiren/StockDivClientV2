@@ -63,7 +63,6 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
       query: (selectedPortfolio) =>
         getPortfolioQuery(selectedPortfolio, "news"),
     }),
-
     getSoFar: builder.query({
       query: (selectedPortfolio) =>
         getDividendQuery(selectedPortfolio, "soFar"),

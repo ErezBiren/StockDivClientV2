@@ -1,5 +1,5 @@
 import { ApexOptions } from "apexcharts";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
   useGetMarketValueQuery,
@@ -15,6 +15,7 @@ import {
   useGetHighestIncomeQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
+  useGetLastTotalDividendQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IDiversification } from "../utils/interfaces/IDiversification";
@@ -42,6 +43,47 @@ const Overview = () => {
     projectionChartOptionsInit,
     highestIncomeChartOptionsInit,
   } = useChartsInit();
+
+  const {
+    data: portfolioLastTotalDividend,
+    isSuccess: isSuccessPortfolioLastTotalDividend,
+  } = useGetLastTotalDividendQuery(selectedPortfolio);
+  const { data: performance, isSuccess: isSuccessPerformance } =
+    useGetPerformanceQuery(selectedPortfolio);
+  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
+    useGetInvestedQuery(selectedPortfolio);
+  const {
+    data: portfolioMarketValue,
+    isSuccess: isSuccessPortfolioMarketValue,
+  } = useGetMarketValueQuery(selectedPortfolio);
+  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
+    useGetSoFarQuery(selectedPortfolio);
+  const { data: next, isSuccess: isSuccessNext } =
+    useGetNextQuery(selectedPortfolio);
+  const { data: periods, isSuccess: isSuccessPeriods } =
+    useGetPeriodsQuery(selectedPortfolio);
+  const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
+    useGetMonthsProjectionQuery(selectedPortfolio);
+  const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
+  const { data: diversity, isSuccess: isSuccessDiversity } =
+    useGetDiversityQuery(selectedPortfolio);
+
+  const { data: highestIncome, isSuccess: isSuccessHighestIncome } =
+    useGetHighestIncomeQuery(selectedPortfolio);
+
+  const [diversificationChartOptions, setDiversificationChartOptions] =
+    useState<ApexOptions>(diversificationChartOptionsInit);
+
+  const [diversificationChartSeries, setDiversificationChartSeries] = useState<
+    number[]
+  >([]);
+
+  const [performanceChartSeries, setPerformanceChartSeries] = useState<
+    { name: string; data: number[] }[]
+  >([{ name: "", data: [] }]);
+
+  const [performanceChartOptions, setPerformanceChartOptions] =
+    useState<ApexOptions>(performanceChartOptionsInit);
 
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");
@@ -86,6 +128,20 @@ const Overview = () => {
     [{ data: number[] }]
   >([{ data: [] }]);
 
+  const [projectionActualChartSeries, setProjectionActualChartSeries] =
+    useState<[{ data: number[] }]>([{ data: [] }]);
+
+  const [
+    projectionWithReinvestChartSeries,
+    setProjectionWithReinvestChartSeries,
+  ] = useState<[{ data: number[] }]>([{ data: [] }]);
+
+  const getPortfolioDivYield = useCallback((): number => {
+    return portfolioMarketValue === 0
+      ? 0
+      : (portfolioLastTotalDividend / portfolioMarketValue) * 100;
+  }, [portfolioLastTotalDividend, portfolioMarketValue]);
+  
   useEffect(() => {
     if (!isSuccessIncomeLastYear || !isSuccessAverageIncrease) return;
 
@@ -110,21 +166,36 @@ const Overview = () => {
           : averageIncrease.averageIncrease10y);
     }
     setProjectionActualChartSeries(tempProjectionChartSeries);
+    let divYield = getPortfolioDivYield() / 100;
+    let marketValue = portfolioMarketValue;
+
+    const tempProjectionWithReinvestChartSeries: [{ data: number[] }] = {
+      ...projectionWithReinvestChartSeries,
+    };
+
+    for (let i = 0; i < 11; i++) {
+      tempProjectionWithReinvestChartSeries[0].data.push(
+        marketValue * divYield
+      );
+      marketValue += marketValue * divYield;
+      divYield *=
+        1 +
+        (i < 6
+          ? averageIncrease.averageIncrease5y
+          : averageIncrease.averageIncrease10y);
+    }
   }, [
     incomeLastYear,
     isSuccessIncomeLastYear,
     averageIncrease,
     isSuccessAverageIncrease,
     projectionChartSeries,
+    getPortfolioDivYield,
+    portfolioMarketValue,
+    projectionWithReinvestChartSeries,
   ]);
 
-  const [projectionActualChartSeries, setProjectionActualChartSeries] =
-    useState<[{ data: number[] }]>([{ data: [] }]);
 
-  const [
-    projectionWithReinvestChartSeries,
-    setProjectionWithReinvestChartSeries,
-  ] = useState<[{ data: number[] }]>([{ data: [] }]);
 
   const toggleReinvest = () => {
     setShowReinvest((prev) => !prev);
@@ -135,41 +206,6 @@ const Overview = () => {
       setProjectionActualChartSeries(projectionWithReinvestChartSeries);
     else setProjectionActualChartSeries(projectionChartSeries);
   }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
-
-  const { data: performance, isSuccess: isSuccessPerformance } =
-    useGetPerformanceQuery(selectedPortfolio);
-  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
-    useGetInvestedQuery(selectedPortfolio);
-  const { data: marketValue, isSuccess: isSuccessMarketValue } =
-    useGetMarketValueQuery(selectedPortfolio);
-  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
-    useGetSoFarQuery(selectedPortfolio);
-  const { data: next, isSuccess: isSuccessNext } =
-    useGetNextQuery(selectedPortfolio);
-  const { data: periods, isSuccess: isSuccessPeriods } =
-    useGetPeriodsQuery(selectedPortfolio);
-  const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
-    useGetMonthsProjectionQuery(selectedPortfolio);
-  const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
-  const { data: diversity, isSuccess: isSuccessDiversity } =
-    useGetDiversityQuery(selectedPortfolio);
-
-  const { data: highestIncome, isSuccess: isSuccessHighestIncome } =
-    useGetHighestIncomeQuery(selectedPortfolio);
-
-  const [diversificationChartOptions, setDiversificationChartOptions] =
-    useState<ApexOptions>(diversificationChartOptionsInit);
-
-  const [diversificationChartSeries, setDiversificationChartSeries] = useState<
-    number[]
-  >([]);
-
-  const [performanceChartSeries, setPerformanceChartSeries] = useState<
-    { name: string; data: number[] }[]
-  >([{ name: "", data: [] }]);
-
-  const [performanceChartOptions, setPerformanceChartOptions] =
-    useState<ApexOptions>(performanceChartOptionsInit);
 
   useEffect(() => {
     if (isSuccessPerformance) {
@@ -343,16 +379,16 @@ const Overview = () => {
   useEffect(() => {
     if (
       isSuccessPortfolioInvested &&
-      isSuccessMarketValue &&
+      isSuccessPortfolioMarketValue &&
       isSuccessDividendsSoFar
     ) {
       setPortfolioChartSeries([
         {
           data: [
             portfolioInvested,
-            marketValue,
-            marketValue - portfolioInvested,
-            marketValue - portfolioInvested + dividendsSoFar,
+            portfolioMarketValue,
+            portfolioMarketValue - portfolioInvested,
+            portfolioMarketValue - portfolioInvested + dividendsSoFar,
           ],
         },
       ]);
@@ -360,9 +396,9 @@ const Overview = () => {
   }, [
     portfolioInvested,
     isSuccessPortfolioInvested,
-    isSuccessMarketValue,
+    isSuccessPortfolioMarketValue,
     isSuccessDividendsSoFar,
-    marketValue,
+    portfolioMarketValue,
     dividendsSoFar,
   ]);
 
