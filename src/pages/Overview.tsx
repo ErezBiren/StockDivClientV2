@@ -10,7 +10,7 @@ import YearsProjection from "../components/overviewCharts/YearsProjection";
 
 const Overview = () => {
   return (
-    <div className="flex flex-col items-center gap-8 text-center">
+    <div className="flex flex-col gap-8 text-center">
       <PortfolioChart />
       <DividendsSoFarChart />
       <MonthsProjectionChart />

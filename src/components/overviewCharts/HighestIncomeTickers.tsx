@@ -44,8 +44,7 @@ const HighestIncomeTickers = () => {
         type="bar"
         options={highestIncomeChartOptions}
         series={highestIncomeChartSeries}
-        width={500}
-        height={320}
+        height={300}
       />
     </ChartCard>
   );

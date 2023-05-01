@@ -50,8 +50,7 @@ const MonthsProjectionChart = () => {
         type="bar"
         options={monthsProjectionChartOptions}
         series={monthsProjectionChartSeries}
-        width={500}
-        height={320}
+        height={300}
       />
     </ChartCard>
   );

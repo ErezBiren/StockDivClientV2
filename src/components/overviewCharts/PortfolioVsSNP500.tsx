@@ -55,7 +55,6 @@ const PortfolioVsSNP500 = () => {
         options={performanceChartOptions}
         series={performanceChartSeries}
         height={300}
-        width={500}
       />
     </ChartCard>
   );

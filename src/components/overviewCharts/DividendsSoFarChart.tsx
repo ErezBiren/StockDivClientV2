@@ -64,17 +64,21 @@ const DividendsSoFarChart = () => {
       </div>
       <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
 
-      {next?.tickers.map((ticker: string, index: number) => (
-        <div key={index} className="flex flex-column ">
-          <div
-            className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
-            title={`Next Dividend: ${formatToCurrency(next?.amouts?.[index])}`}
-          >
-            <div className="mt-px">{ticker}</div>
+      <div className="flex flex-row justify-center">
+        {next?.tickers.map((ticker: string, index: number) => (
+          <div key={index} className="flex flex-col items-center gap-1">
+            <div
+              className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
+              title={`Next Dividend: ${formatToCurrency(
+                next?.amouts?.[index]
+              )}`}
+            >
+              <div className="mt-px">{ticker}</div>
+            </div>
+            <img src={next?.logos[index]} className="h-[32px] w-[32px]" />
           </div>
-          <img src={next?.logos[index]} className="h-[32px] w-[32px]" />
-        </div>
-      ))}
+        ))}
+      </div>
       <div className="justify-center row">
         <Chart
           type="donut"

@@ -158,8 +158,7 @@ function MainLayout() {
           )}
         </div>
       </header>
-      <main className="mt-[160px]">
-        {" "}
+      <main className="mt-[220px]">
         {/* TODO: set the top dynamically*/}
         <Outlet />
       </main>
