@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
   useGetMarketValueQuery,
-  useGetInvestedQuery,
-  useGetSoFarQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
   useGetLastTotalDividendQuery,
@@ -18,32 +16,22 @@ import RoiChart from "../components/overviewCharts/RoiChart";
 import DividendsSoFarChart from "../components/overviewCharts/DividendsSoFarChart";
 import MonthsProjectionChart from "../components/overviewCharts/MonthsProjectionChart";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import PortfolioChart from "../components/overviewCharts/PortfolioChart";
 
 const Overview = () => {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
-  const { portfolioChartOptions, projectionChartOptionsInit } = useChartsInit();
+  const { projectionChartOptionsInit } = useChartsInit();
 
   const { data: portfolioLastTotalDividend } =
     useGetLastTotalDividendQuery(selectedPortfolio);
 
-  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
-    useGetInvestedQuery(selectedPortfolio);
   const {
     data: portfolioMarketValue,
     isSuccess: isSuccessPortfolioMarketValue,
   } = useGetMarketValueQuery(selectedPortfolio);
-  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
-    useGetSoFarQuery(selectedPortfolio);
 
   const [showReinvest, setShowReinvest] = useState(false);
-
-  const [portfolioChartSeries, setPortfolioChartSeries] =
-    useState<ApexAxisChartSeries>([
-      {
-        data: [0, 0, 0, 0],
-      },
-    ]);
 
   const { data: averageIncrease, isSuccess: isSuccessAverageIncrease } =
     useGetAverageIncreaseQuery(selectedPortfolio);
@@ -131,43 +119,9 @@ const Overview = () => {
     else setProjectionActualChartSeries(projectionChartSeries);
   }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
 
-  useEffect(() => {
-    if (
-      isSuccessPortfolioInvested &&
-      isSuccessPortfolioMarketValue &&
-      isSuccessDividendsSoFar
-    ) {
-      setPortfolioChartSeries([
-        {
-          data: [
-            portfolioInvested,
-            portfolioMarketValue,
-            portfolioMarketValue - portfolioInvested,
-            portfolioMarketValue - portfolioInvested + dividendsSoFar,
-          ],
-        },
-      ]);
-    }
-  }, [
-    portfolioInvested,
-    isSuccessPortfolioInvested,
-    isSuccessPortfolioMarketValue,
-    isSuccessDividendsSoFar,
-    portfolioMarketValue,
-    dividendsSoFar,
-  ]);
-
   return (
     <div className="flex flex-col items-center gap-8 text-center">
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="bar"
-          options={portfolioChartOptions}
-          series={portfolioChartSeries}
-          width={500}
-          height={320}
-        />
-      </div>
+      <PortfolioChart />
       <DividendsSoFarChart />
       <MonthsProjectionChart />
       <HighestIncomeTickers />
