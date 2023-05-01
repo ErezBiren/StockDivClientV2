@@ -1,11 +1,9 @@
-import { ApexOptions } from "apexcharts";
 import { useCallback, useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
   useGetMarketValueQuery,
   useGetInvestedQuery,
   useGetSoFarQuery,
-  useGetMonthsProjectionQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
   useGetLastTotalDividendQuery,
@@ -19,6 +17,7 @@ import PortfolioVsSNP500 from "../components/overviewCharts/PortfolioVsSNP500";
 import News from "../components/overviewCharts/News";
 import RoiChart from "../components/overviewCharts/RoiChart";
 import DividendsSoFarChart from "../components/overviewCharts/DividendsSoFarChart";
+import MonthsProjectionChart from "../components/overviewCharts/MonthsProjectionChart";
 
 const Overview = () => {
   const selectedPortfolio: string = useSelector(
@@ -26,7 +25,6 @@ const Overview = () => {
   );
 
   const {
-    monthsProjectionChartOptionsInit,
     portfolioChartOptions,
     projectionChartOptionsInit,
   } = useChartsInit();
@@ -43,25 +41,12 @@ const Overview = () => {
   const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
     useGetSoFarQuery(selectedPortfolio);
 
-  const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
-    useGetMonthsProjectionQuery(selectedPortfolio);
-
   const [showReinvest, setShowReinvest] = useState(false);
-
-  const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
-    useState<ApexOptions>(monthsProjectionChartOptionsInit);
 
   const [portfolioChartSeries, setPortfolioChartSeries] =
     useState<ApexAxisChartSeries>([
       {
         data: [0, 0, 0, 0],
-      },
-    ]);
-
-  const [monthsProjectionChartSeries, setMonthsProjectionChartSeries] =
-    useState<ApexAxisChartSeries>([
-      {
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ]);
 
@@ -153,22 +138,6 @@ const Overview = () => {
   }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
 
   useEffect(() => {
-    if (isSuccessMonthsProjection) {
-      setMonthsProjectionChartOptions({
-        xaxis: {
-          categories: monthsProjection.map((item: [string, number]) => item[0]),
-        },
-      });
-
-      setMonthsProjectionChartSeries([
-        {
-          data: monthsProjection.map((item: [string, number]) => item[1]),
-        },
-      ]);
-    }
-  }, [isSuccessMonthsProjection, monthsProjection]);
-
-  useEffect(() => {
     if (
       isSuccessPortfolioInvested &&
       isSuccessPortfolioMarketValue &&
@@ -206,15 +175,7 @@ const Overview = () => {
         />
       </div>
       <DividendsSoFarChart />
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="bar"
-          options={monthsProjectionChartOptions}
-          series={monthsProjectionChartSeries}
-          width={500}
-          height={320}
-        />
-      </div>
+      <MonthsProjectionChart />
       <HighestIncomeTickers />
       <div className="bg-[#E1F5FE] shadow-lg">
         <label className="relative inline-flex items-center mt-2 cursor-pointer">
