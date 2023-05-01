@@ -9,28 +9,26 @@ import {
   useGetPeriodsQuery,
   useGetMonthsProjectionQuery,
   useGetRoiMeterQuery,
-  useGetNewsQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
   useGetLastTotalDividendQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../hooks/useFormatHelper";
-import { IPriceAndDate } from "../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../hooks/useChartsInit";
-import { ITickerNews } from "../utils/interfaces/ITickerNews";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import HighestIncomeTickers from "../components/overviewCharts/HighestIncomeTickers";
 import DiversificationChart from "../components/overviewCharts/DiversificationChart";
 import PortfolioVsSNP500 from "../components/overviewCharts/PortfolioVsSNP500";
+import News from "../components/overviewCharts/News";
+import RoiChart from "../components/overviewCharts/RoiChart";
 
 const Overview = () => {
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
   );
 
-  const { formatToCurrency, formatToPercentage, formatToDate } =
-    useFormatHelper();
+  const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const {
     monthsProjectionChartOptionsInit,
     performanceChartOptionsInit,
@@ -60,7 +58,6 @@ const Overview = () => {
     useGetPeriodsQuery(selectedPortfolio);
   const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
     useGetMonthsProjectionQuery(selectedPortfolio);
-  const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
 
   const [showReinvest, setShowReinvest] = useState(false);
   const [nextDividendInfo, setNextDividendInfo] = useState("");
@@ -85,8 +82,6 @@ const Overview = () => {
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ]);
-
-  const { data: newsItems } = useGetNewsQuery(selectedPortfolio);
 
   const { data: averageIncrease, isSuccess: isSuccessAverageIncrease } =
     useGetAverageIncreaseQuery(selectedPortfolio);
@@ -175,77 +170,6 @@ const Overview = () => {
     else setProjectionActualChartSeries(projectionChartSeries);
   }, [projectionChartSeries, projectionWithReinvestChartSeries, showReinvest]);
 
-  const [roiChartOptions, setRoiChartOptions] = useState({});
-  const [roiChartSeries, setRoiChartSeries] = useState<
-    [{ data: number[] }, { data: number[] }]
-  >([{ data: [0] }, { data: [0] }]);
-
-  useEffect(() => {
-    setRoiChartOptions({
-      chart: {
-        type: "bar",
-        stacked: true,
-      },
-      tooltip: {
-        enabled: false,
-      },
-      grid: {
-        yaxis: {
-          lines: {
-            show: false,
-          },
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: function (val: number) {
-          return formatToCurrency(val);
-        },
-        style: {
-          fontSize: "1em",
-          colors: ["#304758"],
-        },
-      },
-      legend: {
-        show: false,
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          borderRadius: 10,
-          dataLabels: {
-            total: {
-              enabled: true,
-              formatter: () => {
-                return portfolioInvested === 0
-                  ? ""
-                  : `${formatToPercentage(
-                      (dividendsSoFar / portfolioInvested) * 100
-                    )} | Approximately ${roiMeterText} to 100% ROI`;
-              },
-            },
-          },
-        },
-      },
-      yaxis: {
-        show: false,
-      },
-      xaxis: {
-        type: "string",
-        categories: ["ROI"],
-      },
-      fill: {
-        opacity: 1,
-      },
-    });
-  }, [
-    dividendsSoFar,
-    formatToCurrency,
-    formatToPercentage,
-    portfolioInvested,
-    roiMeterText,
-  ]);
-
   useEffect(() => {
     if (isSuccessMonthsProjection) {
       setMonthsProjectionChartOptions({
@@ -290,30 +214,6 @@ const Overview = () => {
   }, [formatToCurrency, isSuccessNext, next]);
 
   useEffect(() => {
-    if (isSuccessDividendsSoFar) {
-      setRoiChartSeries((prev) => {
-        const res: [{ data: number[] }, { data: number[] }] = [
-          { data: [dividendsSoFar] },
-          { ...prev[1] },
-        ];
-        return res;
-      });
-    }
-  }, [isSuccessDividendsSoFar, dividendsSoFar]);
-
-  useEffect(() => {
-    if (isSuccessPortfolioInvested) {
-      setRoiChartSeries((prev) => {
-        const res: [{ data: number[] }, { data: number[] }] = [
-          { ...prev[0] },
-          { data: [portfolioInvested] },
-        ];
-        return res;
-      });
-    }
-  }, [isSuccessPortfolioInvested, portfolioInvested]);
-
-  useEffect(() => {
     if (
       isSuccessPortfolioInvested &&
       isSuccessPortfolioMarketValue &&
@@ -338,10 +238,6 @@ const Overview = () => {
     portfolioMarketValue,
     dividendsSoFar,
   ]);
-
-  const gotoNews = (url: string) => {
-    window.open(url, "_blank");
-  };
 
   return (
     <div className="flex flex-col items-center gap-8 text-center">
@@ -425,31 +321,10 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <Chart
-          type="bar"
-          options={roiChartOptions}
-          series={roiChartSeries}
-          height={320}
-        />
-      </div>
+      <RoiChart />
       <DiversificationChart />
       <PortfolioVsSNP500 />
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <span className="justify-center text-xl font-body">News</span>
-        {newsItems?.map((newsItem: ITickerNews, index: number) => (
-          <div
-            key={index}
-            className="py-2 px-2 border-gray-300 cursor-pointer border-b-[1px] hover:bg-gray-300"
-            onClick={() => gotoNews(newsItem.link)}
-          >
-            <div className="text-xs text-gray-800">
-              {formatToDate(newsItem.date.substring(0, 10))}
-            </div>
-            <div className="text-xs text-gray-500">{newsItem.title}</div>
-          </div>
-        ))}
-      </div>
+      <News />
     </div>
   );
 };

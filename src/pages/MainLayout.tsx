@@ -1,6 +1,6 @@
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
-import { logOut, selectCurrentToken } from "../features/auth/authSlice";
+import { logOut } from "../features/auth/authSlice";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
