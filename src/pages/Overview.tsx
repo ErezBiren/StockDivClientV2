@@ -5,15 +5,11 @@ import {
   useGetMarketValueQuery,
   useGetInvestedQuery,
   useGetSoFarQuery,
-  useGetNextQuery,
-  useGetPeriodsQuery,
   useGetMonthsProjectionQuery,
-  useGetRoiMeterQuery,
   useGetIncomeLastYearQuery,
   useGetAverageIncreaseQuery,
   useGetLastTotalDividendQuery,
 } from "../features/portfolio/portfolioApiSlice";
-import useFormatHelper from "../hooks/useFormatHelper";
 import useChartsInit from "../hooks/useChartsInit";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
@@ -22,27 +18,21 @@ import DiversificationChart from "../components/overviewCharts/DiversificationCh
 import PortfolioVsSNP500 from "../components/overviewCharts/PortfolioVsSNP500";
 import News from "../components/overviewCharts/News";
 import RoiChart from "../components/overviewCharts/RoiChart";
+import DividendsSoFarChart from "../components/overviewCharts/DividendsSoFarChart";
 
 const Overview = () => {
   const selectedPortfolio: string = useSelector(
     (state: RootState) => state.stockdiv.selectedPortfolio
   );
 
-  const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const {
     monthsProjectionChartOptionsInit,
-    performanceChartOptionsInit,
     portfolioChartOptions,
-    monthChartOptions,
-    yearChartOptions,
-    weekChartOptions,
     projectionChartOptionsInit,
   } = useChartsInit();
 
-  const {
-    data: portfolioLastTotalDividend,
-    isSuccess: isSuccessPortfolioLastTotalDividend,
-  } = useGetLastTotalDividendQuery(selectedPortfolio);
+  const { data: portfolioLastTotalDividend } =
+    useGetLastTotalDividendQuery(selectedPortfolio);
 
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
@@ -52,15 +42,11 @@ const Overview = () => {
   } = useGetMarketValueQuery(selectedPortfolio);
   const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
     useGetSoFarQuery(selectedPortfolio);
-  const { data: next, isSuccess: isSuccessNext } =
-    useGetNextQuery(selectedPortfolio);
-  const { data: periods, isSuccess: isSuccessPeriods } =
-    useGetPeriodsQuery(selectedPortfolio);
+
   const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
     useGetMonthsProjectionQuery(selectedPortfolio);
 
   const [showReinvest, setShowReinvest] = useState(false);
-  const [nextDividendInfo, setNextDividendInfo] = useState("");
 
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
     useState<ApexOptions>(monthsProjectionChartOptionsInit);
@@ -71,10 +57,6 @@ const Overview = () => {
         data: [0, 0, 0, 0],
       },
     ]);
-
-  const [yearlyChartSeries, setYearlyChartSeries] = useState<number[]>([]);
-  const [monthlyChartSeries, setMonthlyChartSeries] = useState<number[]>([]);
-  const [weeklyChartSeries, setWeeklyChartSeries] = useState<number[]>([]);
 
   const [monthsProjectionChartSeries, setMonthsProjectionChartSeries] =
     useState<ApexAxisChartSeries>([
@@ -187,33 +169,6 @@ const Overview = () => {
   }, [isSuccessMonthsProjection, monthsProjection]);
 
   useEffect(() => {
-    if (isSuccessPeriods) {
-      setYearlyChartSeries(periods.yearDividend);
-      setMonthlyChartSeries(periods.monthDividend);
-      setWeeklyChartSeries(periods.weekDividend);
-    }
-  }, [isSuccessPeriods, periods]);
-
-  useEffect(() => {
-    if (isSuccessNext) {
-      if (next.days === -1)
-        setNextDividendInfo("Nothing in the next 31 days...");
-      else if (next.days === 0)
-        setNextDividendInfo(
-          `Today you should get ${formatToCurrency(next.amount)}`
-        );
-      else if (next.days === 1)
-        setNextDividendInfo(
-          `Tomorrow you should get ${formatToCurrency(next.amount)}`
-        );
-      else
-        setNextDividendInfo(
-          `In ${next.days} days you should get ${formatToCurrency(next.amount)}`
-        );
-    }
-  }, [formatToCurrency, isSuccessNext, next]);
-
-  useEffect(() => {
     if (
       isSuccessPortfolioInvested &&
       isSuccessPortfolioMarketValue &&
@@ -250,46 +205,7 @@ const Overview = () => {
           height={320}
         />
       </div>
-      <div className="bg-[#E1F5FE] shadow-lg">
-        <div className="justify-center text-h6 q-mt-sm row no-wrap">
-          Dividends so far: {formatToCurrency(dividendsSoFar)}
-        </div>
-        <div className="text-h6 q-mt-sm">{nextDividendInfo}</div>
-
-        {next?.tickers.map((ticker: string, index: number) => (
-          <div key={index} className="flex flex-column ">
-            <div
-              className="center relative inline-block select-none whitespace-nowrap rounded-xl bg-teal-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white"
-              title={`Next Dividend: ${formatToCurrency(
-                next?.amouts?.[index]
-              )}`}
-            >
-              <div className="mt-px">{ticker}</div>
-            </div>
-            <img src={next?.logos[index]} className="h-[32px] w-[32px]" />
-          </div>
-        ))}
-        <div className="justify-center row">
-          <Chart
-            type="donut"
-            height={200}
-            options={yearChartOptions}
-            series={yearlyChartSeries}
-          />
-          <Chart
-            type="donut"
-            height={200}
-            options={monthChartOptions}
-            series={monthlyChartSeries}
-          />
-          <Chart
-            type="donut"
-            height={200}
-            options={weekChartOptions}
-            series={weeklyChartSeries}
-          />
-        </div>
-      </div>
+      <DividendsSoFarChart />
       <div className="bg-[#E1F5FE] shadow-lg">
         <Chart
           type="bar"
@@ -321,6 +237,7 @@ const Overview = () => {
           height={320}
         />
       </div>
+
       <RoiChart />
       <DiversificationChart />
       <PortfolioVsSNP500 />
