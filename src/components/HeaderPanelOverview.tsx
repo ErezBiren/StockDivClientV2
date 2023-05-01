@@ -3,7 +3,6 @@ import { HiBellAlert } from "react-icons/hi2";
 import useFormatHelper from "../hooks/useFormatHelper";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import {
   useGetDailyChangeQuery,
   useGetInvestedQuery,
@@ -11,14 +10,13 @@ import {
   useGetMarketValueQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: dailyChange } = useGetDailyChangeQuery(selectedPortfolio);
   const { data: portfolioLastTotalDividend } =

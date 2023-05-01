@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import { useGetPerformanceQuery } from "../../features/portfolio/portfolioApiSlice";
 import { IPriceAndDate } from "../../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../../hooks/useChartsInit";
 import { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
 import ChartCard from "../ChartCard";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const PortfolioVsSNP500 = () => {
   const { performanceChartOptionsInit } = useChartsInit();
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: performance, isSuccess: isSuccessPerformance } =
     useGetPerformanceQuery(selectedPortfolio);

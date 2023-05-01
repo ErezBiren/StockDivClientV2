@@ -1,16 +1,14 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import ChartCard from "../ChartCard";
 import { ApexOptions } from "apexcharts";
 import useChartsInit from "../../hooks/useChartsInit";
 import { useGetMonthsProjectionQuery } from "../../features/portfolio/portfolioApiSlice";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const MonthsProjectionChart = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+ const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const {
     monthsProjectionChartOptionsInit,

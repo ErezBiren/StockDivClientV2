@@ -1,11 +1,10 @@
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IPortfolioAsset } from "../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { isSameDate } from "../utils/utils";
@@ -143,9 +142,7 @@ const AssetsGridView = () => {
     },
   ];
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: assets, isSuccess: isSuccessAssets } =
     useGetAssetsQuery(selectedPortfolio);

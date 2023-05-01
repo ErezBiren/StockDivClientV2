@@ -8,16 +8,14 @@ import { FiLogOut } from "react-icons/fi";
 import { MdAnnouncement } from "react-icons/md";
 import HeaderPanelOverview from "../components/HeaderPanelOverview";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import HeaderPanelPortfolio from "../components/HeaderPanelPortfolio";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: userName } = useGetUserNameQuery({});
   const { data: portfolios } = useGetPortfoliosQuery({});
@@ -153,10 +151,16 @@ function MainLayout() {
           </div>
         </div>
         <div className="flex justify-center">
-          {currentRoute === "/portfolio" ? <HeaderPanelPortfolio/> : <HeaderPanelOverview />}
+          {currentRoute === "/portfolio" ? (
+            <HeaderPanelPortfolio />
+          ) : (
+            <HeaderPanelOverview />
+          )}
         </div>
       </header>
-      <main className="mt-[160px]">       {/* TODO: set the top dynamically*/}
+      <main className="mt-[160px]">
+        {" "}
+        {/* TODO: set the top dynamically*/}
         <Outlet />
       </main>
     </div>

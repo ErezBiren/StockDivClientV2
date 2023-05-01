@@ -3,12 +3,10 @@ import { useGetNewsQuery } from "../../features/portfolio/portfolioApiSlice";
 import { ITickerNews } from "../../utils/interfaces/ITickerNews";
 import { useSelector } from "react-redux";
 import useFormatHelper from "../../hooks/useFormatHelper";
-import { RootState } from "../../app/store";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const News = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { formatToDate } = useFormatHelper();
 

@@ -10,7 +10,6 @@ import {
 } from "../features/portfolio/portfolioApiSlice";
 import useChartsInit from "../hooks/useChartsInit";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import HighestIncomeTickers from "../components/overviewCharts/HighestIncomeTickers";
 import DiversificationChart from "../components/overviewCharts/DiversificationChart";
 import PortfolioVsSNP500 from "../components/overviewCharts/PortfolioVsSNP500";
@@ -18,16 +17,12 @@ import News from "../components/overviewCharts/News";
 import RoiChart from "../components/overviewCharts/RoiChart";
 import DividendsSoFarChart from "../components/overviewCharts/DividendsSoFarChart";
 import MonthsProjectionChart from "../components/overviewCharts/MonthsProjectionChart";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 const Overview = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
-  const {
-    portfolioChartOptions,
-    projectionChartOptionsInit,
-  } = useChartsInit();
+  const { portfolioChartOptions, projectionChartOptionsInit } = useChartsInit();
 
   const { data: portfolioLastTotalDividend } =
     useGetLastTotalDividendQuery(selectedPortfolio);
@@ -122,7 +117,6 @@ const Overview = () => {
     averageIncrease,
     isSuccessAverageIncrease,
     projectionChartSeries,
-    getPortfolioDivYield,
     portfolioMarketValue,
     projectionWithReinvestChartSeries,
   ]);

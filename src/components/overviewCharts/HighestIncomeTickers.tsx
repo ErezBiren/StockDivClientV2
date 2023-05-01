@@ -5,12 +5,10 @@ import Chart from "react-apexcharts";
 import useChartsInit from "../../hooks/useChartsInit";
 import { useGetHighestIncomeQuery } from "../../features/portfolio/portfolioApiSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const HighestIncomeTickers = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: highestIncome, isSuccess: isSuccessHighestIncome } =
     useGetHighestIncomeQuery(selectedPortfolio);

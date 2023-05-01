@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import {
@@ -9,11 +8,10 @@ import {
 } from "../../features/portfolio/portfolioApiSlice";
 import useFormatHelper from "../../hooks/useFormatHelper";
 import useChartsInit from "../../hooks/useChartsInit";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const DividendsSoFarChart = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { yearChartOptions, monthChartOptions, weekChartOptions } =
     useChartsInit();
@@ -57,7 +55,7 @@ const DividendsSoFarChart = () => {
           `In ${next.days} days you should get ${formatToCurrency(next.amount)}`
         );
     }
-  }, [formatToCurrency, isSuccessNext, next]);
+  }, [isSuccessNext, next]);
 
   return (
     <div className="bg-[#E1F5FE] shadow-lg">

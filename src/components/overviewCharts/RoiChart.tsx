@@ -1,4 +1,3 @@
-import { RootState } from "../../app/store";
 import { useSelector } from "react-redux";
 import ChartCard from "../ChartCard";
 import Chart from "react-apexcharts";
@@ -9,11 +8,10 @@ import {
   useGetRoiMeterQuery,
   useGetSoFarQuery,
 } from "../../features/portfolio/portfolioApiSlice";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const RoiChart = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
 

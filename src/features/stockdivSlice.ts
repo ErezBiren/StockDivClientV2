@@ -3,6 +3,7 @@ import { SortByEnum } from '../utils/enums/SortByEnum';
 import { SortDirectionEnum } from '../utils/enums/SortDirectionEnum';
 import { ViewModeEnum } from '../utils/enums/ViewModeEnum';
 import { IDividendAlert } from '../utils/interfaces/IDividendAlert';
+import { RootState } from '../app/store';
 
 const initialState = {
   portfolios: [],
@@ -80,3 +81,6 @@ export const {
 } = stockdivSlice.actions;
 
 export default stockdivSlice.reducer;
+
+
+export const selectCurrentPortfolio = (state: RootState) => state.stockdiv.selectedPortfolio;

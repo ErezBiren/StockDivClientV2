@@ -1,11 +1,9 @@
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 const HeaderPanelPortfolio = () => {
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: assets } = useGetAssetsQuery(selectedPortfolio);
 
@@ -13,7 +11,7 @@ const HeaderPanelPortfolio = () => {
     <div className="bg-[#E1F5FE] shadow-lg p-2">
       <div className="flex flex-row justify-between gap-2">
         <span>{assets?.length} assets</span>
-        <span className="w-[1px] h-6 bg-slate-400"/>
+        <span className="w-[1px] h-6 bg-slate-400" />
         <span>:</span>
       </div>
       <div className="flex flex-col items-center"></div>

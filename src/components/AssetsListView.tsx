@@ -1,9 +1,9 @@
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IPortfolioAsset } from "../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 type AssetsFieldProps = {
   fileName: string;
@@ -22,9 +22,7 @@ const AssetsField = ({ fileName, fieldValue, textAlign }: AssetsFieldProps) => {
 const AssetsListView = () => {
   const navigate = useNavigate();
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: assets } = useGetAssetsQuery(selectedPortfolio);
 

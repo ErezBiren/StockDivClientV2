@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import { IDiversification } from "../../utils/interfaces/IDiversification";
 import ChartCard from "../ChartCard";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { useGetDiversityQuery } from "../../features/portfolio/portfolioApiSlice";
 import useChartsInit from "../../hooks/useChartsInit";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const DiversificationChart = () => {
   const { diversificationChartOptionsInit } = useChartsInit();
 
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { data: diversity, isSuccess: isSuccessDiversity } =
     useGetDiversityQuery(selectedPortfolio);

@@ -7,13 +7,10 @@ import {
   useGetSoFarQuery,
 } from "../features/portfolio/portfolioApiSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 const useChartsInit = () => {
-
-  const selectedPortfolio: string = useSelector(
-    (state: RootState) => state.stockdiv.selectedPortfolio
-  );
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const [portfolioMarketValue, setPortfolioMarketValue] = useState(0);
@@ -154,9 +151,7 @@ const useChartsInit = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return formatToPercentage(
-          opt.w.config.series[opt.seriesIndex]
-        );
+        return formatToPercentage(opt.w.config.series[opt.seriesIndex]);
       },
     },
     plotOptions: {
@@ -360,9 +355,7 @@ const useChartsInit = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return formatToCurrency(
-          opt.w.config.series[opt.seriesIndex]
-        );
+        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
       },
     },
     plotOptions: {
@@ -419,9 +412,7 @@ const useChartsInit = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return formatToCurrency(
-          opt.w.config.series[opt.seriesIndex]
-        );
+        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
       },
     },
     plotOptions: {
@@ -475,9 +466,7 @@ const useChartsInit = () => {
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: function (_val: number, opt: any) {
-        return formatToCurrency(
-          opt.w.config.series[opt.seriesIndex]
-        );
+        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
       },
     },
     plotOptions: {
