@@ -38,18 +38,22 @@ const AssetsListView = () => {
       {assets?.map((item: IPortfolioAsset) => (
         <section
           key={item.ticker}
-          className="h-[300px] bg-[#E1F5FE] cursor-pointer shadow-xl mx-10"
+          className="bg-[#E1F5FE] cursor-pointer shadow-xl mx-10 py-4"
           onClick={() => gotoTickerPage(item.ticker)}
         >
-          <div className="flex flex-row justify-center ">
+          <div className="flex flex-row justify-center gap-1 ">
             <img src={item.logoUrl} width="16px" height="16px" />
-            <span>{item.ticker}:</span>
+            <span className="font-semibold">{item.ticker}:</span>
             <span>{item.sector}</span>
           </div>
           <div className="text-center">
             {formatToNumber(item.shares)} shares of {item.name}
           </div>
           <div className="text-center">
+            <span>$865.24 ( 328.34%)</span>
+            <span> Daily: {formatToPercentage(item.dailyChangePercent)}</span>
+          </div>
+          <div className="text-lg font-semibold text-center">
             Income: {formatToCurrency(item.income)}
           </div>
           <div className="flex flex-row justify-center gap-5">

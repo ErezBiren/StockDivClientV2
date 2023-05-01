@@ -56,6 +56,8 @@ const YearsProjection = () => {
     const tempProjectionChartSeries = { ...projectionChartSeries };
     let tempIncomeLastYear = incomeLastYear;
 
+    tempProjectionChartSeries[0].data=[];
+
     for (let i = 0; i < 11; i++) {
       tempProjectionChartSeries[0].data.push(
         tempIncomeLastYear *
@@ -77,6 +79,8 @@ const YearsProjection = () => {
     const tempProjectionWithReinvestChartSeries: [{ data: number[] }] = {
       ...projectionWithReinvestChartSeries,
     };
+
+    tempProjectionWithReinvestChartSeries[0].data = [];
 
     for (let i = 0; i < 11; i++) {
       tempProjectionWithReinvestChartSeries[0].data.push(
