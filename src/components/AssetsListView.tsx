@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import TrendingArrow from "./common/TrendingArrow";
 
 type AssetsFieldProps = {
   fileName: string;
@@ -50,8 +51,16 @@ const AssetsListView = () => {
             {formatToNumber(item.shares)} shares of {item.name}
           </div>
           <div className="text-center">
-            <span>$865.24 ( 328.34%)</span>
-            <span> Daily: {formatToPercentage(item.dailyChangePercent)}</span>
+            <span>
+              {`${formatToCurrency(item.marketValue)} (`}
+              <TrendingArrow positiveCondition={item.profitLoss >= 0} />
+              {` ${formatToPercentage(item.profitLossPercent)})`}
+            </span>
+            <span>
+              {`Daily: (`}
+              <TrendingArrow positiveCondition={item.dailyChange < 0} />
+              {`${formatToPercentage(item.dailyChangePercent)})`}
+            </span>
           </div>
           <div className="text-lg font-semibold text-center">
             Income: {formatToCurrency(item.income)}

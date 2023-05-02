@@ -21,6 +21,7 @@ const router = createBrowserRouter(
       <Route element={<RequireAuth />}>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Overview />} />
+          <Route path="/overview" element={<Overview />} />
           <Route path="/ticker/:ticker" element={<></>} />
           <Route path="/yearlyPaymentMatrix" element={<></>} />
           <Route path="/monthlyDividendsView/:month" element={<></>} />

@@ -13,7 +13,7 @@ import {
   validateEmail,
 } from "../../utils/utils";
 import { useForgotPasswordMutation } from "../users/usersApiSlice";
-import Modal, { ModalAction } from "../../components/Modal";
+import Modal, { ModalAction } from "../../components/common/Modal";
 
 export default function Login() {
   const [login] = useLoginMutation();

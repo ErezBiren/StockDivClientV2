@@ -1,7 +1,6 @@
 import { BiCalendarEvent } from "react-icons/bi";
 import { HiBellAlert } from "react-icons/hi2";
 import useFormatHelper from "../hooks/useFormatHelper";
-import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import {
   useGetDailyChangeQuery,
@@ -11,6 +10,7 @@ import {
 } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import TrendingArrow from "./common/TrendingArrow";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
@@ -92,11 +92,9 @@ const HeaderPanelOverview = () => {
           }`}
         >
           {formatToCurrency(portfolioMarketValue)}(
-          {portfolioMarketValue - portfolioInvested < 0 ? (
-            <HiTrendingDown className="inline" />
-          ) : (
-            <HiTrendingUp className="inline" />
-          )}
+          <TrendingArrow
+            positiveCondition={portfolioMarketValue - portfolioInvested >= 0}
+          />
           {formatToPercentage(plPercentage())})
         </span>
         <div className="flex flex-row items-center gap-1">
@@ -105,20 +103,14 @@ const HeaderPanelOverview = () => {
               dailyChange < 0 ? "text-red-600" : "text-[#4caf50]"
             }`}
           >
-            {`Daily PL: ${formatToCurrency(dailyChange)}(`}
-            {dailyChange < 0 ? (
-              <HiTrendingDown className="inline" />
-            ) : (
-              <HiTrendingUp className="inline" />
-            )}
-            {formatToPercentage(dailyChangePercentage())}
-            {")"}
+            Daily PL: {formatToCurrency(dailyChange)}(
+            <TrendingArrow positiveCondition={dailyChange >= 0} />
+            {formatToPercentage(dailyChangePercentage())})
           </span>
-          <span className="w-[1px] bg-gray-300 h-6"></span>
+          <span className="w-[1px] bg-gray-300 h-6"/>
           <span>
             Yield/YOC:
-            {formatToPercentage(getPortfolioDivYield())}
-            {" / "}
+            {formatToPercentage(getPortfolioDivYield())}/
             {formatToPercentage(getPortfolioYOC())}
           </span>
         </div>
