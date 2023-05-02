@@ -1,16 +1,9 @@
-import ChartCard from "../ChartCard";
-import { useGetNewsQuery } from "../../features/portfolio/portfolioApiSlice";
-import { ITickerNews } from "../../utils/interfaces/ITickerNews";
-import { useSelector } from "react-redux";
 import useFormatHelper from "../../hooks/useFormatHelper";
-import { selectCurrentPortfolio } from "../../features/stockdivSlice";
+import { INews } from "../../utils/interfaces/INews";
+import ChartCard from "../ChartCard";
 
-const News = () => {
-  const selectedPortfolio = useSelector(selectCurrentPortfolio);
-
+const News = ({ newsItems }: { newsItems: INews[] }) => {
   const { formatToDate } = useFormatHelper();
-
-  const { data: newsItems } = useGetNewsQuery(selectedPortfolio);
 
   const gotoNews = (url: string) => {
     window.open(url, "_blank");
@@ -19,7 +12,7 @@ const News = () => {
   return (
     <ChartCard>
       <span className="justify-center text-xl font-body">News</span>
-      {newsItems?.map((newsItem: ITickerNews, index: number) => (
+      {newsItems?.map((newsItem: INews, index: number) => (
         <div
           key={index}
           className="py-2 px-2 border-gray-300 cursor-pointer border-b-[1px] hover:bg-gray-300"
