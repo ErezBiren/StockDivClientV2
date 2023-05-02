@@ -5,7 +5,7 @@ import { format } from "date-fns";
 const useFormatHelper = () => {
   const store: RootState = useSelector((state: RootState) => state);
 
-  function formatToCurrency(value: number, currency?: string): string {
+  function formatToCurrency(val: number, currency?: string): string {
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currency
@@ -15,7 +15,7 @@ const useFormatHelper = () => {
         : "USD",
       maximumFractionDigits: store.stockdiv.settings.decimalDigits,
     });
-    return formatter.format(value);
+    return formatter.format(val);
   }
   function formatToPercentage(value: number): string {
     return `${value.toFixed(2)}%`;

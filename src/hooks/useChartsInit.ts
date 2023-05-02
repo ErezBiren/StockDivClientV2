@@ -56,9 +56,7 @@ const useChartsInit = () => {
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val: number) {
-        return formatToCurrency(val);
-      },
+      formatter: formatToCurrency,
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -95,9 +93,7 @@ const useChartsInit = () => {
       },
       labels: {
         show: true,
-        formatter: function (val: number) {
-          return formatToCurrency(val);
-        },
+        formatter: formatToCurrency,
       },
     },
   };
@@ -150,9 +146,7 @@ const useChartsInit = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (_val: number, opt: any) {
-        return formatToPercentage(opt.w.config.series[opt.seriesIndex]);
-      },
+      formatter: (_val: number, opt: any) => formatToPercentage(opt.w.config.series[opt.seriesIndex]),
     },
     plotOptions: {
       pie: {
@@ -164,9 +158,7 @@ const useChartsInit = () => {
             },
             value: {
               show: true,
-              formatter: function (val: string) {
-                return formatToPercentage(Number(val));
-              },
+              formatter: (val: string) => formatToPercentage(Number(val)),
             },
             total: {
               show: false,
@@ -224,9 +216,7 @@ const useChartsInit = () => {
     yaxis: {
       title: {},
       labels: {
-        formatter: function (val: number) {
-          return formatToPercentage(val);
-        },
+        formatter: (val: string) => formatToPercentage(Number(val)),
       },
     },
     legend: {
@@ -282,9 +272,7 @@ const useChartsInit = () => {
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val: number) {
-        return formatToCurrency(val);
-      },
+      formatter: formatToCurrency,
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -321,9 +309,7 @@ const useChartsInit = () => {
       },
       labels: {
         show: true,
-        formatter: function (val: number) {
-          return formatToCurrency(val);
-        },
+        formatter: formatToCurrency,
       },
     },
     title: {
@@ -335,9 +321,7 @@ const useChartsInit = () => {
     tooltip: {
       enabled: true,
       y: {
-        formatter: function (value: number) {
-          return formatToCurrency(value);
-        },
+        formatter: formatToCurrency,
       },
     },
     legend: {
@@ -354,9 +338,7 @@ const useChartsInit = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (_val: number, opt: any) {
-        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
-      },
+      formatter: (_val: number, opt: any) => formatToCurrency(opt.w.config.series[opt.seriesIndex]),
     },
     plotOptions: {
       pie: {
@@ -374,13 +356,11 @@ const useChartsInit = () => {
               showAlways: true,
               label: "Month",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter: function (w: any) {
-                return formatToCurrency(
-                  w.globals.seriesTotals.reduce((a: number, b: number) => {
-                    return a + b;
-                  }, 0)
-                );
-              },
+              formatter: (w: any) => formatToCurrency(
+                w.globals.seriesTotals.reduce((a: number, b: number) => {
+                  return a + b;
+                }, 0)
+              ),
             },
           },
         },
@@ -392,9 +372,7 @@ const useChartsInit = () => {
     tooltip: {
       enabled: true,
       y: {
-        formatter: function (value: number) {
-          return formatToCurrency(value);
-        },
+        formatter: formatToCurrency,
       },
     },
     colors: ["#90EE90", "#ADD8E6", "#CBC3E3"],
@@ -411,9 +389,7 @@ const useChartsInit = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (_val: number, opt: any) {
-        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
-      },
+      formatter: (_val: number, opt: any) => formatToCurrency(opt.w.config.series[opt.seriesIndex]),
     },
     plotOptions: {
       pie: {
@@ -431,13 +407,11 @@ const useChartsInit = () => {
               showAlways: true,
               label: "Year",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter: function (w: any) {
-                return formatToCurrency(
-                  w.globals.seriesTotals.reduce((a: number, b: number) => {
-                    return a + b;
-                  }, 0)
-                );
-              },
+              formatter: (w: any) => formatToCurrency(
+                w.globals.seriesTotals.reduce((a: number, b: number) => {
+                  return a + b;
+                }, 0)
+              ),
             },
           },
         },
@@ -449,9 +423,7 @@ const useChartsInit = () => {
     tooltip: {
       enabled: true,
       y: {
-        formatter: function (value: number) {
-          return formatToCurrency(value);
-        },
+        formatter: formatToCurrency,
       },
     },
     colors: ["#90EE90", "#ADD8E6", "#CBC3E3"],
@@ -465,9 +437,7 @@ const useChartsInit = () => {
         colors: ["black", "black", "black"],
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: function (_val: number, opt: any) {
-        return formatToCurrency(opt.w.config.series[opt.seriesIndex]);
-      },
+      formatter: (_val: number, opt: any) => formatToCurrency(opt.w.config.series[opt.seriesIndex]),
     },
     plotOptions: {
       pie: {
@@ -485,13 +455,11 @@ const useChartsInit = () => {
               showAlways: true,
               label: "Week",
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter: function (w: any) {
-                return formatToCurrency(
-                  w.globals.seriesTotals.reduce((a: number, b: number) => {
-                    return a + b;
-                  }, 0)
-                );
-              },
+              formatter: (w: any) => formatToCurrency(
+                w.globals.seriesTotals.reduce((a: number, b: number) => {
+                  return a + b;
+                }, 0)
+              ),
             },
           },
         },
@@ -527,9 +495,7 @@ const useChartsInit = () => {
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val: number) {
-        return formatToCurrency(val);
-      },
+      formatter: formatToCurrency,
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -579,9 +545,7 @@ const useChartsInit = () => {
       },
       labels: {
         show: true,
-        formatter: function (val: number) {
-          return formatToCurrency(val);
-        },
+        formatter: formatToCurrency,
       },
     },
   };
@@ -623,9 +587,7 @@ const useChartsInit = () => {
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val: number) {
-        return formatToCurrency(val);
-      },
+      formatter: formatToCurrency,
       offsetY: -20,
       style: {
         colors: ["#304758"],
@@ -662,9 +624,7 @@ const useChartsInit = () => {
       },
       labels: {
         show: true,
-        formatter: function (val: number) {
-          return formatToCurrency(val);
-        },
+        formatter: formatToCurrency,
       },
     },
   };
