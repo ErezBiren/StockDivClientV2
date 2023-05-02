@@ -10,6 +10,7 @@ import HeaderPanelOverview from "../components/HeaderPanelOverview";
 import { useSelector } from "react-redux";
 import HeaderPanelPortfolio from "../components/HeaderPanelPortfolio";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import SearchTickerOrName from "../components/SearchTickerOrName";
 
 function MainLayout() {
   const navigate = useNavigate();
@@ -69,8 +70,8 @@ function MainLayout() {
               </span>
             </span>
           </div>
-          <div className="flex flex-row justify-between">
-            <span className="flex flex-row items-center gap-2 mx-4 mb-4">
+          <div className="flex flex-row justify-between px-3">
+            <span className="flex flex-row items-center gap-2 mb-4">
               <button
                 id="dropdownDefaultButton"
                 data-dropdown-toggle="dropdown"
@@ -138,16 +139,7 @@ function MainLayout() {
                 </ul>
               </div>
             </span>
-            <span className="flex flex-row items-center gap-2 mx-4 mb-4">
-              <div>
-                <input
-                  type="text"
-                  id="success"
-                  className="bg-green-50 border-b-2 border-green-500 text-green-900  placeholder-green-700  text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block p-2.5 "
-                />
-                <span className="mt-2 text-xs">Search ticker/name</span>
-              </div>
-            </span>
+            <SearchTickerOrName/>
           </div>
         </div>
         <div className="flex justify-center">
