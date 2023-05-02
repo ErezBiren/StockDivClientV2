@@ -42,8 +42,8 @@ const AssetsListView = () => {
           className="bg-[#E1F5FE] cursor-pointer shadow-xl mx-10 py-4"
           onClick={() => gotoTickerPage(item.ticker)}
         >
-          <div className="flex flex-row justify-center gap-1 ">
-            <img src={item.logoUrl} width="16px" height="16px" />
+          <div className="flex flex-row items-center justify-center gap-1">
+            <img src={item.logoUrl} className="w-[16px] h-[16px]" />
             <span className="font-semibold">{item.ticker}:</span>
             <span>{item.sector}</span>
           </div>
@@ -51,12 +51,20 @@ const AssetsListView = () => {
             {formatToNumber(item.shares)} shares of {item.name}
           </div>
           <div className="text-center">
-            <span>
+            <span
+              className={`mt-1 text-xl font-semibold ${
+                item.profitLoss >= 0 ? "text-[#4caf50]" : "text-[#f44336]"
+              }`}
+            >
               {`${formatToCurrency(item.marketValue)} (`}
               <TrendingArrow positiveCondition={item.profitLoss >= 0} />
               {` ${formatToPercentage(item.profitLossPercent)})`}
             </span>
-            <span>
+            <span
+              className={`mt-1 mx-3 text-sm font-semibold ${
+                item.dailyChange < 0 ? "text-[#4caf50]" : "text-[#f44336]"
+              }`}
+            >
               {`Daily: (`}
               <TrendingArrow positiveCondition={item.dailyChange < 0} />
               {`${formatToPercentage(item.dailyChangePercent)})`}
