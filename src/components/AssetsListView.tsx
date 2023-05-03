@@ -31,7 +31,6 @@ const AssetsListView = () => {
     useFormatHelper();
 
   const gotoTickerPage = (ticker: string) => {
-    setSelectedTicker(ticker);
     navigate(`/ticker/${ticker}`);
   };
 

@@ -8,7 +8,6 @@ import { RootState } from '../app/store';
 const initialState = {
   portfolios: [],
   selectedPortfolio: 'Portfolio',
-  selectedTicker: "AVGO",
   portfolioCurrency: '',
   settings: {
     dateFormat: 'yyyy-MM-dd',
@@ -41,9 +40,6 @@ export const stockdivSlice = createSlice({
     setSelectedPortfolio: (state, action) => {
       state.selectedPortfolio = action.payload;
     },
-    setSelectedTicker: (state, action) => {
-      state.selectedTicker = action.payload;
-    },
     setPortfolioCurrency: (state, action) => {
       state.portfolioCurrency = action.payload;
     },
@@ -74,7 +70,6 @@ export const stockdivSlice = createSlice({
 export const {
   setPortfolios,
   setSelectedPortfolio,
-  setSelectedTicker,
   setPortfolioCurrency,
   setDateFormat,
   setDefaultTax,
@@ -89,4 +84,3 @@ export default stockdivSlice.reducer;
 
 
 export const selectCurrentPortfolio = (state: RootState) => state.stockdiv.selectedPortfolio;
-export const selectCurrentTicker = (state: RootState) => state.stockdiv.selectedTicker;

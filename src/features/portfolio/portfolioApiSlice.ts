@@ -91,10 +91,23 @@ export const portFolioApiSlice = apiSlice.injectEndpoints({
       query: (selectedPortfolio) =>
         getDividendQuery(selectedPortfolio, "averageIncrease"),
     }),
+    getTickerTimeline: builder.query({
+      query: ({
+        portfolio,
+        ticker,
+      }: {
+        portfolio: string;
+        ticker: string;
+      }) => ({
+        url: `portfolio/${portfolio}/ticker/${ticker}/timeline`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
+  useLazyGetTickerTimelineQuery,
   useGetAverageIncreaseQuery,
   useGetIncomeLastYearQuery,
   useGetPortfoliosQuery,

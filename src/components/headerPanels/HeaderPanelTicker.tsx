@@ -1,49 +1,110 @@
 import { useSelector } from "react-redux";
-import {
-  selectCurrentPortfolio,
-  selectCurrentTicker,
-} from "../../features/stockdivSlice";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import {
   useLazyGetTickerCurrencyQuery,
-  useGetTickerDailyChangeQuery,
-  useGetTickerLogoQuery,
-  useGetTickerNameQuery,
+  useLazyGetTickerDailyChangeQuery,
+  useLazyGetTickerLogoQuery,
+  useLazyGetTickerNameQuery,
   useLazyGetTickerPriceQuery,
-  useGetTickerAveragePriceQuery,
+  useLazyGetTickerAveragePriceQuery,
 } from "../../features/ticker/tickerApiSlice";
 import Splitter from "../common/Splitter";
 import { useEffect, useState } from "react";
 import useFormatHelper from "../../hooks/useFormatHelper";
 import TrendingArrow from "../common/TrendingArrow";
 import { getTradingColor } from "../../utils/utils";
+import { useLazyGetTickerTimelineQuery } from "../../features/portfolio/portfolioApiSlice";
+import { RootState } from "../../app/store";
+import { ITransactionData } from "../../utils/interfaces/ITransactionData";
+import { useParams } from "react-router-dom";
 
 const HeaderPanelTicker = () => {
+  const { ticker } = useParams();
+  const settingsDateFormat = useSelector(
+    (state: RootState) => state.stockdiv.settings.dateFormat
+  );
+
+  const [showDivs, setShowDivs] = useState<boolean | undefined>();
+  const [tickerShares, setTickerShares] = useState<number | undefined>();
+  const [timelineItemsToShow, setTimelineItemsToShow] = useState();
+  const [firstTransaction, setFirstTransaction] = useState<Date | undefined>();
+
   const { formatToDate, formatToCurrency, formatToPercentage } =
     useFormatHelper();
-  const ticker = useSelector(selectCurrentTicker);
   const portfolio = useSelector(selectCurrentPortfolio);
-  const { data: tickerName } = useGetTickerNameQuery(ticker);
-  const { data: tickerLogo } = useGetTickerLogoQuery(ticker);
-  const { data: dailyChange } = useGetTickerDailyChangeQuery(ticker);
-  const { data: tickerAveragePrice } = useGetTickerAveragePriceQuery({
-    ticker,
-    portfolio,
-  });
-
+  const [tickerNameTrigger, tickerName] = useLazyGetTickerNameQuery();
+  const [tickerLogoTrigger, tickerLogo] = useLazyGetTickerLogoQuery();
+  const [dailyChangeTrigger, dailyChange] = useLazyGetTickerDailyChangeQuery();
+  const [tickerAveragePriceTrigger, tickerAveragePrice] =
+    useLazyGetTickerAveragePriceQuery();
+  const [timelineItemsTrigger, timelineItems] = useLazyGetTickerTimelineQuery();
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 
   const [triggerTickerPrice, tickerPrice] = useLazyGetTickerPriceQuery();
 
+  const toggleShowDividends = () => {
+    if (showDivs) setTimelineItemsToShow(timelineItems.data);
+    else
+      setTimelineItemsToShow(
+        timelineItems.data.filter((item) => item.transaction)
+      );
+  };
+
   useEffect(() => {
     if (!ticker) return;
-
+    tickerNameTrigger(ticker);
+    tickerLogoTrigger(ticker);
+    dailyChangeTrigger(ticker);
+    tickerAveragePriceTrigger({
+      ticker,
+      portfolio,
+    });
     triggerTicketCurrency(ticker);
     triggerTickerPrice({
-      ticker: ticker,
+      ticker,
       when: formatToDate(new Date().toString(), "yyyy-MM-dd"),
     });
+    timelineItemsTrigger({
+      ticker,
+      portfolio,
+    });
   }, [ticker]);
+
+  useEffect(() => {
+    console.log(2);
+    if (!timelineItems.data) return;
+
+    let withTransactions = false;
+    let tickerShares = 0;
+
+    timelineItems?.data.forEach(
+      (element: {
+        title: string;
+        content: string;
+        transaction?: ITransactionData;
+      }) => {
+        if (settingsDateFormat !== "yyyy-MM-dd")
+          element.title = formatToDate(element.title);
+        if (element.transaction) {
+          setFirstTransaction(new Date(element.transaction.when));
+          withTransactions = true;
+          tickerShares += element.transaction.shares;
+        }
+      }
+    );
+    setTickerShares(tickerShares);
+    setShowDivs(!withTransactions);
+    toggleShowDividends();
+  }, []);
+
+  const dailyChangePercentage = () => {
+    if (tickerPrice?.data - dailyChange?.data !== 0) {
+      return (
+        (dailyChange?.data / (tickerPrice?.data - dailyChange?.data)) * 100
+      );
+    } else return 0;
+  };
 
   return (
     <div className="bg-[#E1F5FE] shadow-lg p-2">
@@ -51,16 +112,16 @@ const HeaderPanelTicker = () => {
         className="flex flex-row items-center justify-start gap-2"
         title="no notes"
       >
-        <img src={tickerLogo} className="w-[28px] h-[28px]" />
+        <img src={tickerLogo?.data} className="w-[28px] h-[28px]" />
         <span>{ticker}:</span>
-        <span>{tickerName?.substring(0, 30)}</span>
+        <span>{tickerName?.data?.substring(0, 30)}</span>
       </div>
       <Splitter />
 
       <div className="flex flex-col items-center">
         <span
           className={`mt-1 text-sm font-semibold ${getTradingColor(
-            tickerPrice?.data - tickerAveragePrice >= 0
+            tickerPrice?.data - tickerAveragePrice?.data >= 0
           )}`}
         >
           {formatToCurrency(tickerPrice?.data, tickerCurrency?.data)}
@@ -68,12 +129,14 @@ const HeaderPanelTicker = () => {
       </div>
       <div className="flex flex-row items-center gap-1">
         <span
-          className={`mt-1 text-sm font-semibold ${getTradingColor(1 == 1)}`}
+          className={`mt-1 text-sm font-semibold ${getTradingColor(
+            dailyChangePercentage() > 0
+          )}`}
         >
           Daily PL:
-          {` ${formatToCurrency(dailyChange, tickerCurrency?.data)}`} (
-          <TrendingArrow positiveCondition={true} />
-          {`${formatToPercentage(888)}`})
+          {` ${formatToCurrency(dailyChange?.data, tickerCurrency?.data)}`} (
+          <TrendingArrow positiveCondition={dailyChangePercentage() > 0} />
+          {`${formatToPercentage(dailyChangePercentage())}`})
         </span>
         <span className="w-[1px] bg-slate-300 h-6"></span>
         <span>0 shares</span>
