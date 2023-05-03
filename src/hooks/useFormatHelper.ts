@@ -20,8 +20,11 @@ const useFormatHelper = () => {
   function formatToPercentage(value: number): string {
     return `${value.toFixed(2)}%`;
   }
-  function formatToDate(value: string): string {
-    return format(new Date(value), store.stockdiv.settings.dateFormat);
+  function formatToDate(value: string, dateFormat?: string): string {
+    return format(
+      new Date(value),
+      dateFormat ?? store.stockdiv.settings.dateFormat
+    );
   }
   function formatToNumber(value: number): string {
     return `${value.toFixed(2)}`;

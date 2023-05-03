@@ -1,6 +1,5 @@
 import { SyntheticEvent, useRef, useState } from "react";
 import LogoImage from "../../assets/logo.png";
-import axios from "axios";
 
 import { useLoginMutation, useRegisterMutation } from "./authApiSlice";
 import { useDispatch } from "react-redux";

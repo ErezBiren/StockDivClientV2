@@ -9,7 +9,7 @@ const SearchTickerOrName = () => {
 
   //todo: remove this
   useEffect(() => {
-    goToTickerPage("hbeif")
+    goToTickerPage("AVGO")
   }, [])
   
 

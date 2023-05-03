@@ -1,4 +1,3 @@
-import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 
 // import { date, EventBus, Notify } from 'quasar';
@@ -6,6 +5,13 @@ import { toast } from "react-toastify";
 
 // export const bus = new EventBus();
 // const store = stockdivStore();
+
+const greenText = " text-[#4caf50]";
+const redText = " text-[#f44336]";
+
+export const getTradingColor = (positiveCondition: boolean) => {
+  return positiveCondition ? greenText : redText;
+};
 
 export const showNotification = (message: string) => {
   toast.error(message, {

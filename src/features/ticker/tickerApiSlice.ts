@@ -5,6 +5,15 @@ const getTickerQuery = (ticker: string, endpoint: string) => ({
   method: "GET",
 });
 
+const getTickerAndPortfolioQuery = (
+  ticker: string,
+  portfolio: string,
+  endpoint: string
+) => ({
+  url: `ticker/${ticker}/${portfolio}/${endpoint}`,
+  method: "GET",
+});
+
 export const tickerApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getTickerSearch: builder.query({
@@ -31,15 +40,28 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
     getTickerDailyChange: builder.query({
       query: (ticker: string) => getTickerQuery(ticker, "dailyChange"),
     }),
+    getTickerPrice: builder.query({
+      query: ({ ticker, when }: { ticker: string; when: string }) => ({
+        url: `ticker/${ticker}/price?ofDate=${when}`,
+        method: "GET",
+      }),
+    }),
+    getTickerAveragePrice: builder.query({
+      query: ({ ticker, portfolio }: { ticker: string; portfolio: string }) =>
+        getTickerAndPortfolioQuery(ticker, portfolio, "averagePrice"),
+    }),
   }),
 });
 
 export const {
+  useGetTickerCurrencyQuery,
+  useLazyGetTickerPriceQuery,
   useLazyGetTickerSearchQuery,
   useGetTickerNewsQuery,
   useGetTickerNameQuery,
   useGetTickerLogoQuery,
-  useGetTickerCurrencyQuery,
+  useLazyGetTickerCurrencyQuery,
   useGetTickerFrequencyQuery,
-  useGetTickerDailyChangeQuery
+  useGetTickerDailyChangeQuery,
+  useGetTickerAveragePriceQuery
 } = tickerApiSlice;
