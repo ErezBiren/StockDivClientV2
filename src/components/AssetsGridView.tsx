@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { isSameDate } from "../utils/utils";
-import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import { selectCurrentPortfolio, setSelectedTicker } from "../features/stockdivSlice";
 
 const bgGreen = "#4caf50";
 const bgRed = "#ef5350";
@@ -186,6 +186,7 @@ const AssetsGridView = () => {
   }, [isSuccessAssets, assets]);
 
   const gotoTickerPage = (ticker: string) => {
+    setSelectedTicker(ticker);
     navigate(`/ticker/${ticker}`);
   };
 

@@ -1,16 +1,16 @@
 import { BiCalendarEvent } from "react-icons/bi";
 import { HiBellAlert } from "react-icons/hi2";
-import useFormatHelper from "../hooks/useFormatHelper";
+import useFormatHelper from "../../hooks/useFormatHelper";
 import { useSelector } from "react-redux";
 import {
   useGetDailyChangeQuery,
   useGetInvestedQuery,
   useGetLastTotalDividendQuery,
   useGetMarketValueQuery,
-} from "../features/portfolio/portfolioApiSlice";
+} from "../../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
-import { selectCurrentPortfolio } from "../features/stockdivSlice";
-import TrendingArrow from "./common/TrendingArrow";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
+import TrendingArrow from "../common/TrendingArrow";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ const HeaderPanelOverview = () => {
             <TrendingArrow positiveCondition={dailyChange >= 0} />
             {formatToPercentage(dailyChangePercentage())})
           </span>
-          <span className="w-[1px] bg-gray-300 h-6"/>
+          <span className="w-[1px] bg-gray-300 h-6" />
           <span>
             Yield/YOC:
             {formatToPercentage(getPortfolioDivYield())}/

@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
-import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import { useGetAssetsQuery } from "../../features/portfolio/portfolioApiSlice";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const HeaderPanelPortfolio = () => {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);

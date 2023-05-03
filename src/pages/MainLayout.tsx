@@ -6,11 +6,12 @@ import { FaHome } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { MdAnnouncement } from "react-icons/md";
-import HeaderPanelOverview from "../components/HeaderPanelOverview";
+import HeaderPanelOverview from "../components/headerPanels/HeaderPanelOverview";
 import { useSelector } from "react-redux";
-import HeaderPanelPortfolio from "../components/HeaderPanelPortfolio";
+import HeaderPanelPortfolio from "../components/headerPanels/HeaderPanelPortfolio";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
 import SearchTickerOrName from "../components/SearchTickerOrName";
+import HeaderPanelTicker from "../components/headerPanels/HeaderPanelTicker";
 
 function MainLayout() {
   const navigate = useNavigate();
@@ -30,6 +31,19 @@ function MainLayout() {
   const handleLogOut = () => {
     logOut();
     navigate("/login");
+  };
+
+  const getHeaderPanelByRoute = () => {
+    const routeFirstFragment = currentRoute.split("/")[1];
+
+    switch (routeFirstFragment) {
+      case "portfolio":
+        return <HeaderPanelPortfolio />;
+      case "ticker":
+        return <HeaderPanelTicker />;
+      default:
+        return <HeaderPanelOverview />;
+    }
   };
 
   return (
@@ -139,18 +153,12 @@ function MainLayout() {
                 </ul>
               </div>
             </span>
-            <SearchTickerOrName/>
+            <SearchTickerOrName />
           </div>
         </div>
-        <div className="flex justify-center">
-          {currentRoute === "/portfolio" ? (
-            <HeaderPanelPortfolio />
-          ) : (
-            <HeaderPanelOverview />
-          )}
-        </div>
+        <div className="flex justify-center">{getHeaderPanelByRoute()}</div>
       </header>
-        <Outlet />
+      <Outlet />
     </div>
   );
 }
