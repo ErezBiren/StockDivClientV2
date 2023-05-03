@@ -8,7 +8,7 @@ import { RootState } from '../app/store';
 const initialState = {
   portfolios: [],
   selectedPortfolio: 'Portfolio',
-  selectedTicker: "",
+  selectedTicker: "AVGO",
   portfolioCurrency: '',
   settings: {
     dateFormat: 'yyyy-MM-dd',

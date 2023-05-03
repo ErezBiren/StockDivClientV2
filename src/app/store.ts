@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";
+import { tickerApiSlice } from "../features/ticker/tickerApiSlice";
 import { portFolioApiSlice } from "../features/portfolio/portfolioApiSlice";
 import stockdivReducer from "../features/stockdivSlice";
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     [portFolioApiSlice.reducerPath]: portFolioApiSlice.reducer,
     stockdiv: stockdivReducer,
+    [tickerApiSlice.reducerPath]: tickerApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

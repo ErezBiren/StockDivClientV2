@@ -148,7 +148,7 @@ const TickerInvestments = () => {
       />
       <div className="flex justify-center mb-4">
         {periodOptions?.map((periodOption) => (
-          <div className="flex items-center mr-4">
+          <div className="flex items-center mr-4" key={periodOption.value}>
             <input
               id="inline-radio"
               type="radio"
