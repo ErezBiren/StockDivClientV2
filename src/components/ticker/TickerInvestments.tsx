@@ -251,22 +251,28 @@ const TickerInvestments = () => {
   };
 
   const getDifferencePercentColor = () => {
-    return lastAmount < firstAmount
-      ? "absolute-top-right q-mr-xl q-mt-md text-red text-weight-bold row no-wrap"
-      : "absolute-top-right q-mr-xl q-mt-md text-green text-weight-bold row no-wrap";
+    return lastAmount < firstAmount ? "text-red-500" : "text-green-500";
   };
 
-  const percentDifference = () => {
-    return firstAmount === 0
-      ? 0
-      : ((lastAmount - firstAmount) / firstAmount) * 100;
-  };
+  const [percentDifference, setPercentDifference] = useState(0);
+  const [differencePercentColor, setDifferencePercentColor] =
+    useState("text-black-500");
+
+  useEffect(() => {
+    setDifferencePercentColor(
+      lastAmount < firstAmount ? "text-red-500" : "text-green-500"
+    );
+
+    setPercentDifference(
+      firstAmount === 0 ? 0 : ((lastAmount - firstAmount) / firstAmount) * 100
+    );
+  }, [firstAmount, lastAmount]);
 
   return (
     <ChartCard>
-      <div>
+      <div className={`flex justify-end font-bold ${differencePercentColor}`}>
         <TrendingArrow positiveCondition={true} />
-        {formatToPercentage(80)}
+        {formatToPercentage(percentDifference)}
       </div>
       <Chart
         type="line"
