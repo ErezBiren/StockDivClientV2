@@ -4,6 +4,7 @@ import authReducer from "../features/auth/authSlice";
 import { tickerApiSlice } from "../features/ticker/tickerApiSlice";
 import { portFolioApiSlice } from "../features/portfolio/portfolioApiSlice";
 import stockdivReducer from "../features/stockdivSlice";
+import { dividendApiSlice } from "../features/dividend/dividendApiSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     [portFolioApiSlice.reducerPath]: portFolioApiSlice.reducer,
     stockdiv: stockdivReducer,
     [tickerApiSlice.reducerPath]: tickerApiSlice.reducer,
+    [dividendApiSlice.reducerPath]: dividendApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
