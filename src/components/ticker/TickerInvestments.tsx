@@ -60,7 +60,9 @@ const TickerInvestments = () => {
 
   const [period, setPeriod] = useState(periodOptions[0].value);
   const [firstTransaction, setFirstTransaction] = useState();
-
+  const [percentDifference, setPercentDifference] = useState(0);
+  const [differencePercentColor, setDifferencePercentColor] =
+    useState("text-black-500");
   const [firstAmount, setFirstAmount] = useState<number>(0);
   const [lastAmount, setLastAmount] = useState<number>(0);
   const [whatHappenedSinceSeries, setWhatHappenedSinceSeries] = useState([
@@ -249,14 +251,6 @@ const TickerInvestments = () => {
     console.log(e.target.value);
     setPeriod(e.target.value);
   };
-
-  const getDifferencePercentColor = () => {
-    return lastAmount < firstAmount ? "text-red-500" : "text-green-500";
-  };
-
-  const [percentDifference, setPercentDifference] = useState(0);
-  const [differencePercentColor, setDifferencePercentColor] =
-    useState("text-black-500");
 
   useEffect(() => {
     setDifferencePercentColor(
