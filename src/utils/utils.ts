@@ -75,35 +75,7 @@ export const isSameDate = (date1: Date, date2: Date): boolean => {
   );
 };
 
-export const subtractFromDate = (
-  date: Date,
-  {
-    years = 0,
-    months = 0,
-    weeks = 0,
-    days = 0,
-    hours = 0,
-    minutes = 0,
-    seconds = 0,
-  }: {
-    years?: number;
-    months?: number;
-    weeks?: number;
-    days?: number;
-    hours?: number;
-    minutes?: number;
-    seconds?: number;
-  } = {}
-): Date => {
-  const subtractedDate = new Date(date);
-  subtractedDate.setFullYear(subtractedDate.getFullYear() - years);
-  subtractedDate.setMonth(subtractedDate.getMonth() - months);
-  subtractedDate.setDate(subtractedDate.getDate() - (weeks * 7 + days));
-  subtractedDate.setHours(subtractedDate.getHours() - hours);
-  subtractedDate.setMinutes(subtractedDate.getMinutes() - minutes);
-  subtractedDate.setSeconds(subtractedDate.getSeconds() - seconds);
-  return subtractedDate;
-};
+
 
 export const startOfDate = (
   date: Date,

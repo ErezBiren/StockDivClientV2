@@ -10,7 +10,8 @@ import { useSelector } from "react-redux";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { startOfDate, subtractFromDate } from "../../utils/utils";
+import { startOfDate, subtractFromDate } from "../../utils/date";
+import TrendingArrow from "../common/TrendingArrow";
 
 const periodOptions = [
   {
@@ -50,7 +51,7 @@ const periodOptions = [
 const TickerInvestments = () => {
   const portfolio = useSelector(selectCurrentPortfolio);
   const { ticker } = useParams();
-  const { formatToCurrency } = useFormatHelper();
+  const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const [triggerTickerCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 
@@ -60,8 +61,8 @@ const TickerInvestments = () => {
   const [period, setPeriod] = useState(periodOptions[0].value);
   const [firstTransaction, setFirstTransaction] = useState();
 
-  const [firstAmount, setFirstAmount] = useState<number>();
-  const [lastAmount, setLastAmount] = useState<number>();
+  const [firstAmount, setFirstAmount] = useState<number>(0);
+  const [lastAmount, setLastAmount] = useState<number>(0);
   const [whatHappenedSinceSeries, setWhatHappenedSinceSeries] = useState([
     {
       name: "Price",
@@ -120,45 +121,43 @@ const TickerInvestments = () => {
       }
     }
 
-    // if (
-    //   !originalWhatHappenedSinceSeries ||
-    //   !originalWhatHappenedSinceSeries.data
-    // )
-    //   return;
+    if (
+      !originalWhatHappenedSinceSeries ||
+      !originalWhatHappenedSinceSeries.data
+    )
+      return;
 
-    // const filtered: [Date, [number, number]][] =
-    //   originalWhatHappenedSinceSeries?.data?.filter(
-    //     (element: [Date, [number, number]]) =>
-    //       new Date(element[0]).getTime() >= limit.getTime()
-    //   );
+    const filtered: [Date, [number, number]][] =
+      originalWhatHappenedSinceSeries?.data?.filter(
+        (element: [Date, [number, number]]) =>
+          new Date(element[0]).getTime() >= limit.getTime()
+      );
 
-    // console.log(111);
-    // console.log(filtered);
-    // setLastAmount(filtered[0][1][0] ? filtered[0][1][0] : filtered[1][1][0]);
+    setLastAmount(filtered[0][1][0] ? filtered[0][1][0] : filtered[1][1][0]);
 
-    // setFirstAmount(filtered[filtered.length - 1][1][0]);
+    setFirstAmount(filtered[filtered.length - 1][1][0]);
 
-    // setWhatHappenedSinceSeries((prev) => {
-    //   prev[0].data = filtered.map(
-    //     (element: [Date, [number, number]]) => element[1][0]
-    //   );
+    setWhatHappenedSinceSeries((prev) => {
+      prev[0].data = filtered.map(
+        (element: [Date, [number, number]]) => element[1][0]
+      );
 
-    //   prev[1].data = filtered.map(
-    //     (element: [Date, [number, number]]) => element[1][1]
-    //   );
+      prev[1].data = filtered.map(
+        (element: [Date, [number, number]]) => element[1][1]
+      );
 
-    //   return prev;
-    // });
+      return prev;
+    });
 
-    //   setWhatHappenedSinceOptions((prev) => ({
-    //     ...prev,
-    //     xaxis: {
-    //       categories: filtered.map(
-    //         (element: [Date, [number, number]]) => element[0]
-    //       ),
-    //     },
-    //   }));
-  }, []);
+    setWhatHappenedSinceOptions((prev) => ({
+      ...prev,
+      xaxis: {
+        categories: filtered.map(
+          (element: [Date, [number, number]]) => element[0]
+        ),
+      },
+    }));
+  }, [period, firstTransaction, originalWhatHappenedSinceSeries]);
 
   useEffect(() => {
     if (!ticker) return;
@@ -247,11 +246,28 @@ const TickerInvestments = () => {
   }, [tickerCurrency]);
 
   const changePeriod = (e) => {
+    console.log(e.target.value);
     setPeriod(e.target.value);
+  };
+
+  const getDifferencePercentColor = () => {
+    return lastAmount < firstAmount
+      ? "absolute-top-right q-mr-xl q-mt-md text-red text-weight-bold row no-wrap"
+      : "absolute-top-right q-mr-xl q-mt-md text-green text-weight-bold row no-wrap";
+  };
+
+  const percentDifference = () => {
+    return firstAmount === 0
+      ? 0
+      : ((lastAmount - firstAmount) / firstAmount) * 100;
   };
 
   return (
     <ChartCard>
+      <div>
+        <TrendingArrow positiveCondition={true} />
+        {formatToPercentage(80)}
+      </div>
       <Chart
         type="line"
         height="300"
@@ -264,7 +280,7 @@ const TickerInvestments = () => {
             <input
               id="inline-radio"
               type="radio"
-              value={period}
+              value={periodOption.value}
               name="inline-radio-group"
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               onChange={changePeriod}
