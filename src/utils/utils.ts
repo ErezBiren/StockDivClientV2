@@ -74,3 +74,58 @@ export const isSameDate = (date1: Date, date2: Date): boolean => {
     date1.getDate() === date2.getDate()
   );
 };
+
+export const subtractFromDate = (
+  date: Date,
+  {
+    years = 0,
+    months = 0,
+    weeks = 0,
+    days = 0,
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
+  }: {
+    years?: number;
+    months?: number;
+    weeks?: number;
+    days?: number;
+    hours?: number;
+    minutes?: number;
+    seconds?: number;
+  } = {}
+): Date => {
+  const subtractedDate = new Date(date);
+  subtractedDate.setFullYear(subtractedDate.getFullYear() - years);
+  subtractedDate.setMonth(subtractedDate.getMonth() - months);
+  subtractedDate.setDate(subtractedDate.getDate() - (weeks * 7 + days));
+  subtractedDate.setHours(subtractedDate.getHours() - hours);
+  subtractedDate.setMinutes(subtractedDate.getMinutes() - minutes);
+  subtractedDate.setSeconds(subtractedDate.getSeconds() - seconds);
+  return subtractedDate;
+};
+
+export const startOfDate = (
+  date: Date,
+  unit: "year" | "month" | "week" | "day"
+): Date => {
+  const startOfDate = new Date(date);
+
+  if (unit === "year") {
+    startOfDate.setMonth(0);
+    startOfDate.setDate(1);
+    startOfDate.setHours(0, 0, 0, 0);
+  } else if (unit === "month") {
+    startOfDate.setDate(1);
+    startOfDate.setHours(0, 0, 0, 0);
+  } else if (unit === "week") {
+    const dayOfWeek = startOfDate.getDay();
+    const diff = startOfDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+    startOfDate.setDate(diff);
+    startOfDate.setHours(0, 0, 0, 0);
+  } else if (unit === "day") {
+    startOfDate.setHours(0, 0, 0, 0);
+  }
+
+  return startOfDate;
+};

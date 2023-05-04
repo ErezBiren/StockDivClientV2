@@ -2,10 +2,15 @@ import { ApexOptions } from "apexcharts";
 import useFormatHelper from "../../hooks/useFormatHelper";
 import ChartCard from "../ChartCard";
 import Chart from "react-apexcharts";
-import { useGetTickerCurrencyQuery } from "../../features/ticker/tickerApiSlice";
+import {
+  useLazyGetTickerCurrencyQuery,
+  useLazyGetWhatHappenedSinceQuery,
+} from "../../features/ticker/tickerApiSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { startOfDate, subtractFromDate } from "../../utils/utils";
 
 const periodOptions = [
   {
@@ -43,85 +48,21 @@ const periodOptions = [
 ];
 
 const TickerInvestments = () => {
+  const portfolio = useSelector(selectCurrentPortfolio);
+  const { ticker } = useParams();
   const { formatToCurrency } = useFormatHelper();
-  const { data: selectedTicker } = useSelector(selectCurrentPortfolio);
-  const { data: tickerCurrency } = useGetTickerCurrencyQuery(selectedTicker);
+  const [triggerTickerCurrency, tickerCurrency] =
+    useLazyGetTickerCurrencyQuery();
 
-  const [selectedPeriod, setSelectedPeriod] = useState(periodOptions[0].value);
+  const [triggerWhatHappenedSince, originalWhatHappenedSinceSeries] =
+    useLazyGetWhatHappenedSinceQuery();
 
-  const whatHappenedSinceOptions: ApexOptions = {
-    chart: {
-      dropShadow: {
-        enabled: true,
-        color: "#000",
-        top: 18,
-        left: 7,
-        blur: 10,
-        opacity: 0.2,
-      },
-      height: 350,
-      type: "line",
-      toolbar: {
-        show: true,
-      },
-      animations: {
-        enabled: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-    },
-    markers: {
-      size: 0,
-    },
-    colors: ["#ADD8E6", "#00FF00"],
-    tooltip: {
-      shared: true,
-      intersect: false,
-    },
-    stroke: {
-      width: [5, 5],
-      curve: "straight",
-    },
-    title: {
-      text: "What happened since (up to 10 years)",
-      align: "center",
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    labels: [],
-    xaxis: {
-      type: "datetime",
-    },
-    yaxis: [
-      {
-        title: {
-          text: "Price",
-        },
-        labels: {
-          show: true,
-          formatter: function (val: number) {
-            return formatToCurrency(val, tickerCurrency);
-          },
-        },
-      },
-      {
-        opposite: true,
-        title: {
-          text: "Dividends",
-        },
-        labels: {
-          show: true,
-          formatter: function (val: number) {
-            return formatToCurrency(val, tickerCurrency);
-          },
-        },
-      },
-    ],
-  };
+  const [period, setPeriod] = useState(periodOptions[0].value);
+  const [firstTransaction, setFirstTransaction] = useState();
 
-  const whatHappenedSinceSeries = [
+  const [firstAmount, setFirstAmount] = useState<number>();
+  const [lastAmount, setLastAmount] = useState<number>();
+  const [whatHappenedSinceSeries, setWhatHappenedSinceSeries] = useState([
     {
       name: "Price",
       type: "line",
@@ -132,10 +73,181 @@ const TickerInvestments = () => {
       type: "line",
       data: [] as number[],
     },
-  ];
+  ]);
+
+  const [whatHappenedSinceOptions, setWhatHappenedSinceOptions] =
+    useState<ApexOptions>({});
+
+  useEffect(() => {
+    let limit: Date;
+    const endDate: Date = subtractFromDate(new Date(), { days: 1 });
+    if (period === "fp" && !firstTransaction) setPeriod("10y");
+
+    switch (period) {
+      case "w": {
+        limit = subtractFromDate(endDate, { days: 7 });
+        break;
+      }
+      case "m": {
+        limit = subtractFromDate(endDate, { months: 1 });
+        break;
+      }
+      case "y": {
+        limit = subtractFromDate(endDate, { years: 1 });
+        break;
+      }
+      case "ytd": {
+        limit = startOfDate(endDate, "year");
+        break;
+      }
+      case "3y": {
+        limit = subtractFromDate(endDate, { years: 3 });
+        break;
+      }
+      case "5y": {
+        limit = subtractFromDate(endDate, { years: 5 });
+        break;
+      }
+      case "10y": {
+        limit = subtractFromDate(endDate, { years: 10 });
+        break;
+      }
+      case "fp": {
+        limit = firstTransaction
+          ? firstTransaction
+          : subtractFromDate(endDate, { years: 10 });
+        break;
+      }
+    }
+
+    // if (
+    //   !originalWhatHappenedSinceSeries ||
+    //   !originalWhatHappenedSinceSeries.data
+    // )
+    //   return;
+
+    // const filtered: [Date, [number, number]][] =
+    //   originalWhatHappenedSinceSeries?.data?.filter(
+    //     (element: [Date, [number, number]]) =>
+    //       new Date(element[0]).getTime() >= limit.getTime()
+    //   );
+
+    // console.log(111);
+    // console.log(filtered);
+    // setLastAmount(filtered[0][1][0] ? filtered[0][1][0] : filtered[1][1][0]);
+
+    // setFirstAmount(filtered[filtered.length - 1][1][0]);
+
+    // setWhatHappenedSinceSeries((prev) => {
+    //   prev[0].data = filtered.map(
+    //     (element: [Date, [number, number]]) => element[1][0]
+    //   );
+
+    //   prev[1].data = filtered.map(
+    //     (element: [Date, [number, number]]) => element[1][1]
+    //   );
+
+    //   return prev;
+    // });
+
+    //   setWhatHappenedSinceOptions((prev) => ({
+    //     ...prev,
+    //     xaxis: {
+    //       categories: filtered.map(
+    //         (element: [Date, [number, number]]) => element[0]
+    //       ),
+    //     },
+    //   }));
+  }, []);
+
+  useEffect(() => {
+    if (!ticker) return;
+
+    triggerTickerCurrency(ticker);
+  }, [ticker]);
+
+  useEffect(() => {
+    if (!ticker || !portfolio) return;
+    const tickerPortfolioParam = { ticker, portfolio };
+    triggerWhatHappenedSince(tickerPortfolioParam);
+  }, [ticker, portfolio]);
+
+  useEffect(() => {
+    setWhatHappenedSinceOptions({
+      chart: {
+        dropShadow: {
+          enabled: true,
+          color: "#000",
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2,
+        },
+        height: 350,
+        type: "line",
+        toolbar: {
+          show: true,
+        },
+        animations: {
+          enabled: false,
+        },
+        zoom: {
+          enabled: false,
+        },
+      },
+      markers: {
+        size: 0,
+      },
+      colors: ["#ADD8E6", "#00FF00"],
+      tooltip: {
+        shared: true,
+        intersect: false,
+      },
+      stroke: {
+        width: [5, 5],
+        curve: "straight",
+      },
+      title: {
+        text: "What happened since (up to 10 years)",
+        align: "center",
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      labels: [],
+      xaxis: {
+        type: "datetime",
+      },
+      yaxis: [
+        {
+          title: {
+            text: "Price",
+          },
+          labels: {
+            show: true,
+            formatter: function (val: number) {
+              return formatToCurrency(val, tickerCurrency?.data);
+            },
+          },
+        },
+        {
+          opposite: true,
+          title: {
+            text: "Dividends",
+          },
+          labels: {
+            show: true,
+            formatter: function (val: number) {
+              return formatToCurrency(val, tickerCurrency?.data);
+            },
+          },
+        },
+      ],
+    });
+  }, [tickerCurrency]);
 
   const changePeriod = (e) => {
-    setSelectedPeriod(e.target.value);
+    setPeriod(e.target.value);
   };
 
   return (
@@ -152,7 +264,7 @@ const TickerInvestments = () => {
             <input
               id="inline-radio"
               type="radio"
-              value={selectedPeriod}
+              value={period}
               name="inline-radio-group"
               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
               onChange={changePeriod}

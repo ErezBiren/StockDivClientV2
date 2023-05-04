@@ -23,15 +23,15 @@ const HeaderPanelTicker = () => {
   const settingsDateFormat = useSelector(
     (state: RootState) => state.stockdiv.settings.dateFormat
   );
-
+  
   const [showDivs, setShowDivs] = useState<boolean | undefined>();
   const [tickerShares, setTickerShares] = useState<number | undefined>();
   const [timelineItemsToShow, setTimelineItemsToShow] = useState();
   const [firstTransaction, setFirstTransaction] = useState<Date | undefined>();
+  const portfolio = useSelector(selectCurrentPortfolio);
 
   const { formatToDate, formatToCurrency, formatToPercentage } =
     useFormatHelper();
-  const portfolio = useSelector(selectCurrentPortfolio);
   const [tickerNameTrigger, tickerName] = useLazyGetTickerNameQuery();
   const [tickerLogoTrigger, tickerLogo] = useLazyGetTickerLogoQuery();
   const [dailyChangeTrigger, dailyChange] = useLazyGetTickerDailyChangeQuery();
@@ -42,7 +42,7 @@ const HeaderPanelTicker = () => {
     useLazyGetTickerCurrencyQuery();
 
   const [triggerTickerPrice, tickerPrice] = useLazyGetTickerPriceQuery();
-
+  
   const toggleShowDividends = () => {
     if (showDivs) setTimelineItemsToShow(timelineItems.data);
     else
@@ -53,26 +53,24 @@ const HeaderPanelTicker = () => {
 
   useEffect(() => {
     if (!ticker) return;
+
     tickerNameTrigger(ticker);
     tickerLogoTrigger(ticker);
     dailyChangeTrigger(ticker);
-    tickerAveragePriceTrigger({
-      ticker,
-      portfolio,
-    });
     triggerTicketCurrency(ticker);
     triggerTickerPrice({
       ticker,
       when: formatToDate(new Date().toString(), "yyyy-MM-dd"),
     });
-    timelineItemsTrigger({
-      ticker,
-      portfolio,
-    });
-  }, [ticker]);
+
+    if (portfolio) {
+      const tickerPortfolioParam = { ticker, portfolio };
+      timelineItemsTrigger(tickerPortfolioParam);
+      tickerAveragePriceTrigger(tickerPortfolioParam);
+    }
+  }, [ticker, portfolio]);
 
   useEffect(() => {
-    console.log(2);
     if (!timelineItems.data) return;
 
     let withTransactions = false;
@@ -96,7 +94,7 @@ const HeaderPanelTicker = () => {
     setTickerShares(tickerShares);
     setShowDivs(!withTransactions);
     toggleShowDividends();
-  }, []);
+  }, [timelineItems, timelineItems.data]);
 
   const dailyChangePercentage = () => {
     if (tickerPrice?.data - dailyChange?.data !== 0) {
@@ -139,7 +137,7 @@ const HeaderPanelTicker = () => {
           {`${formatToPercentage(dailyChangePercentage())}`})
         </span>
         <span className="w-[1px] bg-slate-300 h-6"></span>
-        <span>0 shares</span>
+        <span>{tickerShares} shares</span>
       </div>
     </div>
   );
