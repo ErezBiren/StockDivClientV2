@@ -8,7 +8,7 @@ import {
 } from "../../features/ticker/tickerApiSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { startOfDate, subtractFromDate } from "../../utils/date";
 import TrendingArrow from "../common/TrendingArrow";
@@ -245,7 +245,7 @@ const TickerInvestments = () => {
     });
   }, [tickerCurrency]);
 
-  const changePeriod = (e) => {
+  const changePeriod = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     setPeriod(e.target.value);
   };
