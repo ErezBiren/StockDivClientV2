@@ -8,10 +8,17 @@ export const dividendApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getAverageIncrease: builder.query({
+      query: (ticker) => ({
+        url: `dividend/ticker/${ticker}/averageIncrease`,
+        method: "GET",
+      }),
+    }),
     
   }),
 });
 
 export const {
-  useLazyGetAllDividendsQuery
+  useLazyGetAllDividendsQuery,
+  useLazyGetAverageIncreaseQuery,
 } = dividendApiSlice;
