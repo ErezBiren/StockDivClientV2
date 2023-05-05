@@ -5,10 +5,12 @@ import { useLazyGetAllDividendsQuery } from "../../features/dividend/dividendApi
 import useFormatHelper from "../../hooks/useFormatHelper";
 import { useParams } from "react-router-dom";
 import { useLazyGetTickerCurrencyQuery } from "../../features/ticker/tickerApiSlice";
+import TrendingArrow from "../common/TrendingArrow";
 
 const DividendHistoryData = () => {
   const { ticker } = useParams();
-  const { formatToDate, formatToCurrency } = useFormatHelper();
+  const { formatToDate, formatToCurrency, formatToPercentage } =
+    useFormatHelper();
   const [triggerDividendData, dividendData] = useLazyGetAllDividendsQuery();
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
@@ -21,22 +23,36 @@ const DividendHistoryData = () => {
 
   return (
     <ChartCard>
-      <table className=" overflow-y-auto h-[300px]">
+      <table className="w-full m-10 overflow-hidden">
         <thead>
           <tr>
-            <th className="bg-green-200">Ex</th>
-            <th className="bg-green-200">Pay</th>
-            <th className="bg-green-200">Amount</th>
-            <th className="bg-green-200">% Increment</th>
-            <th className="bg-green-200">Special</th>
+            <th className="bg-[#c8e6c9]">Ex</th>
+            <th className="bg-[#c8e6c9]">Pay</th>
+            <th className="bg-[#c8e6c9]">Amount</th>
+            <th className="bg-[#c8e6c9]">% Increment</th>
+            <th className="bg-[#c8e6c9]">Special</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="overflow-y-auto h-[100px]">
           {dividendData?.data?.map((item: IDividendHistoryData) => (
-            <tr key={item.exDay}>
+            <tr key={item.exDay} className="border border-gray-300 border-b-1">
               <td>{formatToDate(item.exDay.substring(0, 10))}</td>
               <td>{formatToDate(item.payDay.substring(0, 10))}</td>
               <td>{formatToCurrency(item.amount, tickerCurrency?.data)}</td>
+              <td
+                className={`${
+                  item.increasePercent > 0 ? "text-[#4caf50]" : "text-[#f44336]"
+                }`}
+              >
+                {item.increasePercent !== 0 && (
+                  <>
+                    <TrendingArrow
+                      positiveCondition={item.increasePercent > 0}
+                    />
+                    {formatToPercentage(item.increasePercent)}
+                  </>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

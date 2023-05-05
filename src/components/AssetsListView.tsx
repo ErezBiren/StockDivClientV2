@@ -61,9 +61,6 @@ const AssetsListView = () => {
               {` ${formatToPercentage(item.profitLossPercent)})`}
             </span>
             <span
-              className={`mt-1 mx-3 text-sm font-semibold ${
-                item.dailyChange < 0 ? "text-[#4caf50]" : "text-[#f44336]"
-              }`}
             >
               {`Daily: (`}
               <TrendingArrow positiveCondition={item.dailyChange < 0} />
