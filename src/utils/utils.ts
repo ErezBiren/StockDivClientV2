@@ -40,18 +40,6 @@ export const isNumber = (str: string): boolean => {
   return !Number.isNaN(Number(str));
 };
 
-export const showAPIError = (apiError: unknown) => {
-  let err = "Unknown error";
-
-  try {
-    err = apiError.data.error;
-  } catch (error) {
-    err = "Unknown error";
-  }
-
-  showNotification(err);
-};
-
 export const getTodayDate = (full: boolean): string => {
   let str = new Date().toISOString();
   if (!full) str = str.substring(0, 10);

@@ -4,19 +4,23 @@ import { HiChevronUpDown } from "react-icons/hi2";
 import { useLazyGetTickerSearchQuery } from "../features/ticker/tickerApiSlice";
 import { useNavigate } from "react-router-dom";
 
+type SearchedTicker = { ticker: ""; name: "" };
+
 const SearchTickerOrName = () => {
   //todo: remove this
   useEffect(() => {
     goToTickerPage("AVGO");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [trigger, result] = useLazyGetTickerSearchQuery();
 
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState<SearchedTicker>();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  const triggerSearch = (e) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const triggerSearch = (e: any) => {
     const dataToSearch = e.target.value;
     if (dataToSearch === "" || dataToSearch.length < 3) return;
     trigger(e.target.value);
@@ -36,7 +40,7 @@ const SearchTickerOrName = () => {
           <div className="relative w-full overflow-hidden text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
               className="w-full py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 border-none focus:ring-0"
-              displayValue={(item) => item.name}
+              displayValue={(item: { name: string }) => item.name}
               // onKeyDown={searchKeyDown}
               onKeyUp={triggerSearch}
             />
@@ -60,7 +64,7 @@ const SearchTickerOrName = () => {
                   Nothing found.
                 </div>
               ) : (
-                result?.data?.map((item) => (
+                result?.data?.map((item: SearchedTicker) => (
                   <Combobox.Option
                     onClick={() => goToTickerPage(item.ticker)}
                     key={item.ticker}

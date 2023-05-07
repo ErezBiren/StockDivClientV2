@@ -24,9 +24,8 @@ const HeaderPanelOverview = () => {
 
   const {
     data: portfolioMarketValue,
-    isSuccess: isSuccessPortfolioMarketValue,
   } = useGetMarketValueQuery(selectedPortfolio);
-  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
+  const { data: portfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
 
   const plPercentage = () => {

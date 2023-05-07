@@ -2,7 +2,6 @@ import useFormatHelper from "../hooks/useFormatHelper";
 import { IPortfolioAsset } from "../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
-import { useNavigate } from "react-router-dom";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
@@ -32,20 +31,22 @@ const getExPayColor = (params: { value: string }) => {
       : { backgroundColor: bgDatePurple };
 };
 
-const tickerCellRenderer = (props: any) => {
+const tickerCellRenderer = (props: { value: string }) => {
   return <span>{props.value}</span>;
 };
 
 const AssetsGridView = () => {
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
-  const navigate = useNavigate();
   const [rowDataAssets, setRowDataAssets] = useState<IPortfolioAsset[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const currencyValueFormatter = (params: any) =>
     params.value ? formatToCurrency(params.value) : "";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const percentageValueFormatter = (params: any) =>
     params.value ? formatToPercentage(params.value) : "";
 
-  const columnDefs = [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columnDefs : any = [
     {
       field: "ticker",
       cellStyle: { backgroundColor: "#cfdef5" },
@@ -85,6 +86,7 @@ const AssetsGridView = () => {
       field: "profitLossPercent",
       headerName: "PL%",
       valueFormatter: percentageValueFormatter,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cellStyle: (params: any) => {
         if (!params?.value) return {};
 
@@ -104,6 +106,7 @@ const AssetsGridView = () => {
       field: "dailyChangePercent",
       headerName: "Change%",
       valueFormatter: percentageValueFormatter,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cellStyle: (params: any) => {
         if (!params.value) return {};
 
@@ -184,10 +187,7 @@ const AssetsGridView = () => {
     setRowDataAssets([...assets, sumRow]);
   }, [isSuccessAssets, assets]);
 
-  const gotoTickerPage = (ticker: string) => {
-    navigate(`/ticker/${ticker}`);
-  };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getRowStyle = (params: any) => {
     if (params.node.data.id === "sum") {
       return { background: "#cfdef5" };

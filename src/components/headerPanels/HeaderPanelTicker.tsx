@@ -23,11 +23,11 @@ const HeaderPanelTicker = () => {
   const settingsDateFormat = useSelector(
     (state: RootState) => state.stockdiv.settings.dateFormat
   );
-  
+
   const [showDivs, setShowDivs] = useState<boolean | undefined>();
   const [tickerShares, setTickerShares] = useState<number | undefined>();
-  const [timelineItemsToShow, setTimelineItemsToShow] = useState();
-  const [firstTransaction, setFirstTransaction] = useState<Date | undefined>();
+  const [, setTimelineItemsToShow] = useState();
+  const [, setFirstTransaction] = useState<Date | undefined>();
   const portfolio = useSelector(selectCurrentPortfolio);
 
   const { formatToDate, formatToCurrency, formatToPercentage } =
@@ -42,12 +42,14 @@ const HeaderPanelTicker = () => {
     useLazyGetTickerCurrencyQuery();
 
   const [triggerTickerPrice, tickerPrice] = useLazyGetTickerPriceQuery();
-  
+
   const toggleShowDividends = () => {
     if (showDivs) setTimelineItemsToShow(timelineItems.data);
     else
       setTimelineItemsToShow(
-        timelineItems.data.filter((item) => item.transaction)
+        timelineItems.data.filter(
+          (item: { transaction: unknown }) => item.transaction
+        )
       );
   };
 
@@ -68,6 +70,7 @@ const HeaderPanelTicker = () => {
       timelineItemsTrigger(tickerPortfolioParam);
       tickerAveragePriceTrigger(tickerPortfolioParam);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker, portfolio]);
 
   useEffect(() => {
@@ -94,6 +97,7 @@ const HeaderPanelTicker = () => {
     setTickerShares(tickerShares);
     setShowDivs(!withTransactions);
     toggleShowDividends();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineItems, timelineItems.data]);
 
   const dailyChangePercentage = () => {

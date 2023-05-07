@@ -6,11 +6,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 
 import { useNavigate } from "react-router-dom";
-import {
-  showAPIError,
-  showNotification,
-  validateEmail,
-} from "../../utils/utils";
+import { showNotification, validateEmail } from "../../utils/utils";
 import { useForgotPasswordMutation } from "../users/usersApiSlice";
 import Modal, { ModalAction } from "../../components/common/Modal";
 
@@ -29,10 +25,7 @@ export default function Login() {
 
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-  const [, setIsPwd] = useState(true);
-  const [, setIsRePwd] = useState(true);
   const [email, setEmail] = useState<string>();
-  const [, setRememberMe] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [disableLetMeIn, setDisableLetMeIn] = useState(false);
@@ -82,7 +75,7 @@ export default function Login() {
           setPassword("");
           navigate("/");
         } catch (error) {
-          showAPIError(error);
+          console.error(error);
         }
       } else {
         await register({
@@ -116,7 +109,7 @@ export default function Login() {
             }
           })
           .catch((error) => {
-            showAPIError(error);
+            console.error(error);
           })
           .finally(() => {
             setDisableLetMeIn(false);
@@ -168,8 +161,8 @@ export default function Login() {
           );
         }
       })
-      .catch((err) => {
-        showAPIError(err);
+      .catch((error) => {
+        console.error(error);
       })
       .finally(() => {
         setDisableLetMeIn(false);

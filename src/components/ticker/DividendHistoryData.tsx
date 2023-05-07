@@ -1,6 +1,6 @@
 import ChartCard from "../ChartCard";
 import { IDividendHistoryData } from "../../utils/interfaces/IDividendHistoryData";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLazyGetAllDividendsQuery } from "../../features/dividend/dividendApiSlice";
 import useFormatHelper from "../../hooks/useFormatHelper";
 import { useParams } from "react-router-dom";
@@ -19,6 +19,7 @@ const DividendHistoryData = () => {
     if (!ticker) return;
     triggerDividendData(ticker);
     triggerTicketCurrency(ticker);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker]);
 
   return (

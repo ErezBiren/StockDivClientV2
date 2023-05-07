@@ -21,7 +21,6 @@ const YearsProjection = () => {
 
   const {
     data: portfolioMarketValue,
-    isSuccess: isSuccessPortfolioMarketValue,
   } = useGetMarketValueQuery(selectedPortfolio);
 
   const [showReinvest, setShowReinvest] = useState(false);
@@ -32,16 +31,17 @@ const YearsProjection = () => {
   const { data: incomeLastYear, isSuccess: isSuccessIncomeLastYear } =
     useGetIncomeLastYearQuery(selectedPortfolio);
 
-  const [projectionChartSeries, setProjectionChartSeries] = useState<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [projectionChartSeries] = useState<
     [{ data: number[] }]
   >([{ data: [] }]);
 
   const [projectionActualChartSeries, setProjectionActualChartSeries] =
     useState<[{ data: number[] }]>([{ data: [] }]);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [
     projectionWithReinvestChartSeries,
-    setProjectionWithReinvestChartSeries,
   ] = useState<[{ data: number[] }]>([{ data: [] }]);
 
   const getPortfolioDivYield = useCallback((): number => {

@@ -13,10 +13,10 @@ const useChartsInit = () => {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
-  const [portfolioMarketValue, setPortfolioMarketValue] = useState(0);
-  const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
+  const [portfolioMarketValue] = useState(0);
+  const { data: portfolioInvested } =
     useGetInvestedQuery(selectedPortfolio);
-  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
+  const { data: dividendsSoFar } =
     useGetSoFarQuery(selectedPortfolio);
 
   const monthsProjectionChartOptionsInit: ApexOptions = {

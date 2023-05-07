@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable no-fallthrough */
+
 import { capitalize } from "./format";
 
 interface DateOptions {
@@ -118,7 +121,7 @@ export function daysInMonth(date: Date) {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
 
-export function startOfDate(date: Date, unit: string, utc?: boolean) {
+export function startOfDate(date: Date, unit: string, utc?: boolean): Date {
   const t = new Date(date),
     prefix = `set${utc === true ? "UTC" : ""}`;
 

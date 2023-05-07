@@ -1,8 +1,11 @@
+import { ReactNode } from "react";
 
-const ChartCard = ({children}) => {
-  return (
-    <div className="bg-[#E1F5FE] shadow-lg">{children}</div>
-  )
+interface ChartCardProps {
+  children?: ReactNode;
 }
 
-export default ChartCard   ;
+const ChartCard = ({ children }: ChartCardProps) => {
+  return <div className="bg-[#E1F5FE] shadow-lg">{children}</div>;
+};
+
+export default ChartCard;

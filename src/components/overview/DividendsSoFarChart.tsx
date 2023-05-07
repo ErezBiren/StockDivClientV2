@@ -18,7 +18,7 @@ const DividendsSoFarChart = () => {
 
   const [nextDividendInfo, setNextDividendInfo] = useState("");
   const { formatToCurrency } = useFormatHelper();
-  const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
+  const { data: dividendsSoFar } =
     useGetSoFarQuery(selectedPortfolio);
 
   const [yearlyChartSeries, setYearlyChartSeries] = useState<number[]>([]);
