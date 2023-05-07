@@ -8,10 +8,7 @@ import { useEffect, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { isSameDate } from "../utils/utils";
-import {
-  selectCurrentPortfolio,
-  setSelectedTicker,
-} from "../features/stockdivSlice";
+import { selectCurrentPortfolio } from "../features/stockdivSlice";
 
 const bgGreen = "#4caf50";
 const bgRed = "#ef5350";
@@ -35,18 +32,17 @@ const getExPayColor = (params: { value: string }) => {
       : { backgroundColor: bgDatePurple };
 };
 
-const tickerCellRenderer = (props) => {
+const tickerCellRenderer = (props: any) => {
   return <span>{props.value}</span>;
 };
 
 const AssetsGridView = () => {
-  const { formatToCurrency, formatToPercentage, formatToNumber, formatToDate } =
-    useFormatHelper();
+  const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const navigate = useNavigate();
   const [rowDataAssets, setRowDataAssets] = useState<IPortfolioAsset[]>([]);
-  const currencyValueFormatter = (params) =>
+  const currencyValueFormatter = (params: any) =>
     params.value ? formatToCurrency(params.value) : "";
-  const percentageValueFormatter = (params) =>
+  const percentageValueFormatter = (params: any) =>
     params.value ? formatToPercentage(params.value) : "";
 
   const columnDefs = [
@@ -89,7 +85,7 @@ const AssetsGridView = () => {
       field: "profitLossPercent",
       headerName: "PL%",
       valueFormatter: percentageValueFormatter,
-      cellStyle: (params) => {
+      cellStyle: (params: any) => {
         if (!params?.value) return {};
 
         if (params.value > 0) {
@@ -108,7 +104,7 @@ const AssetsGridView = () => {
       field: "dailyChangePercent",
       headerName: "Change%",
       valueFormatter: percentageValueFormatter,
-      cellStyle: (params) => {
+      cellStyle: (params: any) => {
         if (!params.value) return {};
 
         if (params.value[0] !== "-") {
@@ -192,7 +188,7 @@ const AssetsGridView = () => {
     navigate(`/ticker/${ticker}`);
   };
 
-  const getRowStyle = (params) => {
+  const getRowStyle = (params: any) => {
     if (params.node.data.id === "sum") {
       return { background: "#cfdef5" };
     }

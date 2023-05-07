@@ -29,19 +29,19 @@ export default function Login() {
 
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-  const [isPwd, setIsPwd] = useState(true);
-  const [isRePwd, setIsRePwd] = useState(true);
+  const [, setIsPwd] = useState(true);
+  const [, setIsRePwd] = useState(true);
   const [email, setEmail] = useState<string>();
-  const [rememberMe, setRememberMe] = useState(false);
+  const [, setRememberMe] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [disableLetMeIn, setDisableLetMeIn] = useState(false);
   const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
 
   const rePasswordRef = useRef(null);
-  const emailRef = useRef(null);
-  const refConfirmationCode = useRef(null);
-  const confirmationCodeRef = useRef(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const refConfirmationCode = useRef<HTMLInputElement>(null);
+  const confirmationCodeRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 

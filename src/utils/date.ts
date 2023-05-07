@@ -18,7 +18,7 @@ interface DateOptions {
   years?: number;
 }
 
-function getChange(date: Date, rawMod: DateOptions, sign) {
+function getChange(date: Date, rawMod: DateOptions, sign: number) {
   const mod = normalizeMod(rawMod),
     d = new Date(date),
     t =
@@ -34,10 +34,7 @@ function getChange(date: Date, rawMod: DateOptions, sign) {
   return t;
 }
 
-export const subtractFromDate = (
-  date: Date | number | string,
-  mod: DateOptions
-) => {
+export const subtractFromDate = (date: Date, mod: DateOptions) => {
   return getChange(date, mod, -1);
 };
 
@@ -86,7 +83,7 @@ function normalizeMod(mod: DateOptions) {
   return acc;
 }
 
-function applyYearMonthDayChange(date: Date, mod: DateOptions, sign) {
+function applyYearMonthDayChange(date: Date, mod: DateOptions, sign: number) {
   let year = date.getFullYear(),
     month = date.getMonth();
 

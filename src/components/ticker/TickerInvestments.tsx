@@ -59,7 +59,7 @@ const TickerInvestments = () => {
     useLazyGetWhatHappenedSinceQuery();
 
   const [period, setPeriod] = useState(periodOptions[0].value);
-  const [firstTransaction, setFirstTransaction] = useState();
+  const [firstTransaction] = useState();
   const [percentDifference, setPercentDifference] = useState(0);
   const [differencePercentColor, setDifferencePercentColor] =
     useState("text-black-500");
