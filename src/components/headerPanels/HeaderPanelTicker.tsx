@@ -70,7 +70,7 @@ const HeaderPanelTicker = () => {
       timelineItemsTrigger(tickerPortfolioParam);
       tickerAveragePriceTrigger(tickerPortfolioParam);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker, portfolio]);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const HeaderPanelTicker = () => {
     setTickerShares(tickerShares);
     setShowDivs(!withTransactions);
     toggleShowDividends();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineItems, timelineItems.data]);
 
   const dailyChangePercentage = () => {
@@ -109,7 +109,7 @@ const HeaderPanelTicker = () => {
   };
 
   return (
-    <div className="bg-[#E1F5FE] shadow-lg p-2">
+    <div className="bg-cardBackground shadow-lg p-2">
       <div
         className="flex flex-row items-center justify-start gap-2"
         title="no notes"

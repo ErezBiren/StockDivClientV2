@@ -39,7 +39,7 @@ const AssetsListView = () => {
       {assets?.map((item: IPortfolioAsset) => (
         <section
           key={item.ticker}
-          className="bg-[#E1F5FE] cursor-pointer shadow-xl mx-10 py-4"
+          className="bg-cardBackground cursor-pointer shadow-xl mx-10 py-4"
           onClick={() => gotoTickerPage(item.ticker)}
         >
           <div className="flex flex-row items-center justify-center gap-1">
@@ -60,8 +60,7 @@ const AssetsListView = () => {
               <TrendingArrow positiveCondition={item.profitLoss >= 0} />
               {` ${formatToPercentage(item.profitLossPercent)})`}
             </span>
-            <span
-            >
+            <span>
               {`Daily: (`}
               <TrendingArrow positiveCondition={item.dailyChange < 0} />
               {`${formatToPercentage(item.dailyChangePercent)})`}

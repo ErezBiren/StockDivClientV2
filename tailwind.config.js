@@ -16,6 +16,9 @@ export default {
           800: "#1e40af",
           900: "#1e3a8a",
         },
+        cardBackground:"#E1F5FE",
+        headerBackground: "#c8e6c9",
+        iconsColor:"#2196f3"
       },
     },
     fontFamily: {

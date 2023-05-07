@@ -18,8 +18,7 @@ const DividendsSoFarChart = () => {
 
   const [nextDividendInfo, setNextDividendInfo] = useState("");
   const { formatToCurrency } = useFormatHelper();
-  const { data: dividendsSoFar } =
-    useGetSoFarQuery(selectedPortfolio);
+  const { data: dividendsSoFar } = useGetSoFarQuery(selectedPortfolio);
 
   const [yearlyChartSeries, setYearlyChartSeries] = useState<number[]>([]);
   const [monthlyChartSeries, setMonthlyChartSeries] = useState<number[]>([]);
@@ -58,7 +57,7 @@ const DividendsSoFarChart = () => {
   }, [isSuccessNext, next]);
 
   return (
-    <div className="bg-[#E1F5FE] shadow-lg">
+    <div className="bg-cardBackground shadow-lg">
       <div className="justify-center text-h6 q-mt-sm row no-wrap">
         Dividends so far: {formatToCurrency(dividendsSoFar)}
       </div>

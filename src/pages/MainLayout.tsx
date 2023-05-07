@@ -47,7 +47,7 @@ function MainLayout() {
   return (
     <div className="flex flex-col gap-10">
       <header className="fixed top-0 z-50 w-full">
-        <div className="bg-[#c8e6c9] shadow-lg ">
+        <div className="bg-headerBackground shadow-lg ">
           <div className="flex flex-row justify-between">
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <button
@@ -59,26 +59,26 @@ function MainLayout() {
               </button>
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
               <span className="cursor-pointer" title="Settings">
-                <IoMdSettings className="fill-[#2196f3]" />
+                <IoMdSettings className="fill-iconsColor" />
               </span>
               <span
                 className="cursor-pointer"
                 title="Overview"
                 onClick={() => navigate("/overview")}
               >
-                <FaHome className="fill-[#2196f3] cursor-pointer" />
+                <FaHome className="fill-iconsColor cursor-pointer" />
               </span>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <span className="cursor-pointer" title="Announcements">
-                <MdAnnouncement className="fill-[#2196f3]" />
+                <MdAnnouncement className="fill-iconsColor" />
               </span>
               <span
                 className="cursor-pointer"
                 title="LogOut"
                 onClick={handleLogOut}
               >
-                <FiLogOut className="stroke-[#2196f3]" />
+                <FiLogOut className="stroke-iconsColor" />
               </span>
             </span>
           </div>

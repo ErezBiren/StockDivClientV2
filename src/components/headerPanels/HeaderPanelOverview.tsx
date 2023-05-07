@@ -22,11 +22,9 @@ const HeaderPanelOverview = () => {
   const { data: portfolioLastTotalDividend } =
     useGetLastTotalDividendQuery(selectedPortfolio);
 
-  const {
-    data: portfolioMarketValue,
-  } = useGetMarketValueQuery(selectedPortfolio);
-  const { data: portfolioInvested } =
-    useGetInvestedQuery(selectedPortfolio);
+  const { data: portfolioMarketValue } =
+    useGetMarketValueQuery(selectedPortfolio);
+  const { data: portfolioInvested } = useGetInvestedQuery(selectedPortfolio);
 
   const plPercentage = () => {
     if (portfolioInvested !== 0) {
@@ -61,7 +59,7 @@ const HeaderPanelOverview = () => {
   };
 
   return (
-    <div className="bg-[#E1F5FE] shadow-lg p-2">
+    <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
         <span className="flex items-center gap-2 row">
@@ -70,7 +68,7 @@ const HeaderPanelOverview = () => {
             title="Show Dividend Alerts"
           />
           <BiCalendarEvent
-            className="fill-[#2196f3] cursor-pointer"
+            className="cursor-pointer fill-iconsColor"
             title="Show Current Month"
           />
           <span
@@ -78,7 +76,7 @@ const HeaderPanelOverview = () => {
             className="cursor-pointer"
             onClick={handleShowAssest}
           >
-            <BiCalendarEvent className="fill-[#2196f3]" />
+            <BiCalendarEvent className="fill-iconsColor" />
           </span>
         </span>
       </div>

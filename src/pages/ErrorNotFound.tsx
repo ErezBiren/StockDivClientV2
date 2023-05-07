@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function ErrorNotFound() {
   return (
-    <div className="bg-[#2196f3] text-white text-center flex items-center justify-center">
+    <div className="bg-iconsColor text-white text-center flex items-center justify-center">
       <div>
         <div className="text-9xl mb-6">404</div>
 

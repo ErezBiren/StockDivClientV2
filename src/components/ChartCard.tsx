@@ -5,7 +5,7 @@ interface ChartCardProps {
 }
 
 const ChartCard = ({ children }: ChartCardProps) => {
-  return <div className="bg-[#E1F5FE] shadow-lg">{children}</div>;
+  return <div className="bg-cardBackground shadow-lg">{children}</div>;
 };
 
 export default ChartCard;

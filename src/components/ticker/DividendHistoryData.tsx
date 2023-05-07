@@ -19,7 +19,7 @@ const DividendHistoryData = () => {
     if (!ticker) return;
     triggerDividendData(ticker);
     triggerTicketCurrency(ticker);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker]);
 
   return (
@@ -27,11 +27,11 @@ const DividendHistoryData = () => {
       <table className="w-full m-10 overflow-hidden">
         <thead>
           <tr>
-            <th className="bg-[#c8e6c9]">Ex</th>
-            <th className="bg-[#c8e6c9]">Pay</th>
-            <th className="bg-[#c8e6c9]">Amount</th>
-            <th className="bg-[#c8e6c9]">% Increment</th>
-            <th className="bg-[#c8e6c9]">Special</th>
+            <th className="bg-headerBackground">Ex</th>
+            <th className="bg-headerBackground">Pay</th>
+            <th className="bg-headerBackground">Amount</th>
+            <th className="bg-headerBackground">% Increment</th>
+            <th className="bg-headerBackground">Special</th>
           </tr>
         </thead>
         <tbody className="overflow-y-auto h-[100px]">
