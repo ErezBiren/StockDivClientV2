@@ -19,7 +19,14 @@ const FiveYearsProjection = () => {
     useLazyGetTickerCurrencyQuery();
 
   const [yearsProjectionOptions, setYearsProjectionOptions] =
-    useState<ApexOptions>({
+    useState<ApexOptions>({});
+
+  const [yearsProjectionSeries, setYearsProjectionSeries] = useState<
+    [{ data: number[] }]
+  >([{ data: [] }]);
+
+  useEffect(() => {
+    setYearsProjectionOptions({
       chart: {
         type: "bar",
       },
@@ -100,12 +107,10 @@ const FiveYearsProjection = () => {
         align: "center",
       },
     });
-
-  const [yearsProjectionSeries, setYearsProjectionSeries] = useState<
-    [{ data: number[] }]
-  >([{ data: [] }]);
+  }, [tickerCurrency.data]);
 
   useEffect(() => {
+    
     if (!ticker) return;
     triggerGetAverageIncrease(ticker);
     triggerTicketCurrency(ticker);
@@ -114,18 +119,26 @@ const FiveYearsProjection = () => {
   useEffect(() => {
     if (!averageIncrease || !averageIncrease.data) return;
 
+    console.log(averageIncrease.data);
+
     const avrIncrease: number = averageIncrease.data.averageIncrease5y;
 
     setYearsProjectionSeries([
       {
         data: [
+          averageIncrease.data.dividends1YearBack,
           averageIncrease.data.dividends1YearBack *
             Math.pow(1 + avrIncrease, 1),
-          Math.pow(1 + avrIncrease, 2),
-          Math.pow(1 + avrIncrease, 3),
-          Math.pow(1 + avrIncrease, 4),
-          Math.pow(1 + avrIncrease, 5),
-          Math.pow(1 + avrIncrease, 6),
+          averageIncrease.data.dividends1YearBack *
+            Math.pow(1 + avrIncrease, 2),
+          averageIncrease.data.dividends1YearBack *
+            Math.pow(1 + avrIncrease, 3),
+          averageIncrease.data.dividends1YearBack *
+            Math.pow(1 + avrIncrease, 4),
+          averageIncrease.data.dividends1YearBack *
+            Math.pow(1 + avrIncrease, 5),
+          averageIncrease.data.dividends1YearBack *
+            Math.pow(1 + avrIncrease, 6),
         ],
       },
     ]);

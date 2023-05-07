@@ -58,7 +58,6 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  
   useLazyGetWhatHappenedSinceQuery,
   useGetTickerCurrencyQuery,
   useLazyGetTickerPriceQuery,
@@ -69,5 +68,5 @@ export const {
   useLazyGetTickerCurrencyQuery,
   useGetTickerFrequencyQuery,
   useLazyGetTickerDailyChangeQuery,
-  useLazyGetTickerAveragePriceQuery
+  useLazyGetTickerAveragePriceQuery,
 } = tickerApiSlice;
