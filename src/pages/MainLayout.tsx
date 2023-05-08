@@ -76,9 +76,11 @@ function MainLayout() {
               </TooltipStock>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
-              <span className="cursor-pointer" title="Announcements">
+              <TooltipStock content="Announcements">
+              <span className="cursor-pointer">
                 <MdAnnouncement className="fill-iconsColor" />
               </span>
+              </TooltipStock>
               <TooltipStock content="LogOut">
                 <span className="cursor-pointer" onClick={handleLogOut}>
                   <FiLogOut className="stroke-iconsColor" />
