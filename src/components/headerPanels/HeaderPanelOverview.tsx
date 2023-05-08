@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import TrendingField from "../common/TrendingField";
 import { useCallback } from "react";
+import { FiMoreVertical } from "react-icons/fi";
+import { Tooltip } from "flowbite-react";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
@@ -106,10 +108,15 @@ const HeaderPanelOverview = () => {
           <span
             title="Show Screener"
             className="cursor-pointer"
-            onClick={(goToScreener)}
+            onClick={goToScreener}
           >
             <BiFilter className="fill-iconsColor" />
           </span>
+          <Tooltip content="Tooltip content" className="bg-tooltipBackground">
+          <span className="cursor-pointer" onClick={goToScreener}>
+            <FiMoreVertical />
+          </span>
+          </Tooltip>
         </span>
       </div>
       <div className="flex flex-col items-center">

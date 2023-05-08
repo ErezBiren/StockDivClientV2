@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -16,11 +20,12 @@ export default {
           800: "#1e40af",
           900: "#1e3a8a",
         },
-        cardBackground:"#E1F5FE",
+        cardBackground: "#E1F5FE",
         headerBackground: "#c8e6c9",
-        iconsColor:"#2196f3",
-        trendingUpColor:"#4caf50",
-        trendingDownColor:"#f44336",
+        iconsColor: "#2196f3",
+        trendingUpColor: "#4caf50",
+        trendingDownColor: "#f44336",
+        tooltipBackground:"blue"
       },
     },
     fontFamily: {
@@ -60,5 +65,5 @@ export default {
       ],
     },
   },
-  plugins: [],
+  plugins: [require('flowbite/plugin')],
 };
