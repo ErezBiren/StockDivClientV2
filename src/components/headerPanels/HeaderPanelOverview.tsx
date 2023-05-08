@@ -58,15 +58,24 @@ const HeaderPanelOverview = () => {
     navigate("/portfolio");
   };
 
+  const goToShowDividendAlerts = ()=>{
+    navigate("/dividendAlerts");
+  }
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
         <span className="flex items-center gap-2 row">
+        <span
+            title="Show Dividend Alerts"
+            className="cursor-pointer"
+            onClick={goToShowDividendAlerts}
+          >
           <HiBellAlert
             className="fill-[#f44336] cursor-pointer"
-            title="Show Dividend Alerts"
           />
+          </span>
           <BiCalendarEvent
             className="cursor-pointer fill-iconsColor"
             title="Show Current Month"

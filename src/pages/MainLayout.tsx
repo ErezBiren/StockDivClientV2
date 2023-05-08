@@ -39,15 +39,17 @@ function MainLayout() {
         return <HeaderPanelPortfolio />;
       case "ticker":
         return <HeaderPanelTicker />;
-      default:
+      case "overview":
         return <HeaderPanelOverview />;
+      default:
+        <></>;
     }
   };
 
   return (
     <div className="flex flex-col gap-10">
       <header className="fixed top-0 z-50 w-full">
-        <div className="bg-headerBackground shadow-lg ">
+        <div className="shadow-lg bg-headerBackground ">
           <div className="flex flex-row justify-between">
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <button
@@ -66,7 +68,7 @@ function MainLayout() {
                 title="Overview"
                 onClick={() => navigate("/overview")}
               >
-                <FaHome className="fill-iconsColor cursor-pointer" />
+                <FaHome className="cursor-pointer fill-iconsColor" />
               </span>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">

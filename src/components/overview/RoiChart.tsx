@@ -11,15 +11,15 @@ import {
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const RoiChart = () => {
-  const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const portfolio = useSelector(selectCurrentPortfolio);
 
-  const { data: roiMeterText } = useGetRoiMeterQuery(selectedPortfolio);
+  const { data: roiMeterText } = useGetRoiMeterQuery(portfolio);
 
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
-    useGetInvestedQuery(selectedPortfolio);
+    useGetInvestedQuery(portfolio);
 
   const { data: dividendsSoFar, isSuccess: isSuccessDividendsSoFar } =
-    useGetSoFarQuery(selectedPortfolio);
+    useGetSoFarQuery(portfolio);
   const { formatToPercentage, formatToCurrency } = useFormatHelper();
   const [roiChartOptions, setRoiChartOptions] = useState({});
   const [roiChartSeries, setRoiChartSeries] = useState<

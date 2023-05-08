@@ -107,7 +107,7 @@ const FiveYearsProjection = () => {
         align: "center",
       },
     });
-  }, [tickerCurrency.data]);
+  }, [tickerCurrency]);
 
   useEffect(() => {
     

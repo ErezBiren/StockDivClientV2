@@ -14,6 +14,7 @@ import Overview from "./pages/Overview";
 import RequireAuth from "./features/auth/RequireAuth";
 import Portfolio from "./pages/Portfolio";
 import TickerPage from "./pages/TickerPage";
+import DividendAlerts from "./pages/DividendAlerts";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,9 +27,9 @@ const router = createBrowserRouter(
           <Route path="/ticker/:ticker" element={<TickerPage/>} />
           <Route path="/yearlyPaymentMatrix" element={<></>} />
           <Route path="/monthlyDividendsView/:month" element={<></>} />
-          <Route path="/dividendAlerts" element={<></>} />
           <Route path="/announcements" element={<></>} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/dividendAlerts" element={<DividendAlerts />} />
           <Route path="/screener" element={<></>} />
           <Route path="*" element={<ErrorNotFound />} />
         </Route>

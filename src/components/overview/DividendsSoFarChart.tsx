@@ -57,7 +57,7 @@ const DividendsSoFarChart = () => {
   }, [isSuccessNext, next]);
 
   return (
-    <div className="bg-cardBackground shadow-lg">
+    <div className="shadow-lg bg-cardBackground">
       <div className="justify-center text-h6 q-mt-sm row no-wrap">
         Dividends so far: {formatToCurrency(dividendsSoFar)}
       </div>

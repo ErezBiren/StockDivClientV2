@@ -9,7 +9,8 @@ type SearchedTicker = { ticker: ""; name: "" };
 const SearchTickerOrName = () => {
   //todo: remove this
   useEffect(() => {
-    goToTickerPage("AVGO");
+    // goToTickerPage("AVGO");
+    navigate("/dividendAlerts");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
