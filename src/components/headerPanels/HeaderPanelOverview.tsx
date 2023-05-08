@@ -1,5 +1,6 @@
-import { BiCalendarEvent } from "react-icons/bi";
+import { BiCalendarEvent, BiFilter, BiWalletAlt } from "react-icons/bi";
 import { HiBellAlert } from "react-icons/hi2";
+import { BsCalendarRange } from "react-icons/bs";
 import useFormatHelper from "../../hooks/useFormatHelper";
 import { useSelector } from "react-redux";
 import {
@@ -55,12 +56,20 @@ const HeaderPanelOverview = () => {
       : (portfolioLastTotalDividend / portfolioInvested) * 100;
   };
 
-  const handleShowAssest = () => {
+  const goToYearlyPayment = () => {
+    navigate("/yearlyPaymentMatrix");
+  };
+
+  const goToAssets = () => {
     navigate("/portfolio");
   };
 
   const goToShowDividendAlerts = () => {
     navigate("/dividendAlerts");
+  };
+
+  const goToScreener = () => {
+    navigate("/screener");
   };
 
   return (
@@ -75,16 +84,31 @@ const HeaderPanelOverview = () => {
           >
             <HiBellAlert className="fill-[#f44336] cursor-pointer" />
           </span>
+          <span
+            title="Show Yearly Payment"
+            className="cursor-pointer fill-iconsColor"
+            onClick={goToYearlyPayment}
+          >
+            <BsCalendarRange />
+          </span>
           <BiCalendarEvent
             className="cursor-pointer fill-iconsColor"
             title="Show Current Month"
           />
+
           <span
             title="Show Assets"
             className="cursor-pointer"
-            onClick={handleShowAssest}
+            onClick={goToAssets}
           >
-            <BiCalendarEvent className="fill-iconsColor" />
+            <BiWalletAlt className="fill-iconsColor" />
+          </span>
+          <span
+            title="Show Screener"
+            className="cursor-pointer"
+            onClick={(goToScreener)}
+          >
+            <BiFilter className="fill-iconsColor" />
           </span>
         </span>
       </div>

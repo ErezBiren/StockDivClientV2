@@ -15,6 +15,7 @@ import RequireAuth from "./features/auth/RequireAuth";
 import Portfolio from "./pages/Portfolio";
 import TickerPage from "./pages/TickerPage";
 import DividendAlerts from "./pages/DividendAlerts";
+import Screener from "./pages/Screener";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,7 +31,7 @@ const router = createBrowserRouter(
           <Route path="/announcements" element={<></>} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/dividendAlerts" element={<DividendAlerts />} />
-          <Route path="/screener" element={<></>} />
+          <Route path="/screener" element={<Screener/>} />
           <Route path="*" element={<ErrorNotFound />} />
         </Route>
       </Route>

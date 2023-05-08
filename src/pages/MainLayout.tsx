@@ -50,6 +50,7 @@ function MainLayout() {
         return <HeaderPanelPortfolio />;
       case "ticker":
         return <HeaderPanelTicker />;
+      case "":
       case "overview":
         return <HeaderPanelOverview />;
       default:
