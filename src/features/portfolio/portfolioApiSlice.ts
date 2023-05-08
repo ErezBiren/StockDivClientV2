@@ -10,7 +10,7 @@ const getDividendQuery = (selectedPortfolio: string, endpoint: string) => ({
   method: "GET",
 });
 
-export const portFolioApiSlice = apiSlice.injectEndpoints({
+export const portfolioApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPortfolios: builder.query({
       query: () => ({
@@ -130,4 +130,4 @@ export const {
   useGetNewsQuery,
   useGetLastTotalDividendQuery,
   useGetAssetsQuery,
-} = portFolioApiSlice;
+} = portfolioApiSlice;

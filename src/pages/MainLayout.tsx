@@ -18,7 +18,8 @@ import { HiChevronUpDown } from "react-icons/hi2";
 
 function MainLayout() {
   const dispatch = useDispatch();
-  const { data: portfolios } = useGetPortfoliosQuery();
+  
+  const { data: portfolios } = useGetPortfoliosQuery(""); // todo: check why we need the argument
 
   const navigate = useNavigate();
   const location = useLocation();

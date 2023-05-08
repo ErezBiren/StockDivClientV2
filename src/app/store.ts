@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";
 import { tickerApiSlice } from "../features/ticker/tickerApiSlice";
-import { portFolioApiSlice } from "../features/portfolio/portfolioApiSlice";
+import { portfolioApiSlice } from "../features/portfolio/portfolioApiSlice";
 import stockdivReducer from "../features/stockdivSlice";
 import { dividendApiSlice } from "../features/dividend/dividendApiSlice";
 
@@ -10,7 +10,7 @@ export const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
-    [portFolioApiSlice.reducerPath]: portFolioApiSlice.reducer,
+    [portfolioApiSlice.reducerPath]: portfolioApiSlice.reducer,
     stockdiv: stockdivReducer,
     [tickerApiSlice.reducerPath]: tickerApiSlice.reducer,
     [dividendApiSlice.reducerPath]: dividendApiSlice.reducer,
