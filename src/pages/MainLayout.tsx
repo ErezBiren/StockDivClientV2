@@ -10,9 +10,9 @@ import HeaderPanelPortfolio from "../components/headerPanels/HeaderPanelPortfoli
 import SearchTickerOrName from "../components/header/SearchTickerOrName";
 import HeaderPanelTicker from "../components/headerPanels/HeaderPanelTicker";
 import PortfoliosDropdown from "../components/header/PortfoliosDropdown";
+import TooltipStock from "../components/common/TooltipStock";
 
 function MainLayout() {
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -51,36 +51,39 @@ function MainLayout() {
         <div className="shadow-lg bg-headerBackground ">
           <div className="flex flex-row justify-between">
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
-              <button
-                className="px-2 py-1 mr-2 text-white bg-green-700 rounded"
-                onClick={goToDonate}
-                title="donating is caring :)"
-              >
-                DONATE
-              </button>
+              <TooltipStock content="donating is caring :)">
+                <button
+                  className="px-2 py-1 mr-2 text-white bg-green-700 rounded"
+                  onClick={goToDonate}
+                >
+                  DONATE
+                </button>
+              </TooltipStock>
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
-              <span className="cursor-pointer" title="Settings">
-                <IoMdSettings className="fill-iconsColor" />
-              </span>
-              <span
-                className="cursor-pointer"
-                title="Overview"
-                onClick={() => navigate("/overview")}
-              >
-                <FaHome className="cursor-pointer fill-iconsColor" />
-              </span>
+
+              <TooltipStock content="Settings">
+                <span className="cursor-pointer">
+                  <IoMdSettings className="fill-iconsColor" />
+                </span>
+              </TooltipStock>
+              <TooltipStock content="Overview">
+                <span
+                  className="cursor-pointer"
+                  onClick={() => navigate("/overview")}
+                >
+                  <FaHome className="cursor-pointer fill-iconsColor" />
+                </span>
+              </TooltipStock>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <span className="cursor-pointer" title="Announcements">
                 <MdAnnouncement className="fill-iconsColor" />
               </span>
-              <span
-                className="cursor-pointer"
-                title="LogOut"
-                onClick={handleLogOut}
-              >
-                <FiLogOut className="stroke-iconsColor" />
-              </span>
+              <TooltipStock content="LogOut">
+                <span className="cursor-pointer" onClick={handleLogOut}>
+                  <FiLogOut className="stroke-iconsColor" />
+                </span>
+              </TooltipStock>
             </span>
           </div>
           <div className="flex flex-row justify-between px-3">

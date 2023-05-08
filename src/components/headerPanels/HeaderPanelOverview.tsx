@@ -15,6 +15,7 @@ import TrendingField from "../common/TrendingField";
 import { useCallback } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { Tooltip } from "flowbite-react";
+import TooltipStock from "../common/TooltipStock";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
@@ -78,45 +79,42 @@ const HeaderPanelOverview = () => {
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
-        <span className="flex items-center gap-2 row">
-          <span
-            title="Show Dividend Alerts"
-            className="cursor-pointer"
-            onClick={goToShowDividendAlerts}
-          >
-            <HiBellAlert className="fill-[#f44336] cursor-pointer" />
-          </span>
-          <span
-            title="Show Yearly Payment"
-            className="cursor-pointer fill-iconsColor"
-            onClick={goToYearlyPayment}
-          >
-            <BsCalendarRange />
-          </span>
-          <BiCalendarEvent
-            className="cursor-pointer fill-iconsColor"
-            title="Show Current Month"
-          />
+        <span className="flex items-center gap-4 row">
+          <TooltipStock content="Show Dividend Alerts">
+            <span
+              className="cursor-pointer"
+              onClick={goToShowDividendAlerts}
+            >
+              <HiBellAlert className="fill-[#f44336] cursor-pointer" />
+            </span>
+          </TooltipStock>
+          <TooltipStock content="Show Yearly Payment">
+            <span
+              className="cursor-pointer fill-iconsColor"
+              onClick={goToYearlyPayment}
+            >
+              <BsCalendarRange />
+            </span>
+          </TooltipStock>
 
-          <span
-            title="Show Assets"
-            className="cursor-pointer"
-            onClick={goToAssets}
-          >
-            <BiWalletAlt className="fill-iconsColor" />
-          </span>
-          <span
-            title="Show Screener"
-            className="cursor-pointer"
-            onClick={goToScreener}
-          >
-            <BiFilter className="fill-iconsColor" />
-          </span>
-          <Tooltip content="Tooltip content" className="bg-tooltipBackground">
+          <TooltipStock content="Show Current Month">
+            <BiCalendarEvent className="cursor-pointer fill-iconsColor" />
+          </TooltipStock>
+
+          <TooltipStock content="Show Assets">
+            <span className="cursor-pointer" onClick={goToAssets}>
+              <BiWalletAlt className="fill-iconsColor" />
+            </span>
+          </TooltipStock>
+
+          <TooltipStock content="Show Screener">
+            <span className="cursor-pointer" onClick={goToScreener}>
+              <BiFilter className="fill-iconsColor" />
+            </span>
+          </TooltipStock>
           <span className="cursor-pointer" onClick={goToScreener}>
             <FiMoreVertical />
           </span>
-          </Tooltip>
         </span>
       </div>
       <div className="flex flex-col items-center">

@@ -17,6 +17,7 @@ import { RootState } from "../../app/store";
 import { ITransactionData } from "../../utils/interfaces/ITransactionData";
 import { useParams } from "react-router-dom";
 import TrendingField from "../common/TrendingField";
+import TooltipStock from "../common/TooltipStock";
 
 const HeaderPanelTicker = () => {
   const { ticker } = useParams();
@@ -109,14 +110,13 @@ const HeaderPanelTicker = () => {
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
-      <div
-        className="flex flex-row items-center justify-start gap-2"
-        title="no notes"
-      >
-        <img src={tickerLogo?.data} className="w-[28px] h-[28px]" />
-        <span>{ticker}:</span>
-        <span>{tickerName?.data?.substring(0, 30)}</span>
-      </div>
+      <TooltipStock content="no notes">
+        <div className="flex flex-row items-center justify-start gap-2">
+          <img src={tickerLogo?.data} className="w-[28px] h-[28px]" />
+          <span>{ticker}:</span>
+          <span>{tickerName?.data?.substring(0, 30)}</span>
+        </div>
+      </TooltipStock>
       <Splitter />
 
       <div className="flex flex-col items-center">
