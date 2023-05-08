@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useGetUserNameQuery } from "../features/users/usersApiSlice";
 import { logOut } from "../features/auth/authSlice";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -6,13 +7,19 @@ import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { MdAnnouncement } from "react-icons/md";
 import HeaderPanelOverview from "../components/headerPanels/HeaderPanelOverview";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import HeaderPanelPortfolio from "../components/headerPanels/HeaderPanelPortfolio";
-import { selectCurrentPortfolio } from "../features/stockdivSlice";
+import { selectCurrentPortfolio, setSelectedPortfolio } from "../features/stockdivSlice";
 import SearchTickerOrName from "../components/SearchTickerOrName";
 import HeaderPanelTicker from "../components/headerPanels/HeaderPanelTicker";
+import { Listbox, Transition } from "@headlessui/react";
+import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
+import { HiChevronUpDown } from "react-icons/hi2";
 
 function MainLayout() {
+  const dispatch = useDispatch();
+  const { data: portfolios } = useGetPortfoliosQuery();
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,6 +51,11 @@ function MainLayout() {
       default:
         <></>;
     }
+  };
+
+  const selectedPortfolioChanged = (e: string) => {
+    console.log(e);
+    dispatch(setSelectedPortfolio(e));
   };
 
   return (
@@ -85,74 +97,38 @@ function MainLayout() {
             </span>
           </div>
           <div className="flex flex-row justify-between px-3">
-            <span className="flex flex-row items-center gap-2 mb-4">
-              <button
-                id="dropdownDefaultButton"
-                data-dropdown-toggle="dropdown"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"
+            <div>
+              <Listbox
+                value={selectedPortfolio}
+                onChange={selectedPortfolioChanged}
               >
-                {selectedPortfolio ?? ""}
-                <svg
-                  className="w-4 h-4 ml-2"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+                <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                  <span className="block truncate">{selectedPortfolio}</span>
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <HiChevronUpDown
+                      className="w-5 h-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Listbox.Button>
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-
-              <div
-                id="dropdown"
-                className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-              >
-                <ul
-                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                  aria-labelledby="dropdownDefaultButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Earnings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Sign out
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </span>
+                  <Listbox.Options>
+                    <div className="p-3 bg-white">
+                      {portfolios?.map((portfolio: string, index: number) => (
+                        <Listbox.Option key={index} value={portfolio}>
+                          {portfolio}
+                        </Listbox.Option>
+                      ))}
+                    </div>
+                  </Listbox.Options>
+                </Transition>
+              </Listbox>
+            </div>
             <SearchTickerOrName />
           </div>
         </div>

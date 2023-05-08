@@ -13,7 +13,10 @@ const getDividendQuery = (selectedPortfolio: string, endpoint: string) => ({
 export const portFolioApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getPortfolios: builder.query({
-      query: () => getPortfolioQuery("all", ""),
+      query: () => ({
+        url: "portfolio/all",
+        method: "GET",
+      }),
     }),
     getAssets: builder.query({
       query: (selectedPortfolio) =>

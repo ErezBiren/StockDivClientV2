@@ -1,4 +1,6 @@
 
+![example workflow](https://github.com/ErezBiren/StockDivClientV2/actions/workflows/deploy.yml/badge.svg)
+
 <h1 align="center">Welcome to StockDivClient V2 👋</h1>
 
 Your portfolio. Your income.
