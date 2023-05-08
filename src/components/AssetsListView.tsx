@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
-import TrendingArrow from "./common/TrendingArrow";
+import TrendingField from "./common/TrendingField";
 
 type AssetsFieldProps = {
   fileName: string;
@@ -50,20 +50,33 @@ const AssetsListView = () => {
           <div className="text-center">
             {formatToNumber(item.shares)} shares of {item.name}
           </div>
-          <div className="text-center">
+          <div className="flex flex-row items-center justify-center gap-3 mt-2">
             <span
-              className={`mt-1 text-xl font-semibold ${
-                item.profitLoss >= 0 ? "text-trendingUpColor" : "text-trendingDownColor"
+              className={`text-xl font-semibold ${
+                item.profitLoss >= 0
+                  ? "text-trendingUpColor"
+                  : "text-trendingDownColor"
               }`}
             >
-              {`${formatToCurrency(item.marketValue)} (`}
-              <TrendingArrow positiveCondition={item.profitLoss >= 0} />
-              {` ${formatToPercentage(item.profitLossPercent)})`}
+              {formatToCurrency(item.marketValue)} (
+               <TrendingField
+                positiveCondition={item.profitLoss >= 0}
+                value={item.profitLossPercent}
+              />)
             </span>
-            <span>
-              {`Daily: (`}
-              <TrendingArrow positiveCondition={item.dailyChange < 0} />
-              {`${formatToPercentage(item.dailyChangePercent)})`}
+            <span
+              className={`${
+                item.dailyChange < 0
+                  ? "text-trendingUpColor"
+                  : "text-trendingDownColor"
+              }`}
+            >
+              Daily: (
+              <TrendingField
+                positiveCondition={item.dailyChange < 0}
+                value={item.dailyChangePercent}
+              />
+              )
             </span>
           </div>
           <div className="text-lg font-semibold text-center">

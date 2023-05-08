@@ -5,7 +5,7 @@ import { useLazyGetAllDividendsQuery } from "../../features/dividend/dividendApi
 import useFormatHelper from "../../hooks/useFormatHelper";
 import { useParams } from "react-router-dom";
 import { useLazyGetTickerCurrencyQuery } from "../../features/ticker/tickerApiSlice";
-import TrendingArrow from "../common/TrendingArrow";
+import TrendingField from "../common/TrendingField";
 
 const DividendHistoryData = () => {
   const { ticker } = useParams();
@@ -49,10 +49,10 @@ const DividendHistoryData = () => {
               >
                 {item.increasePercent !== 0 && (
                   <>
-                    <TrendingArrow
+                    <TrendingField
                       positiveCondition={item.increasePercent > 0}
+                      value={item.increasePercent}
                     />
-                    {formatToPercentage(item.increasePercent)}
                   </>
                 )}
               </td>

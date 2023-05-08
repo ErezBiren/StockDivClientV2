@@ -11,7 +11,7 @@ import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { startOfDate, subtractFromDate } from "../../utils/date";
-import TrendingArrow from "../common/TrendingArrow";
+import TrendingField from "../common/TrendingField";
 
 const periodOptions = [
   {
@@ -265,8 +265,7 @@ const TickerInvestments = () => {
   return (
     <ChartCard>
       <div className={`flex justify-end font-bold ${differencePercentColor}`}>
-        <TrendingArrow positiveCondition={true} />
-        {formatToPercentage(percentDifference)}
+        <TrendingField positiveCondition={true} value={percentDifference} />
       </div>
       <Chart
         type="line"

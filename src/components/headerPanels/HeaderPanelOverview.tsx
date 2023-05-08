@@ -10,7 +10,8 @@ import {
 } from "../../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
-import TrendingArrow from "../common/TrendingArrow";
+import TrendingField from "../common/TrendingField";
+import { useCallback } from "react";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
@@ -37,11 +38,11 @@ const HeaderPanelOverview = () => {
     } else return 0;
   };
 
-  const dailyChangePercentage = () => {
+  const dailyChangePercentage = useCallback(() => {
     if (portfolioMarketValue - dailyChange !== 0) {
       return (dailyChange / (portfolioMarketValue - dailyChange)) * 100;
     } else return 0;
-  };
+  }, [dailyChange, portfolioMarketValue]);
 
   const getPortfolioDivYield = () => {
     return portfolioMarketValue === 0
@@ -58,23 +59,21 @@ const HeaderPanelOverview = () => {
     navigate("/portfolio");
   };
 
-  const goToShowDividendAlerts = ()=>{
+  const goToShowDividendAlerts = () => {
     navigate("/dividendAlerts");
-  }
+  };
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
         <span className="flex items-center gap-2 row">
-        <span
+          <span
             title="Show Dividend Alerts"
             className="cursor-pointer"
             onClick={goToShowDividendAlerts}
           >
-          <HiBellAlert
-            className="fill-[#f44336] cursor-pointer"
-          />
+            <HiBellAlert className="fill-[#f44336] cursor-pointer" />
           </span>
           <BiCalendarEvent
             className="cursor-pointer fill-iconsColor"
@@ -98,20 +97,25 @@ const HeaderPanelOverview = () => {
           }`}
         >
           {formatToCurrency(portfolioMarketValue)}(
-          <TrendingArrow
+          <TrendingField
             positiveCondition={portfolioMarketValue - portfolioInvested >= 0}
+            value={plPercentage()}
           />
-          {formatToPercentage(plPercentage())})
         </span>
         <div className="flex flex-row items-center gap-1">
           <span
             className={`mt-1 text-l ${
-              dailyChange < 0 ? "text-trendingDownColor" : "text-trendingUpColor"
+              dailyChange < 0
+                ? "text-trendingDownColor"
+                : "text-trendingUpColor"
             }`}
           >
             Daily PL: {formatToCurrency(dailyChange)}(
-            <TrendingArrow positiveCondition={dailyChange >= 0} />
-            {formatToPercentage(dailyChangePercentage())})
+            <TrendingField
+              positiveCondition={dailyChange >= 0}
+              value={dailyChangePercentage()}
+            />
+            )
           </span>
           <span className="w-[1px] bg-gray-300 h-6" />
           <span>

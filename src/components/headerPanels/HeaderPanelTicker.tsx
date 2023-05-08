@@ -9,14 +9,14 @@ import {
   useLazyGetTickerAveragePriceQuery,
 } from "../../features/ticker/tickerApiSlice";
 import Splitter from "../common/Splitter";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useFormatHelper from "../../hooks/useFormatHelper";
-import TrendingArrow from "../common/TrendingArrow";
 import { getTradingColor } from "../../utils/utils";
 import { useLazyGetTickerTimelineQuery } from "../../features/portfolio/portfolioApiSlice";
 import { RootState } from "../../app/store";
 import { ITransactionData } from "../../utils/interfaces/ITransactionData";
 import { useParams } from "react-router-dom";
+import TrendingField from "../common/TrendingField";
 
 const HeaderPanelTicker = () => {
   const { ticker } = useParams();
@@ -100,16 +100,16 @@ const HeaderPanelTicker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineItems, timelineItems.data]);
 
-  const dailyChangePercentage = () => {
+  const dailyChangePercentage = useCallback(() => {
     if (tickerPrice?.data - dailyChange?.data !== 0) {
       return (
         (dailyChange?.data / (tickerPrice?.data - dailyChange?.data)) * 100
       );
     } else return 0;
-  };
+  }, [dailyChange?.data, tickerPrice?.data]);
 
   return (
-    <div className="bg-cardBackground shadow-lg p-2">
+    <div className="p-2 shadow-lg bg-cardBackground">
       <div
         className="flex flex-row items-center justify-start gap-2"
         title="no notes"
@@ -137,8 +137,11 @@ const HeaderPanelTicker = () => {
         >
           Daily PL:
           {` ${formatToCurrency(dailyChange?.data, tickerCurrency?.data)}`} (
-          <TrendingArrow positiveCondition={dailyChangePercentage() > 0} />
-          {`${formatToPercentage(dailyChangePercentage())}`})
+          <TrendingField
+            positiveCondition={dailyChangePercentage() > 0}
+            value={dailyChangePercentage()}
+          />
+          )
         </span>
         <span className="w-[1px] bg-slate-300 h-6"></span>
         <span>{tickerShares} shares</span>
