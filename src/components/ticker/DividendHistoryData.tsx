@@ -48,12 +48,10 @@ const DividendHistoryData = () => {
                 }`}
               >
                 {item.increasePercent !== 0 && (
-                  <>
-                    <TrendingField
-                      positiveCondition={item.increasePercent > 0}
-                      value={item.increasePercent}
-                    />
-                  </>
+                  <TrendingField
+                    positiveCondition={item.increasePercent > 0}
+                    value={item.increasePercent}
+                  />
                 )}
               </td>
             </tr>

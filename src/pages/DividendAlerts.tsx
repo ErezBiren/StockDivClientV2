@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentPortfolio } from "../features/stockdivSlice";
 import { useGetAlertsQuery } from "../features/portfolio/portfolioApiSlice";
 import { IDividendAlert } from "../utils/interfaces/IDividendAlert";
-import AlertCard from "../components/alertCard";
+import AlertCard from "../components/AlertCard";
 
 const DividendAlerts = () => {
   const portfolio = useSelector(selectCurrentPortfolio);
