@@ -9,7 +9,7 @@ import TrendingField from "../common/TrendingField";
 
 const DividendHistoryData = () => {
   const { ticker } = useParams();
-  const { formatToDate, formatToCurrency, formatToPercentage } =
+  const { formatToDate, formatToCurrency } =
     useFormatHelper();
   const [triggerDividendData, dividendData] = useLazyGetAllDividendsQuery();
   const [triggerTicketCurrency, tickerCurrency] =

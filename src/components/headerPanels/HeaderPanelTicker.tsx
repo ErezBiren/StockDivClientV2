@@ -30,8 +30,7 @@ const HeaderPanelTicker = () => {
   const [, setFirstTransaction] = useState<Date | undefined>();
   const portfolio = useSelector(selectCurrentPortfolio);
 
-  const { formatToDate, formatToCurrency, formatToPercentage } =
-    useFormatHelper();
+  const { formatToDate, formatToCurrency } = useFormatHelper();
   const [tickerNameTrigger, tickerName] = useLazyGetTickerNameQuery();
   const [tickerLogoTrigger, tickerLogo] = useLazyGetTickerLogoQuery();
   const [dailyChangeTrigger, dailyChange] = useLazyGetTickerDailyChangeQuery();

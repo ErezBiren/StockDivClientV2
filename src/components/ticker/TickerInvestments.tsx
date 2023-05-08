@@ -51,7 +51,7 @@ const periodOptions = [
 const TickerInvestments = () => {
   const portfolio = useSelector(selectCurrentPortfolio);
   const { ticker } = useParams();
-  const { formatToCurrency, formatToPercentage } = useFormatHelper();
+  const { formatToCurrency } = useFormatHelper();
   const [triggerTickerCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 

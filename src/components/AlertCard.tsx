@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useFormatHelper from "../hooks/useFormatHelper";
 import { IDividendAlert } from "../utils/interfaces/IDividendAlert";
 import TrendingField from "./common/TrendingField";
