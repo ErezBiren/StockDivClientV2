@@ -18,7 +18,9 @@ export default {
         },
         cardBackground:"#E1F5FE",
         headerBackground: "#c8e6c9",
-        iconsColor:"#2196f3"
+        iconsColor:"#2196f3",
+        trendingUpColor:"#4caf50",
+        trendingDownColor:"#f44336",
       },
     },
     fontFamily: {

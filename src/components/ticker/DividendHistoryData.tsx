@@ -42,7 +42,9 @@ const DividendHistoryData = () => {
               <td>{formatToCurrency(item.amount, tickerCurrency?.data)}</td>
               <td
                 className={`${
-                  item.increasePercent > 0 ? "text-[#4caf50]" : "text-[#f44336]"
+                  item.increasePercent > 0
+                    ? "text-trendingUpColor"
+                    : "text-trendingDownColor"
                 }`}
               >
                 {item.increasePercent !== 0 && (

@@ -84,8 +84,8 @@ const HeaderPanelOverview = () => {
         <span
           className={`mt-1 text-xl ${
             portfolioMarketValue - portfolioInvested < 0
-              ? "text-red-600"
-              : "text-[#4caf50]"
+              ? "text-trendingDownColor"
+              : "text-trendingUpColor"
           }`}
         >
           {formatToCurrency(portfolioMarketValue)}(
@@ -97,7 +97,7 @@ const HeaderPanelOverview = () => {
         <div className="flex flex-row items-center gap-1">
           <span
             className={`mt-1 text-l ${
-              dailyChange < 0 ? "text-red-600" : "text-[#4caf50]"
+              dailyChange < 0 ? "text-trendingDownColor" : "text-trendingUpColor"
             }`}
           >
             Daily PL: {formatToCurrency(dailyChange)}(

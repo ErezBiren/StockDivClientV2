@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 // export const bus = new EventBus();
 // const store = stockdivStore();
 
-const greenText = " text-[#4caf50]";
-const redText = " text-[#f44336]";
+const greenText = " text-trendingUpColor";
+const redText = " text-trendingDownColor";
 
 export const getTradingColor = (positiveCondition: boolean) => {
   return positiveCondition ? greenText : redText;
@@ -62,8 +62,6 @@ export const isSameDate = (date1: Date, date2: Date): boolean => {
     date1.getDate() === date2.getDate()
   );
 };
-
-
 
 export const startOfDate = (
   date: Date,

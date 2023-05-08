@@ -39,7 +39,7 @@ const AssetsListView = () => {
       {assets?.map((item: IPortfolioAsset) => (
         <section
           key={item.ticker}
-          className="bg-cardBackground cursor-pointer shadow-xl mx-10 py-4"
+          className="py-4 mx-10 shadow-xl cursor-pointer bg-cardBackground"
           onClick={() => gotoTickerPage(item.ticker)}
         >
           <div className="flex flex-row items-center justify-center gap-1">
@@ -53,7 +53,7 @@ const AssetsListView = () => {
           <div className="text-center">
             <span
               className={`mt-1 text-xl font-semibold ${
-                item.profitLoss >= 0 ? "text-[#4caf50]" : "text-[#f44336]"
+                item.profitLoss >= 0 ? "text-trendingUpColor" : "text-trendingDownColor"
               }`}
             >
               {`${formatToCurrency(item.marketValue)} (`}
