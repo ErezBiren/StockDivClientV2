@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiChevronUpDown } from "react-icons/hi2";
-import { useLazyGetTickerSearchQuery } from "../features/ticker/tickerApiSlice";
+import { useLazyGetTickerSearchQuery } from "../../features/ticker/tickerApiSlice";
 import { useNavigate } from "react-router-dom";
 
 type SearchedTicker = { ticker: ""; name: "" };
