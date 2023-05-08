@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useLazyGetTickerSearchQuery } from "../../features/ticker/tickerApiSlice";
