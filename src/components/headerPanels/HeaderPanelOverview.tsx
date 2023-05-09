@@ -14,12 +14,23 @@ import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import TrendingField from "../common/TrendingField";
 import { useCallback } from "react";
 import { FiMoreVertical } from "react-icons/fi";
-import { Tooltip } from "flowbite-react";
 import TooltipStock from "../common/TooltipStock";
+import {
+  Menu,
+  Item,
+  useContextMenu,
+} from "react-contexify";
+import "react-contexify/dist/ReactContexify.css";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+
+const MENU_ID = "overview-header";
 
 const HeaderPanelOverview = () => {
   const navigate = useNavigate();
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
+  const { show } = useContextMenu({
+    id: MENU_ID,
+  });
 
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
@@ -75,16 +86,17 @@ const HeaderPanelOverview = () => {
     navigate("/screener");
   };
 
+  const renamePortfolio = ()=>{
+    console.log(111)
+  }
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
         <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
         <span className="flex items-center gap-4 row">
           <TooltipStock content="Show Dividend Alerts">
-            <span
-              className="cursor-pointer"
-              onClick={goToShowDividendAlerts}
-            >
+            <span className="cursor-pointer" onClick={goToShowDividendAlerts}>
               <HiBellAlert className="fill-[#f44336] cursor-pointer" />
             </span>
           </TooltipStock>
@@ -112,7 +124,12 @@ const HeaderPanelOverview = () => {
               <BiFilter className="fill-iconsColor" />
             </span>
           </TooltipStock>
-          <span className="cursor-pointer" onClick={goToScreener}>
+          <span
+            className="cursor-pointer"
+            onClick={(e) => {
+              show({ event: e });
+            }}
+          >
             <FiMoreVertical />
           </span>
         </span>
@@ -154,6 +171,11 @@ const HeaderPanelOverview = () => {
           </span>
         </div>
       </div>
+      <Menu id={MENU_ID}>
+        <Item onClick={renamePortfolio}>
+          <MdOutlineDriveFileRenameOutline /> <span className="ml-2">Rename Portfolio</span>
+        </Item>
+      </Menu>
     </div>
   );
 };
