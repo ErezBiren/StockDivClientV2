@@ -2,7 +2,7 @@ import { IPortfolioAsset } from "../../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
 import { useGetAssetsQuery } from "../../features/portfolio/portfolioApiSlice";
 import { AgGridReact } from "ag-grid-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
@@ -56,7 +56,7 @@ const AssetsGridView = () => {
       shares: 0,
       averagePrice: 0,
       sharePrice: 0,
-      dividendFrequency: 0,
+      dividendFrequency:'Other',
       profitLossPercent: 0,
       annualized: 0,
       dailyChangePercent: 0,

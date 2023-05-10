@@ -37,6 +37,14 @@ const HeaderPanelPortfolio = () => {
     dispatch(setPortfolioView(newPortfolioView));
   };
 
+  const saveView = () => {
+    console.log("not implemented"); // todo: implement
+  };
+
+  const toggleClosePositions = () => {
+    console.log("not implemented"); // todo: implement
+  };
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row items-center justify-between gap-2">
@@ -57,11 +65,11 @@ const HeaderPanelPortfolio = () => {
           <MdPreview />
           <span className="ml-2">Switch View</span>
         </Item>
-        <Item>
+        <Item onClick={saveView}>
           <MdSaveAs />
           <span className="ml-2">Save View</span>
         </Item>
-        <Item>
+        <Item onClick={toggleClosePositions}>
           <MdCancelPresentation />
           <span className="ml-2">Toggle closed positions</span>
         </Item>
