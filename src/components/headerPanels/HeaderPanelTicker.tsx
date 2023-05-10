@@ -169,7 +169,7 @@ const HeaderPanelTicker = () => {
   const showProperties = () => {
 
     console.log(222);
-    console.log(tickerUserData.data);
+    console.log(tickerUserData);
 
     dispatch(
       setShowTickerPropertiesDialog({

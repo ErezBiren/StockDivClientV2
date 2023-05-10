@@ -25,7 +25,8 @@ export default {
         iconsColor: "#2196f3",
         trendingUpColor: "#4caf50",
         trendingDownColor: "#f44336",
-        tooltipBackground:"#3f48cc"
+        tooltipBackground:"#3f48cc",
+        drawerBackground:"#31CCEC"
       },
     },
     fontFamily: {

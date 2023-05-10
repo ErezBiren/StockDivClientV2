@@ -118,12 +118,13 @@ function MainLayout() {
       </header>
 
       <Outlet />
+
       <Drawer
         open={showPropertiesDialog}
         onClose={closePropertiesDialog}
         direction="bottom"
       >
-        <TickerProperties ticker={tickerUserData} />
+        <TickerProperties tickerUserData={tickerUserData} />
       </Drawer>
     </div>
   );

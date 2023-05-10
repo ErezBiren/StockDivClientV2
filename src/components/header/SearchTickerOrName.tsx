@@ -15,7 +15,7 @@ const SearchTickerOrName = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/portfolio");
+    navigate("/ticker/AVGO");
   }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
