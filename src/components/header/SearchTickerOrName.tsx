@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useLazyGetTickerSearchQuery } from "../../features/ticker/tickerApiSlice";
@@ -13,6 +13,10 @@ const SearchTickerOrName = () => {
   const [selected, setSelected] = useState<SearchedTicker>();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/portfolio");
+  }, [])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const triggerSearch = (e: any) => {

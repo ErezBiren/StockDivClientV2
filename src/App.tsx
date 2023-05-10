@@ -26,16 +26,19 @@ const router = createBrowserRouter(
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Overview />} />
           <Route path="/overview" element={<Overview />} />
-          <Route path="/ticker/:ticker" element={<TickerPage/>} />
+          <Route path="/ticker/:ticker" element={<TickerPage />} />
           <Route path="/yearlyPaymentMatrix" element={<></>} />
-          <Route path="/monthlyDividendsView/:month" element={<MonthlyDividendsView/>} />
+          <Route
+            path="/monthlyDividendsView/:month"
+            element={<MonthlyDividendsView />}
+          />
           <Route path="/announcements" element={<></>} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/dividendAlerts" element={<DividendAlerts />} />
-          <Route path="/screener" element={<Screener/>} />
-          <Route path="*" element={<ErrorNotFound />} />
+          <Route path="/screener" element={<Screener />} />
         </Route>
       </Route>
+      <Route path="*" element={<ErrorNotFound />} />
     </Route>
   )
 );
