@@ -1,16 +1,47 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { SortByEnum } from '../utils/enums/SortByEnum';
-import { SortDirectionEnum } from '../utils/enums/SortDirectionEnum';
-import { ViewModeEnum } from '../utils/enums/ViewModeEnum';
-import { IDividendAlert } from '../utils/interfaces/IDividendAlert';
-import { RootState } from '../app/store';
+import { createSlice } from "@reduxjs/toolkit";
+import { SortByEnum } from "../utils/enums/SortByEnum";
+import { SortDirectionEnum } from "../utils/enums/SortDirectionEnum";
+import { ViewModeEnum } from "../utils/enums/ViewModeEnum";
+import { IDividendAlert } from "../utils/interfaces/IDividendAlert";
+import { RootState } from "../app/store";
+import { ITickerUserData } from "../utils/interfaces/ITickerUserData";
 
-const initialState = {
-  portfolios: [],
-  selectedPortfolio: 'Portfolio',
-  portfolioCurrency: '',
+type StockDivStateType = {
+  showTickerPropertiesDialog: {
+    show: boolean;
+    tickerUserData?: ITickerUserData | null;
+  };
+  portfolios: any[];
+  selectedPortfolio: string;
+  portfolioCurrency: string;
   settings: {
-    dateFormat: 'yyyy-MM-dd',
+    dateFormat: string;
+    defaultTax: number;
+    decimalDigits: number;
+    portfolioView: {
+      mode: ViewModeEnum;
+      sortBy: SortByEnum;
+      sortDirection: SortDirectionEnum;
+      visibleColumns: Array<string>;
+    };
+    screenerView: {
+      mode: ViewModeEnum;
+      sortBy: SortByEnum;
+      sortDirection: SortDirectionEnum;
+      visibleColumns: Array<string>;
+    };
+  };
+  dividendAlerts: Array<IDividendAlert>;
+  announcements: Array<{ theDate: string; theMessage: string }>;
+};
+
+const initialState: StockDivStateType = {
+  showTickerPropertiesDialog: { show: false, tickerUserData: undefined },
+  portfolios: [],
+  selectedPortfolio: "Portfolio",
+  portfolioCurrency: "",
+  settings: {
+    dateFormat: "yyyy-MM-dd",
     defaultTax: 0,
     decimalDigits: 2,
     portfolioView: {
@@ -31,9 +62,20 @@ const initialState = {
 };
 
 export const stockdivSlice = createSlice({
-  name: 'stockdiv',
+  name: "stockdiv",
   initialState,
   reducers: {
+    setShowTickerPropertiesDialog: (
+      state,
+      action: {
+        payload: {
+          show: boolean;
+          tickerUserData?: ITickerUserData | null;
+        };
+      }
+    ) => {
+      state.showTickerPropertiesDialog = action.payload;
+    },
     setPortfolios: (state, action) => {
       state.portfolios = action.payload;
     },
@@ -68,6 +110,7 @@ export const stockdivSlice = createSlice({
 });
 
 export const {
+  setShowTickerPropertiesDialog,
   setPortfolios,
   setSelectedPortfolio,
   setPortfolioCurrency,
@@ -82,6 +125,7 @@ export const {
 
 export default stockdivSlice.reducer;
 
-
-export const selectCurrentPortfolio = (state: RootState) => state.stockdiv.selectedPortfolio;
-export const selectPortfolioView = (state: RootState) => state.stockdiv.settings.portfolioView;
+export const selectCurrentPortfolio = (state: RootState) =>
+  state.stockdiv.selectedPortfolio;
+export const selectPortfolioView = (state: RootState) =>
+  state.stockdiv.settings.portfolioView;

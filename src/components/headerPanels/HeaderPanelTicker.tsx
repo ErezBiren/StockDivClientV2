@@ -1,5 +1,8 @@
-import { useSelector } from "react-redux";
-import { selectCurrentPortfolio } from "../../features/stockdivSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectCurrentPortfolio,
+  setShowTickerPropertiesDialog,
+} from "../../features/stockdivSlice";
 import {
   useLazyGetTickerCurrencyQuery,
   useLazyGetTickerDailyChangeQuery,
@@ -29,6 +32,7 @@ import { MdAddShoppingCart, MdOutlineEditNote } from "react-icons/md";
 const HeaderPanelTicker = () => {
   const MENU_ID = "ticker-header";
   const { ticker } = useParams();
+  const dispatch = useDispatch();
   const settingsDateFormat = useSelector(
     (state: RootState) => state.stockdiv.settings.dateFormat
   );
@@ -162,6 +166,19 @@ const HeaderPanelTicker = () => {
     id: MENU_ID,
   });
 
+  const showProperties = () => {
+
+    console.log(222);
+    console.log(tickerUserData.data);
+
+    dispatch(
+      setShowTickerPropertiesDialog({
+        show: true,
+        tickerUserData: tickerUserData.data,
+      })
+    );
+  };
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <TooltipStock content={getTickerDataTooltip()}>
@@ -209,8 +226,9 @@ const HeaderPanelTicker = () => {
         <span>{tickerShares} shares</span>
       </div>
       <Menu id={MENU_ID}>
-        <Item>
-          <MdOutlineEditNote/><span className="ml-2">Properties</span>
+        <Item onClick={showProperties}>
+          <MdOutlineEditNote />
+          <span className="ml-2">Properties</span>
         </Item>
         <Item>
           <MdAddShoppingCart />

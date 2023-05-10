@@ -11,12 +11,24 @@ import SearchTickerOrName from "../components/header/SearchTickerOrName";
 import HeaderPanelTicker from "../components/headerPanels/HeaderPanelTicker";
 import PortfoliosDropdown from "../components/header/PortfoliosDropdown";
 import TooltipStock from "../components/common/TooltipStock";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
+import TickerProperties from "../components/ticker/TickerProperties";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { setShowTickerPropertiesDialog } from "../features/stockdivSlice";
 
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const { data: userName } = useGetUserNameQuery({});
+  const { show: showPropertiesDialog, tickerUserData } = useSelector(
+    (state: RootState) => state.stockdiv.showTickerPropertiesDialog
+  );
+
+  console.log(showPropertiesDialog);
 
   const currentRoute = location.pathname;
 
@@ -43,6 +55,15 @@ function MainLayout() {
       default:
         <></>;
     }
+  };
+
+  const closePropertiesDialog = () => {
+    dispatch(
+      setShowTickerPropertiesDialog({
+        show: false,
+        tickerUserData: null,
+      })
+    );
   };
 
   return (
@@ -77,9 +98,9 @@ function MainLayout() {
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <TooltipStock content="Announcements">
-              <span className="cursor-pointer">
-                <MdAnnouncement className="fill-iconsColor" />
-              </span>
+                <span className="cursor-pointer">
+                  <MdAnnouncement className="fill-iconsColor" />
+                </span>
               </TooltipStock>
               <TooltipStock content="LogOut">
                 <span className="cursor-pointer" onClick={handleLogOut}>
@@ -95,7 +116,15 @@ function MainLayout() {
         </div>
         <div className="flex justify-center">{getHeaderPanelByRoute()}</div>
       </header>
+
       <Outlet />
+      <Drawer
+        open={showPropertiesDialog}
+        onClose={closePropertiesDialog}
+        direction="bottom"
+      >
+        <TickerProperties ticker={tickerUserData} />
+      </Drawer>
     </div>
   );
 }
