@@ -21,8 +21,13 @@ import { ITransactionData } from "../../utils/interfaces/ITransactionData";
 import { useParams } from "react-router-dom";
 import TrendingField from "../common/TrendingField";
 import TooltipStock from "../common/TooltipStock";
+import { Menu, Item, useContextMenu } from "react-contexify";
+import "react-contexify/dist/ReactContexify.css";
+import { FiMoreVertical } from "react-icons/fi";
+import { MdAddShoppingCart, MdOutlineEditNote } from "react-icons/md";
 
 const HeaderPanelTicker = () => {
+  const MENU_ID = "ticker-header";
   const { ticker } = useParams();
   const settingsDateFormat = useSelector(
     (state: RootState) => state.stockdiv.settings.dateFormat
@@ -153,13 +158,26 @@ const HeaderPanelTicker = () => {
     );
   };
 
+  const { show } = useContextMenu({
+    id: MENU_ID,
+  });
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <TooltipStock content={getTickerDataTooltip()}>
-        <div className="flex flex-row items-center justify-start gap-2">
+        <div className="flex flex-row items-center justify-between gap-2">
           <img src={tickerLogo?.data} className="w-[28px] h-[28px]" />
           <span>{ticker}:</span>
           <span>{tickerName?.data?.substring(0, 30)}</span>
+          <span className="w-[1px] bg-slate-300 h-6"></span>
+          <span
+            className="cursor-pointer"
+            onClick={(e) => {
+              show({ event: e });
+            }}
+          >
+            <FiMoreVertical />
+          </span>
         </div>
       </TooltipStock>
       <Splitter />
@@ -190,6 +208,15 @@ const HeaderPanelTicker = () => {
         <span className="w-[1px] bg-slate-300 h-6"></span>
         <span>{tickerShares} shares</span>
       </div>
+      <Menu id={MENU_ID}>
+        <Item>
+          <MdOutlineEditNote/><span className="ml-2">Properties</span>
+        </Item>
+        <Item>
+          <MdAddShoppingCart />
+          <span className="ml-2">Add Transaction</span>
+        </Item>
+      </Menu>
     </div>
   );
 };

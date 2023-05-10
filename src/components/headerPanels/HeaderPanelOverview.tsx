@@ -23,9 +23,9 @@ import {
 import "react-contexify/dist/ReactContexify.css";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 
-const MENU_ID = "overview-header";
 
 const HeaderPanelOverview = () => {
+  const MENU_ID = "overview-header";
   const navigate = useNavigate();
   const { formatToCurrency, formatToPercentage } = useFormatHelper();
   const { show } = useContextMenu({
