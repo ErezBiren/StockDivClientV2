@@ -46,7 +46,7 @@ const AssetsGridView = () => {
     params.value ? formatToPercentage(params.value) : "";
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columnDefs : any = [
+  const columnDefs: any = [
     {
       field: "ticker",
       cellStyle: { backgroundColor: "#cfdef5" },
@@ -110,7 +110,7 @@ const AssetsGridView = () => {
       cellStyle: (params: any) => {
         if (!params.value) return {};
 
-        if (params.value[0] !== "-") {
+        if (params.value >= 0) {
           return { backgroundColor: bgGreen };
         }
         return { backgroundColor: bgRed };
