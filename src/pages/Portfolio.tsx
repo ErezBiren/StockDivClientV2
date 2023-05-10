@@ -5,13 +5,16 @@ import { selectPortfolioView } from "../features/stockdivSlice";
 import { ViewModeEnum } from "../utils/enums/ViewModeEnum";
 
 const Portfolio = () => {
-
   const portfolioView = useSelector(selectPortfolioView);
-
-  console.log(portfolioView)
-
-
-  return <>{portfolioView.mode === ViewModeEnum.CARD ? <AssetsListView /> : <AssetsGridView/>}</>;
+  return (
+    <>
+      {portfolioView.mode === ViewModeEnum.CARD ? (
+        <AssetsListView />
+      ) : (
+        <AssetsGridView />
+      )}
+    </>
+  );
 };
 
 export default Portfolio;
