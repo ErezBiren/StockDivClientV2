@@ -1,10 +1,10 @@
-import useFormatHelper from "../hooks/useFormatHelper";
-import { IPortfolioAsset } from "../utils/interfaces/IPortfolioAsset";
+import useFormatHelper from "../../hooks/useFormatHelper";
+import { IPortfolioAsset } from "../../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
-import { useGetAssetsQuery } from "../features/portfolio/portfolioApiSlice";
+import { useGetAssetsQuery } from "../../features/portfolio/portfolioApiSlice";
 import { useNavigate } from "react-router-dom";
-import { selectCurrentPortfolio } from "../features/stockdivSlice";
-import TrendingField from "./common/TrendingField";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
+import TrendingField from "../common/TrendingField";
 
 type AssetsFieldProps = {
   fileName: string;
@@ -59,10 +59,11 @@ const AssetsListView = () => {
               }`}
             >
               {formatToCurrency(item.marketValue)} (
-               <TrendingField
+              <TrendingField
                 positiveCondition={item.profitLoss >= 0}
                 value={item.profitLossPercent}
-              />)
+              />
+              )
             </span>
             <span
               className={`${

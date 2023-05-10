@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
-import AssetsGridView from "../components/AssetsGridView";
-import AssetsListView from "../components/AssetsListView";
+import AssetsGridView from "../components/assets/AssetsGridView";
+import AssetsListView from "../components/assets/AssetsListView";
 import { selectPortfolioView } from "../features/stockdivSlice";
 import { ViewModeEnum } from "../utils/enums/ViewModeEnum";
 
