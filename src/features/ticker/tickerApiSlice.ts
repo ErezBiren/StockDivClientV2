@@ -1,4 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
+import { ITickerUserData } from "../../utils/interfaces/ITickerUserData.ts";
+import { TickerPortfolioType } from "../../utils/interfaces/TickerPortfolio.ts";
 
 const getTickerQuery = (ticker: string, endpoint: string) => ({
   url: `ticker/${ticker}/${endpoint}`,
@@ -47,17 +49,27 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getTickerAveragePrice: builder.query({
-      query: ({ ticker, portfolio }: { ticker: string; portfolio: string }) =>
+      query: ({ ticker, portfolio }: TickerPortfolioType) =>
         getTickerAndPortfolioQuery(ticker, portfolio, "averagePrice"),
     }),
     getWhatHappenedSince: builder.query({
-      query: ({ ticker, portfolio }: { ticker: string; portfolio: string }) =>
+      query: ({ ticker, portfolio }: TickerPortfolioType) =>
         getTickerAndPortfolioQuery(ticker, portfolio, "whatHappenedSince"),
+    }),
+    getTickerUserData: builder.query<ITickerUserData, TickerPortfolioType>({
+      query: ({ ticker, portfolio }: TickerPortfolioType) =>
+        getTickerAndPortfolioQuery(ticker, portfolio, "userData"),
+    }),
+    getTickerDividendYield: builder.query({
+      query: ({ ticker, portfolio }: TickerPortfolioType) =>
+        getTickerAndPortfolioQuery(ticker, portfolio, "dividendYield"),
     }),
   }),
 });
 
 export const {
+  useLazyGetTickerDividendYieldQuery,
+  useLazyGetTickerUserDataQuery,
   useLazyGetWhatHappenedSinceQuery,
   useGetTickerCurrencyQuery,
   useLazyGetTickerPriceQuery,
@@ -66,7 +78,7 @@ export const {
   useLazyGetTickerNameQuery,
   useLazyGetTickerLogoQuery,
   useLazyGetTickerCurrencyQuery,
-  useGetTickerFrequencyQuery,
+  useLazyGetTickerFrequencyQuery,
   useLazyGetTickerDailyChangeQuery,
   useLazyGetTickerAveragePriceQuery,
 } = tickerApiSlice;

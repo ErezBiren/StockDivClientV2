@@ -7,6 +7,9 @@ import {
   useLazyGetTickerNameQuery,
   useLazyGetTickerPriceQuery,
   useLazyGetTickerAveragePriceQuery,
+  useLazyGetTickerUserDataQuery,
+  useLazyGetTickerDividendYieldQuery,
+  useLazyGetTickerFrequencyQuery,
 } from "../../features/ticker/tickerApiSlice";
 import Splitter from "../common/Splitter";
 import { useCallback, useEffect, useState } from "react";
@@ -25,6 +28,7 @@ const HeaderPanelTicker = () => {
     (state: RootState) => state.stockdiv.settings.dateFormat
   );
 
+  const { formatToPercentage } = useFormatHelper();
   const [showDivs, setShowDivs] = useState<boolean | undefined>();
   const [tickerShares, setTickerShares] = useState<number | undefined>();
   const [, setTimelineItemsToShow] = useState();
@@ -34,14 +38,21 @@ const HeaderPanelTicker = () => {
   const { formatToDate, formatToCurrency } = useFormatHelper();
   const [tickerNameTrigger, tickerName] = useLazyGetTickerNameQuery();
   const [tickerLogoTrigger, tickerLogo] = useLazyGetTickerLogoQuery();
+  const [tickerFrequencyTrigger, tickerFrequency] =
+    useLazyGetTickerFrequencyQuery();
   const [dailyChangeTrigger, dailyChange] = useLazyGetTickerDailyChangeQuery();
   const [tickerAveragePriceTrigger, tickerAveragePrice] =
     useLazyGetTickerAveragePriceQuery();
+  const [triggerGetTickerDividendYield, tickerDividendYield] =
+    useLazyGetTickerDividendYieldQuery();
+
   const [timelineItemsTrigger, timelineItems] = useLazyGetTickerTimelineQuery();
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 
   const [triggerTickerPrice, tickerPrice] = useLazyGetTickerPriceQuery();
+  const [triggerTicketUserData, tickerUserData] =
+    useLazyGetTickerUserDataQuery();
 
   const toggleShowDividends = () => {
     if (showDivs) setTimelineItemsToShow(timelineItems.data);
@@ -58,6 +69,7 @@ const HeaderPanelTicker = () => {
 
     tickerNameTrigger(ticker);
     tickerLogoTrigger(ticker);
+    tickerFrequencyTrigger(ticker);
     dailyChangeTrigger(ticker);
     triggerTicketCurrency(ticker);
     triggerTickerPrice({
@@ -69,6 +81,8 @@ const HeaderPanelTicker = () => {
       const tickerPortfolioParam = { ticker, portfolio };
       timelineItemsTrigger(tickerPortfolioParam);
       tickerAveragePriceTrigger(tickerPortfolioParam);
+      triggerTicketUserData(tickerPortfolioParam);
+      triggerGetTickerDividendYield(tickerPortfolioParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker, portfolio]);
@@ -108,9 +122,40 @@ const HeaderPanelTicker = () => {
     } else return 0;
   }, [dailyChange?.data, tickerPrice?.data]);
 
+  const getTickerDataTooltip = () => {
+    const notes = tickerUserData.data?.notes ?? "- No Notes -";
+
+    const tax = tickerUserData?.data?.tax
+      ? `Tax: ${formatToPercentage(tickerUserData.data.tax)}`
+      : "Tax: N/A, using default";
+
+    const averagePrice =
+      !tickerAveragePrice?.data || tickerAveragePrice?.data === 0
+        ? ""
+        : `Average Price: ${formatToCurrency(
+            tickerAveragePrice.data,
+            tickerCurrency.data
+          )}`;
+
+    const divYield =
+      !tickerDividendYield?.data || tickerDividendYield?.data === 0
+        ? ""
+        : `Dividend Yield: ${formatToPercentage(tickerDividendYield.data)}`;
+
+    return (
+      <div className="flex flex-col gap-1">
+        <span>{notes}</span>
+        <span>{tax}</span>
+        <span>Frequency: {tickerFrequency.data}</span>
+        <span>{averagePrice}</span>
+        <span>{divYield}</span>
+      </div>
+    );
+  };
+
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
-      <TooltipStock content="no notes">
+      <TooltipStock content={getTickerDataTooltip()}>
         <div className="flex flex-row items-center justify-start gap-2">
           <img src={tickerLogo?.data} className="w-[28px] h-[28px]" />
           <span>{ticker}:</span>

@@ -2,7 +2,7 @@ import { Tooltip } from "flowbite-react";
 import { ReactNode } from "react";
 
 type TooltipStockProps = {
-  content: string;
+  content: string | ReactNode;
   children: ReactNode;
 };
 
