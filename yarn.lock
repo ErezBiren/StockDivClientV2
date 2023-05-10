@@ -2,6 +2,26 @@
 # yarn lockfile v1
 
 
+"@ag-grid-community/core@^29.3.4", "@ag-grid-community/core@~29.3.4":
+  version "29.3.4"
+  resolved "https://registry.yarnpkg.com/@ag-grid-community/core/-/core-29.3.4.tgz#274740882db7ebc8b7e5aa9ec48bb5d87fa7b62d"
+  integrity sha512-WLLfMwxuQqyw3dtVDDIKCO1eRWqhzqJ8427I8SQnwGDHWoZbeVnFgR2Z5InrOjloh36/UyEkK/T8QgwwhmDmDA==
+
+"@ag-grid-enterprise/core@~29.3.4":
+  version "29.3.4"
+  resolved "https://registry.yarnpkg.com/@ag-grid-enterprise/core/-/core-29.3.4.tgz#79afe48972569e42da960384e8c3ad2040ba8771"
+  integrity sha512-kC2m23C81t2WG+Jnnxj2HHsgngOS7shqw5Ig45lIVP3C+6PNxMMli1vZkdgaY2D765bhLxlSmrOeGx6iOkCEtA==
+  dependencies:
+    "@ag-grid-community/core" "~29.3.4"
+
+"@ag-grid-enterprise/side-bar@^29.3.4":
+  version "29.3.4"
+  resolved "https://registry.yarnpkg.com/@ag-grid-enterprise/side-bar/-/side-bar-29.3.4.tgz#96f0ab26cc9fb297371ed233945faae313a69a47"
+  integrity sha512-ACUxmQS7qufZjPjsM8t20AQBhw6ZC7iOsYaB440UNaTAJSIMYx01vBUPBbsxWTPMOFXMelCj9YtQcfXq5RG+Ow==
+  dependencies:
+    "@ag-grid-community/core" "~29.3.4"
+    "@ag-grid-enterprise/core" "~29.3.4"
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.2.1.tgz"

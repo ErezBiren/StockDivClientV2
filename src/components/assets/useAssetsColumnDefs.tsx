@@ -18,8 +18,23 @@ const useAssetsColumnDefs = () => {
   const percentageValueFormatter = (params: { value: number }) =>
     params.value ? formatToPercentage(params.value) : "";
 
-  const tickerCellRenderer = (props: { value: string }) => {
-    return <span>{props.value}</span>;
+  const defaultColDef = {
+    // flex: 1, //todo: make the ag-grid assets column auto width
+    sortable: true
+  };
+
+  const tickerCellRenderer = (props: {
+    value: string;
+    data: { logoUrl: string };
+  }) => {
+    return (
+      <span className="flex flex-row items-center gap-2">
+        {props?.data?.logoUrl && (
+          <img src={props.data.logoUrl} className="w-[20px] h-[20px]" />
+        )}
+        <span>{props.value}</span>
+      </span>
+    );
   };
 
   const getExPayColor = (params: { value: string }) => {
@@ -139,7 +154,7 @@ const useAssetsColumnDefs = () => {
       },
     ];
 
-  return { columnDefs };
+  return { defaultColDef, columnDefs };
 };
 
 export default useAssetsColumnDefs;

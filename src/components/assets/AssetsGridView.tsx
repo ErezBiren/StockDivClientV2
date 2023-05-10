@@ -2,7 +2,7 @@ import { IPortfolioAsset } from "../../utils/interfaces/IPortfolioAsset";
 import { useSelector } from "react-redux";
 import { useGetAssetsQuery } from "../../features/portfolio/portfolioApiSlice";
 import { AgGridReact } from "ag-grid-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
@@ -10,7 +10,8 @@ import useAssetsColumnDefs from "./useAssetsColumnDefs";
 
 const AssetsGridView = () => {
   const [rowDataAssets, setRowDataAssets] = useState<IPortfolioAsset[]>([]);
-  const {columnDefs} = useAssetsColumnDefs();
+  const [sumRow, setSumRow] = useState<IPortfolioAsset>();
+  const { defaultColDef, columnDefs } = useAssetsColumnDefs();
 
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
@@ -40,8 +41,7 @@ const AssetsGridView = () => {
       sums.dailyChange += element.dailyChange;
     });
 
-    const sumRow = {
-      id: "sum",
+    const sum: IPortfolioAsset = {
       profitLoss: sums.profitLoss,
       invested: sums.invested,
       income: sums.income,
@@ -49,14 +49,34 @@ const AssetsGridView = () => {
       dividendYield: sums.dividendYield,
       yoc: sums.yoc,
       dailyChange: sums.dailyChange,
+      logoUrl: "",
+      ticker: "",
+      name: "",
+      sector: "",
+      shares: 0,
+      averagePrice: 0,
+      sharePrice: 0,
+      dividendFrequency: 0,
+      profitLossPercent: 0,
+      annualized: 0,
+      dailyChangePercent: 0,
+      tax: 0,
+      lastExDay: "",
+      lastPayDay: "",
+      dividendAmount: 0,
+      lastTotalDividend: 0,
+      lastTotalDividendYearly: 0,
+      mvPortion: 0,
+      investedPortion: 0,
     };
 
-    setRowDataAssets([...assets, sumRow]);
+    setRowDataAssets([...assets]);
+    setSumRow(sum);
   }, [isSuccessAssets, assets]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getRowStyle = (params: any) => {
-    if (params.node.data.id === "sum") {
+    if (params.node.data?.ticker === "") {
       return { background: "#cfdef5" };
     }
   };
@@ -67,6 +87,9 @@ const AssetsGridView = () => {
         rowData={rowDataAssets}
         columnDefs={columnDefs}
         getRowStyle={getRowStyle}
+        defaultColDef={defaultColDef}
+        sideBar={"columns"}
+        pinnedBottomRowData={[sumRow]}
       />
     </div>
   );
