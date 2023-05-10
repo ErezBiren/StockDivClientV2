@@ -1,10 +1,17 @@
+import { useSelector } from "react-redux";
 import AssetsGridView from "../components/AssetsGridView";
 import AssetsListView from "../components/AssetsListView";
+import { selectPortfolioView } from "../features/stockdivSlice";
+import { ViewModeEnum } from "../utils/enums/ViewModeEnum";
 
 const Portfolio = () => {
-  const view = "assetsListView";
 
-  return <>{view === "assetsListView" ? <AssetsListView /> : <AssetsGridView/>}</>;
+  const portfolioView = useSelector(selectPortfolioView);
+
+  console.log(portfolioView)
+
+
+  return <>{portfolioView.mode === ViewModeEnum.CARD ? <AssetsListView /> : <AssetsGridView/>}</>;
 };
 
 export default Portfolio;

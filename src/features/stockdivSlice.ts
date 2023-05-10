@@ -84,3 +84,4 @@ export default stockdivSlice.reducer;
 
 
 export const selectCurrentPortfolio = (state: RootState) => state.stockdiv.selectedPortfolio;
+export const selectPortfolioView = (state: RootState) => state.stockdiv.settings.portfolioView;

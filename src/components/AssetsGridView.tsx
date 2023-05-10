@@ -195,7 +195,7 @@ const AssetsGridView = () => {
   };
 
   return (
-    <div className="ag-theme-alpine " style={{ height: 500 }}>
+    <div className="ag-theme-alpine mt-[200px]" style={{ height: 500 }}>
       <AgGridReact
         rowData={rowDataAssets}
         columnDefs={columnDefs}
