@@ -40,13 +40,13 @@ const initialState: StockDivStateType = {
     decimalDigits: 2,
     portfolioView: {
       mode: ViewModeEnum.CARD,
-      sortBy: SortByEnum.PROFITLOSSPERCENT,
+      sortBy: SortByEnum.ProfitLossPercent,
       sortDirection: SortDirectionEnum.DESC,
       visibleColumns: [] as string[],
     },
     screenerView: {
       mode: ViewModeEnum.CARD,
-      sortBy: SortByEnum.YEARS,
+      sortBy: SortByEnum.Years,
       sortDirection: SortDirectionEnum.DESC,
       visibleColumns: [] as string[],
     },
