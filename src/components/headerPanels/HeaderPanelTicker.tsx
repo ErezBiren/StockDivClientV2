@@ -1,9 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectCurrentPortfolio,
-  setShowAddTransactionDialog,
-  setShowTickerPropertiesDialog,
-} from "../../features/stockdivSlice";
+import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import {
   useLazyGetTickerCurrencyQuery,
   useLazyGetTickerDailyChangeQuery,
@@ -29,11 +25,13 @@ import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { FiMoreVertical } from "react-icons/fi";
 import { MdAddShoppingCart, MdOutlineEditNote } from "react-icons/md";
+import TickerPropertiesDialog from "../ticker/TickerPropertiesDialog";
+import Drawer from "react-modern-drawer";
+import AddTransactionDialog from "../ticker/AddTransactionDialog";
 
 const HeaderPanelTicker = () => {
   const MENU_ID = "ticker-header";
   const { ticker } = useParams();
-  const dispatch = useDispatch();
   const settingsDateFormat = useSelector(
     (state: RootState) => state.stockdiv.settings.dateFormat
   );
@@ -169,25 +167,9 @@ const HeaderPanelTicker = () => {
     id: MENU_ID,
   });
 
-  const showProperties = () => {
-    console.log(tickerUserData);
-    console.log(tickerAveragePrice);
-
-    dispatch(
-      setShowTickerPropertiesDialog({
-        show: true,
-        tickerUserData: tickerUserData.data,
-      })
-    );
-  };
-
-  const showAddTransaction = () => {
-    dispatch(
-      setShowAddTransactionDialog({
-        show: true,
-      })
-    );
-  };
+  const [showPropertiesDrawer, setShowPropertiesDrawer] = useState(false);
+  const [showAddTransactionDrawer, setShowAddTransactionDrawer] =
+    useState(false);
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
@@ -236,15 +218,33 @@ const HeaderPanelTicker = () => {
         <span>{tickerShares} shares</span>
       </div>
       <Menu id={MENU_ID}>
-        <Item onClick={showProperties}>
+        <Item onClick={() => setShowPropertiesDrawer(true)}>
           <MdOutlineEditNote />
           <span className="ml-2">Properties</span>
         </Item>
-        <Item onClick={showAddTransaction}>
+        <Item onClick={() => setShowAddTransactionDrawer(true)}>
           <MdAddShoppingCart />
           <span className="ml-2">Add Transaction</span>
         </Item>
       </Menu>
+      <Drawer
+        open={showPropertiesDrawer}
+        onClose={() => {
+          setShowPropertiesDrawer(false);
+        }}
+        direction="bottom"
+        style={{ width: "auto", margin: "auto" }}
+      >
+        <TickerPropertiesDialog tickerUserData={tickerUserData.data} />
+      </Drawer>
+      <Drawer
+        open={showAddTransactionDrawer}
+        onClose={() => setShowAddTransactionDrawer(false)}
+        direction="bottom"
+        style={{ width: 300, margin: "auto" }}
+      >
+        <AddTransactionDialog />
+      </Drawer>
     </div>
   );
 };

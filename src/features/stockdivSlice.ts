@@ -4,16 +4,8 @@ import { SortDirectionEnum } from "../utils/enums/SortDirectionEnum";
 import { ViewModeEnum } from "../utils/enums/ViewModeEnum";
 import { IDividendAlert } from "../utils/interfaces/IDividendAlert";
 import { RootState } from "../app/store";
-import { ITickerUserData } from "../utils/interfaces/ITickerUserData";
 
 type StockDivStateType = {
-  showTickerPropertiesDialog: {
-    show: boolean;
-    tickerUserData?: ITickerUserData | null;
-  };
-  showAddTransactionDialog: {
-    show: boolean;
-  };
   portfolios: any[];
   selectedPortfolio: string;
   portfolioCurrency: string;
@@ -39,8 +31,6 @@ type StockDivStateType = {
 };
 
 const initialState: StockDivStateType = {
-  showTickerPropertiesDialog: { show: false, tickerUserData: undefined },
-  showAddTransactionDialog: { show: false },
   portfolios: [],
   selectedPortfolio: "Portfolio",
   portfolioCurrency: "",
@@ -69,27 +59,6 @@ export const stockdivSlice = createSlice({
   name: "stockdiv",
   initialState,
   reducers: {
-    setShowTickerPropertiesDialog: (
-      state,
-      action: {
-        payload: {
-          show: boolean;
-          tickerUserData?: ITickerUserData | null;
-        };
-      }
-    ) => {
-      state.showTickerPropertiesDialog = action.payload;
-    },
-    setShowAddTransactionDialog: (
-      state,
-      action: {
-        payload: {
-          show: boolean;
-        };
-      }
-    ) => {
-      state.showAddTransactionDialog = action.payload;
-    },
     setPortfolios: (state, action) => {
       state.portfolios = action.payload;
     },
@@ -124,8 +93,6 @@ export const stockdivSlice = createSlice({
 });
 
 export const {
-  setShowTickerPropertiesDialog,
-  setShowAddTransactionDialog,
   setPortfolios,
   setSelectedPortfolio,
   setPortfolioCurrency,

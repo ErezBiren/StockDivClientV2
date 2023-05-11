@@ -51,7 +51,7 @@ const TickerPropertiesDialog = ({
           name="notes"
           id="notes"
           className="bottom-0 bg-transparent border-0 border-b-2"
-          onChange={(e) => setTax(e.target.value)}
+          onChange={(e) => setTax(Number.parseInt(e.target.value))}
         />
         <div className="flex flex-row justify-start text-xs">
           <span>Tax</span>
