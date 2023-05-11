@@ -18,6 +18,16 @@ const getTickerAndPortfolioQuery = (
 
 export const tickerApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    submitTickerUserData: builder.mutation({
+      query: (tickerUserData: ITickerUserData) => ({
+        url: `ticker/${tickerUserData.ticker}/${tickerUserData.portfolio}/userData`,
+        method: "POST",
+        body: {
+          tax: tickerUserData.tax,
+          notes: tickerUserData.notes,
+        },
+      }),
+    }),
     getTickerSearch: builder.query({
       query: (dataToSearch: string) => ({
         url: `ticker/search?searchText=${dataToSearch.replace("&", "%26")}`,
@@ -81,4 +91,5 @@ export const {
   useLazyGetTickerFrequencyQuery,
   useLazyGetTickerDailyChangeQuery,
   useLazyGetTickerAveragePriceQuery,
+  useSubmitTickerUserDataMutation,
 } = tickerApiSlice;
