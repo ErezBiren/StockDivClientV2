@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCurrentPortfolio,
+  setShowAddTransactionDialog,
   setShowTickerPropertiesDialog,
 } from "../../features/stockdivSlice";
 import {
@@ -85,14 +86,16 @@ const HeaderPanelTicker = () => {
       ticker,
       when: formatToDate(new Date().toString(), "yyyy-MM-dd"),
     });
+  }, [ticker]);
 
-    if (portfolio) {
-      const tickerPortfolioParam = { ticker, portfolio };
-      timelineItemsTrigger(tickerPortfolioParam);
-      tickerAveragePriceTrigger(tickerPortfolioParam);
-      triggerTicketUserData(tickerPortfolioParam);
-      triggerGetTickerDividendYield(tickerPortfolioParam);
-    }
+  useEffect(() => {
+    if (!portfolio || !ticker) return;
+
+    const tickerPortfolioParam = { ticker, portfolio };
+    timelineItemsTrigger(tickerPortfolioParam);
+    tickerAveragePriceTrigger(tickerPortfolioParam);
+    triggerTicketUserData(tickerPortfolioParam);
+    triggerGetTickerDividendYield(tickerPortfolioParam);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticker, portfolio]);
 
@@ -162,19 +165,26 @@ const HeaderPanelTicker = () => {
     );
   };
 
-  const { show } = useContextMenu({
+  const { show: showContextMenu } = useContextMenu({
     id: MENU_ID,
   });
 
   const showProperties = () => {
-
-    console.log(222);
     console.log(tickerUserData);
+    console.log(tickerAveragePrice);
 
     dispatch(
       setShowTickerPropertiesDialog({
         show: true,
         tickerUserData: tickerUserData.data,
+      })
+    );
+  };
+
+  const showAddTransaction = () => {
+    dispatch(
+      setShowAddTransactionDialog({
+        show: true,
       })
     );
   };
@@ -190,7 +200,7 @@ const HeaderPanelTicker = () => {
           <span
             className="cursor-pointer"
             onClick={(e) => {
-              show({ event: e });
+              showContextMenu({ event: e });
             }}
           >
             <FiMoreVertical />
@@ -230,7 +240,7 @@ const HeaderPanelTicker = () => {
           <MdOutlineEditNote />
           <span className="ml-2">Properties</span>
         </Item>
-        <Item>
+        <Item onClick={showAddTransaction}>
           <MdAddShoppingCart />
           <span className="ml-2">Add Transaction</span>
         </Item>

@@ -11,6 +11,9 @@ type StockDivStateType = {
     show: boolean;
     tickerUserData?: ITickerUserData | null;
   };
+  showAddTransactionDialog: {
+    show: boolean;
+  };
   portfolios: any[];
   selectedPortfolio: string;
   portfolioCurrency: string;
@@ -37,6 +40,7 @@ type StockDivStateType = {
 
 const initialState: StockDivStateType = {
   showTickerPropertiesDialog: { show: false, tickerUserData: undefined },
+  showAddTransactionDialog: { show: false },
   portfolios: [],
   selectedPortfolio: "Portfolio",
   portfolioCurrency: "",
@@ -76,6 +80,16 @@ export const stockdivSlice = createSlice({
     ) => {
       state.showTickerPropertiesDialog = action.payload;
     },
+    setShowAddTransactionDialog: (
+      state,
+      action: {
+        payload: {
+          show: boolean;
+        };
+      }
+    ) => {
+      state.showAddTransactionDialog = action.payload;
+    },
     setPortfolios: (state, action) => {
       state.portfolios = action.payload;
     },
@@ -111,6 +125,7 @@ export const stockdivSlice = createSlice({
 
 export const {
   setShowTickerPropertiesDialog,
+  setShowAddTransactionDialog,
   setPortfolios,
   setSelectedPortfolio,
   setPortfolioCurrency,

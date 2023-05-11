@@ -56,7 +56,7 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
       query: ({ ticker, portfolio }: TickerPortfolioType) =>
         getTickerAndPortfolioQuery(ticker, portfolio, "whatHappenedSince"),
     }),
-    getTickerUserData: builder.query<ITickerUserData, TickerPortfolioType>({
+    getTickerUserData: builder.query<any, TickerPortfolioType>({
       query: ({ ticker, portfolio }: TickerPortfolioType) =>
         getTickerAndPortfolioQuery(ticker, portfolio, "userData"),
     }),

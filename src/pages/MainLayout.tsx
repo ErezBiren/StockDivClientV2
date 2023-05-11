@@ -13,10 +13,14 @@ import PortfoliosDropdown from "../components/header/PortfoliosDropdown";
 import TooltipStock from "../components/common/TooltipStock";
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
-import TickerProperties from "../components/ticker/TickerProperties";
+import TickerPropertiesDialog from "../components/ticker/TickerPropertiesDialog";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { setShowTickerPropertiesDialog } from "../features/stockdivSlice";
+import {
+  setShowAddTransactionDialog,
+  setShowTickerPropertiesDialog,
+} from "../features/stockdivSlice";
+import AddTransactionDialog from "../components/ticker/AddTransactionDialog";
 
 function MainLayout() {
   const navigate = useNavigate();
@@ -26,6 +30,10 @@ function MainLayout() {
   const { data: userName } = useGetUserNameQuery({});
   const { show: showPropertiesDialog, tickerUserData } = useSelector(
     (state: RootState) => state.stockdiv.showTickerPropertiesDialog
+  );
+
+  const { show: showAddTransactionDialog } = useSelector(
+    (state: RootState) => state.stockdiv.showAddTransactionDialog
   );
 
   console.log(showPropertiesDialog);
@@ -62,6 +70,14 @@ function MainLayout() {
       setShowTickerPropertiesDialog({
         show: false,
         tickerUserData: null,
+      })
+    );
+  };
+
+  const closeAddTransactionDialog = () => {
+    dispatch(
+      setShowAddTransactionDialog({
+        show: false,
       })
     );
   };
@@ -124,7 +140,14 @@ function MainLayout() {
         onClose={closePropertiesDialog}
         direction="bottom"
       >
-        <TickerProperties tickerUserData={tickerUserData} />
+        <TickerPropertiesDialog tickerUserData={tickerUserData} />
+      </Drawer>
+      <Drawer
+        open={showAddTransactionDialog}
+        onClose={closeAddTransactionDialog}
+        direction="bottom"
+      >
+        <AddTransactionDialog />
       </Drawer>
     </div>
   );
