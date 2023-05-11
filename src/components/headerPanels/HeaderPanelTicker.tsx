@@ -233,9 +233,11 @@ const HeaderPanelTicker = () => {
           setShowPropertiesDrawer(false);
         }}
         direction="bottom"
-        style={{ width: "auto", margin: "auto" }}
+        style={{ width: 300, margin: "auto" }}
       >
-        <TickerPropertiesDialog tickerUserData={tickerUserData.data} />
+        <TickerPropertiesDialog tickerUserData={tickerUserData.data} onClose={() => {
+          setShowPropertiesDrawer(false);
+        }} />
       </Drawer>
       <Drawer
         open={showAddTransactionDrawer}

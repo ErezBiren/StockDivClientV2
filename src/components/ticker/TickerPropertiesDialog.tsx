@@ -5,8 +5,10 @@ import { useSubmitTickerUserDataMutation } from "../../features/ticker/tickerApi
 
 const TickerPropertiesDialog = ({
   tickerUserData,
+  onClose,
 }: {
-  tickerUserData?: ITickerUserData | null;
+  tickerUserData?: ITickerUserData | null,
+  onClose: () => void;
 }) => {
   const [submitTickerUserData] = useSubmitTickerUserDataMutation();
 
@@ -25,7 +27,16 @@ const TickerPropertiesDialog = ({
       ticker: tickerUserData?.ticker ?? "", // todo: what if we dont have it??
       portfolio: tickerUserData?.portfolio ?? "",
     };
-    const x = await submitTickerUserData(newTickerUserData);
+    try {
+      const result = await submitTickerUserData(newTickerUserData);
+      if (result.data.result) {
+        alert("saved"); //todo:  replacr with toast
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      onClose();
+    }
   }
 
   return (
