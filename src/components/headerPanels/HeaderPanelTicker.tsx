@@ -235,17 +235,20 @@ const HeaderPanelTicker = () => {
         direction="bottom"
         style={{ width: 300, margin: "auto" }}
       >
-        <TickerPropertiesDialog tickerUserData={tickerUserData.data} onClose={() => {
-          setShowPropertiesDrawer(false);
-        }} />
+        <TickerPropertiesDialog
+          tickerUserData={tickerUserData.data}
+          onClose={() => {
+            setShowPropertiesDrawer(false);
+          }}
+        />
       </Drawer>
       <Drawer
         open={showAddTransactionDrawer}
         onClose={() => setShowAddTransactionDrawer(false)}
         direction="bottom"
-        style={{ width: 300, margin: "auto" }}
+        style={{ width: 400, margin: "auto" }}
       >
-        <AddTransactionDialog />
+        <AddTransactionDialog ticker={ticker ?? ""} />
       </Drawer>
     </div>
   );

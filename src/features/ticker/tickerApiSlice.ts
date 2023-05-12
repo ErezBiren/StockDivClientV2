@@ -1,5 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
 import { ITickerUserData } from "../../utils/interfaces/ITickerUserData.ts";
+import { ITransactionData } from "../../utils/interfaces/ITransactionData.ts";
 import { TickerPortfolioType } from "../../utils/interfaces/TickerPortfolio.ts";
 
 const getTickerQuery = (ticker: string, endpoint: string) => ({
@@ -25,6 +26,22 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
         body: {
           tax: tickerUserData.tax,
           notes: tickerUserData.notes,
+        },
+      }),
+    }),
+    submitTransaction: builder.mutation({
+      query: ({
+        transactions,
+        editedTransaction,
+      }: {
+        transactions: ITransactionData[];
+        editedTransaction: ITransactionData;
+      }) => ({
+        url: "transaction",
+        method: "POST",
+        body: {
+          transactions,
+          editedTransaction,
         },
       }),
     }),
@@ -92,4 +109,5 @@ export const {
   useLazyGetTickerDailyChangeQuery,
   useLazyGetTickerAveragePriceQuery,
   useSubmitTickerUserDataMutation,
+  useSubmitTransactionMutation,
 } = tickerApiSlice;
