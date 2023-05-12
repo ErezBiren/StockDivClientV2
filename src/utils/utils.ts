@@ -13,6 +13,12 @@ export const getTradingColor = (positiveCondition: boolean) => {
   return positiveCondition ? greenText : redText;
 };
 
+export const showSuccess = (message: string) => {
+  toast.success(message, {
+    position: toast.POSITION.BOTTOM_CENTER,
+  });
+};
+
 export const showNotification = (message: string) => {
   toast.info(message, {
     position: toast.POSITION.BOTTOM_CENTER,

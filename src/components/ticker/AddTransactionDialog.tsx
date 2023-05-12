@@ -4,32 +4,27 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ITransactionData } from "../../utils/interfaces/ITransactionData";
 import {
   useLazyGetTickerCurrencyQuery,
+  useLazyGetTickerPriceQuery,
   useSubmitTransactionMutation,
 } from "../../features/ticker/tickerApiSlice";
-import { showError, showNotification } from "../../utils/utils";
+import { showError } from "../../utils/utils";
 import { useGetPortfoliosQuery } from "../../features/portfolio/portfolioApiSlice";
 import Dropdown from "../common/Dropdown";
+import { MdRequestQuote } from "react-icons/md";
+import TooltipStock from "../common/TooltipStock";
 
 type AddTransactionDialogProps = { ticker: string };
 
 const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
   const { data: portfolios } = useGetPortfoliosQuery("");
+  const [triggerTickerPrice] = useLazyGetTickerPriceQuery();
 
   const [when, setWhen] = useState(new Date());
   const [shares, setShares] = useState(0);
   const [sharePrice, setSharePrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [isStockDivided, setIsStockDivided] = useState(false);
+  const [isStockDividend, setIsStockDividend] = useState(false);
   const [portfolio, setPortfolio] = useState("");
-
-  const [editedTransaction, setEditedTransaction] = useState<ITransactionData>({
-    ticker: "",
-    shares: 0,
-    sharePrice: 0,
-    portfolio: "",
-    currency: "",
-    when: "",
-  });
 
   const [submitTransactionMutation] = useSubmitTransactionMutation();
 
@@ -91,6 +86,24 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
     setSharePrice(newTotalPrice / shares);
   }
 
+  function getPriceForTransaction() {
+    if (isStockDividend) return;
+
+    triggerTickerPrice({ ticker, when: when.toString() })
+      .unwrap()
+      .then(() => sharePriceChange());
+  }
+
+  function sharePriceChange() {
+    //todo:
+    // if (!this.newTransactionSharePrice) return;
+    // if (this.newTransactionShares === 0) this.newTransactionShares = 1;
+    // this.newTransactionTotal =
+    //   Math.round(
+    //     this.newTransactionShares * this.newTransactionSharePrice * 1000
+    //   ) / 1000;
+  }
+
   return (
     <form
       className="flex flex-col items-center bg-drawerBackground h-[100%] gap-1 p-5"
@@ -113,10 +126,10 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
           <span className="text-xs">When</span>
         </span>
         <input
-          checked={isStockDivided}
+          checked={isStockDividend}
           id="disabled-checked-checkbox"
           type="checkbox"
-          onChange={() => setIsStockDivided((prev) => !prev)}
+          onChange={() => setIsStockDividend((prev) => !prev)}
           className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         />
         <label
@@ -126,7 +139,7 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
           Is stock dividend?
         </label>
       </span>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row items-center gap-2">
         <span className="flex flex-col items-start gap-1">
           <input
             min={1}
@@ -139,6 +152,11 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
           />
           <span className="text-xs">quantity</span>
         </span>
+        <TooltipStock content="Get price (based on selected date)">
+          <span onClick={getPriceForTransaction} className="cursor-pointer">
+            <MdRequestQuote />
+          </span>
+        </TooltipStock>
         <span className="flex flex-col items-start gap-1">
           <input
             value={sharePrice}

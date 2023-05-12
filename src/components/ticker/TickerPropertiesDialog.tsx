@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ITickerUserData } from "../../utils/interfaces/ITickerUserData";
 import TooltipStock from "../common/TooltipStock";
 import { useSubmitTickerUserDataMutation } from "../../features/ticker/tickerApiSlice";
+import { showError, showNotification, showSuccess } from "../../utils/utils";
 
 const TickerPropertiesDialog = ({
   tickerUserData,
@@ -30,10 +31,10 @@ const TickerPropertiesDialog = ({
     try {
       const result = await submitTickerUserData(newTickerUserData);
       if (result.data.result) {
-        alert("saved"); //todo:  replacr with toast
+        showSuccess(`Properties were saved successfully`);
       }
     } catch (error) {
-      console.error(error);
+      showError(error.toString());
     } finally {
       onClose();
     }
