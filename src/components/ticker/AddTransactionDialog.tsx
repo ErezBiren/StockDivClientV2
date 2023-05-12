@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ITransactionData } from "../../utils/interfaces/ITransactionData";
@@ -36,36 +36,37 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 
-  const [first, setfirst] = useState(true);
-
-  // useEffect(() => {
-  //   if (!portfolios || portfolios.length === 0 && !first) return;
-  //   setPortfolio(portfolios[0]);
-  //   setfirst(false);
-  // }, []);
+  useEffect(() => {
+    if (!portfolios || portfolios.length === 0) return;
+    setPortfolio(portfolios[0]);
+  }, [portfolios]);
 
   useEffect(() => {
     if (!ticker) return;
     triggerTicketCurrency(ticker);
   }, [ticker]);
 
-  function submitNewTransaction() {
+  function submitNewTransaction(e: SyntheticEvent) {
+    e.preventDefault();
+
     if (portfolio === "All Portfolios") {
-      showNotification("You can't add/edit a transaction in All Portfolios");
+      showError("You can't add/edit a transaction in All Portfolios");
     } else {
       const transactions: ITransactionData[] = [];
-      transactions.push({
+      const editedTransaction = {
         ticker,
         portfolio,
         sharePrice,
         shares,
         when: when.toString(),
         currency: tickerCurrency.data,
-      });
+      };
+      transactions.push(editedTransaction);
       try {
         submitTransactionMutation({ transactions, editedTransaction });
       } catch (error) {
-        //showError(error.toString());
+        console.log(error);
+        //showError(error.message.toString());
       } finally {
         //todo:
       }
@@ -91,7 +92,10 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
   }
 
   return (
-    <div className="flex flex-col items-center bg-drawerBackground h-[100%] gap-1 p-5">
+    <form
+      className="flex flex-col items-center bg-drawerBackground h-[100%] gap-1 p-5"
+      onSubmit={submitNewTransaction}
+    >
       <span className="flex flex-row border-b-2">
         Add transaction to {ticker} in portfolio
         <Dropdown
@@ -159,9 +163,9 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
         </span>
       </div>
       <div>
-        <button onClick={submitNewTransaction}>Save</button>
+        <button type="submit">Save</button>
       </div>
-    </div>
+    </form>
   );
 };
 

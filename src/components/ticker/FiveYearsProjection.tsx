@@ -119,8 +119,6 @@ const FiveYearsProjection = () => {
   useEffect(() => {
     if (!averageIncrease || !averageIncrease.data) return;
 
-    console.log(averageIncrease.data);
-
     const avrIncrease: number = averageIncrease.data.averageIncrease5y;
 
     setYearsProjectionSeries([
