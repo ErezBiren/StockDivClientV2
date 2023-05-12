@@ -1,67 +1,90 @@
-import { useState } from "react";
-import PortfoliosDropdown from "../header/PortfoliosDropdown";
+import { ChangeEvent, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ITransactionData } from "../../utils/interfaces/ITransactionData";
-import { useSelector } from "react-redux";
-import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import {
   useLazyGetTickerCurrencyQuery,
   useSubmitTransactionMutation,
 } from "../../features/ticker/tickerApiSlice";
+import { showError, showNotification } from "../../utils/utils";
+import { useGetPortfoliosQuery } from "../../features/portfolio/portfolioApiSlice";
+import Dropdown from "../common/Dropdown";
 
 type AddTransactionDialogProps = { ticker: string };
 
 const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
-  const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const { data: portfolios } = useGetPortfoliosQuery("");
 
   const [when, setWhen] = useState(new Date());
   const [shares, setShares] = useState(0);
   const [sharePrice, setSharePrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isStockDivided, setIsStockDivided] = useState(false);
-  const [editedTransaction, setEditedTransaction] = useState<ITransactionData>(
-    {}
-  );
+  const [portfolio, setPortfolio] = useState("");
+
+  const [editedTransaction, setEditedTransaction] = useState<ITransactionData>({
+    ticker: "",
+    shares: 0,
+    sharePrice: 0,
+    portfolio: "",
+    currency: "",
+    when: "",
+  });
 
   const [submitTransactionMutation] = useSubmitTransactionMutation();
 
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();
 
+  const [first, setfirst] = useState(true);
+
+  // useEffect(() => {
+  //   if (!portfolios || portfolios.length === 0 && !first) return;
+  //   setPortfolio(portfolios[0]);
+  //   setfirst(false);
+  // }, []);
+
+  useEffect(() => {
+    if (!ticker) return;
+    triggerTicketCurrency(ticker);
+  }, [ticker]);
+
   function submitNewTransaction() {
-    //  if (selectedPortfolio === 'All Portfolios') {
-    //    //showNotification("You can't add/edit a transaction in All Portfolios");
-    //  } else {
-    //    const transactions: ITransactionData[] = [];
-    //   transactions.push({
-    //     ticker,
-    //     portfolio,
-    //     sharePrice,
-    //     shares,
-    //     when:when.toString(),
-    //     currency: tickerCurrency.data,
-    //   });
-    //   try {
-    //     submitTransactionMutation({transactions , editedTransaction})
-    //   } catch (error) {
-    //   }finally{
-    //   }
+    if (portfolio === "All Portfolios") {
+      showNotification("You can't add/edit a transaction in All Portfolios");
+    } else {
+      const transactions: ITransactionData[] = [];
+      transactions.push({
+        ticker,
+        portfolio,
+        sharePrice,
+        shares,
+        when: when.toString(),
+        currency: tickerCurrency.data,
+      });
+      try {
+        submitTransactionMutation({ transactions, editedTransaction });
+      } catch (error) {
+        //showError(error.toString());
+      } finally {
+        //todo:
+      }
+    }
   }
 
-  function handleQuantityChanged(e) {
+  function handleQuantityChanged(e: ChangeEvent<HTMLInputElement>) {
     const newQuantity = Number.parseInt(e.target.value);
     setShares(newQuantity);
     setTotalPrice(newQuantity * sharePrice);
   }
 
-  function handlePriceChanged(e) {
+  function handlePriceChanged(e: ChangeEvent<HTMLInputElement>) {
     const newPrice = Number.parseInt(e.target.value);
     setSharePrice(newPrice);
     setTotalPrice(newPrice * shares);
   }
 
-  function handleTotalPriceChanged(e) {
+  function handleTotalPriceChanged(e: ChangeEvent<HTMLInputElement>) {
     const newTotalPrice = Number.parseInt(e.target.value);
     setTotalPrice(newTotalPrice);
     setSharePrice(newTotalPrice / shares);
@@ -71,7 +94,11 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
     <div className="flex flex-col items-center bg-drawerBackground h-[100%] gap-1 p-5">
       <span className="flex flex-row border-b-2">
         Add transaction to {ticker} in portfolio
-        <PortfoliosDropdown readOnly={true} />
+        <Dropdown
+          items={portfolios}
+          selectedItem={portfolio}
+          onItemChanged={(selectedItem) => setPortfolio(selectedItem)}
+        />
       </span>
       <span className="flex flex-row items-center justify-between">
         <span className="flex flex-col items-start gap-1">
@@ -132,7 +159,7 @@ const AddTransactionDialog = ({ ticker }: AddTransactionDialogProps) => {
         </span>
       </div>
       <div>
-        <button>Save</button>
+        <button onClick={submitNewTransaction}>Save</button>
       </div>
     </div>
   );

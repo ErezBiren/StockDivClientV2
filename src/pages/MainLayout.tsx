@@ -9,28 +9,36 @@ import HeaderPanelOverview from "../components/headerPanels/HeaderPanelOverview"
 import HeaderPanelPortfolio from "../components/headerPanels/HeaderPanelPortfolio";
 import SearchTickerOrName from "../components/header/SearchTickerOrName";
 import HeaderPanelTicker from "../components/headerPanels/HeaderPanelTicker";
-import PortfoliosDropdown from "../components/header/PortfoliosDropdown";
+import Dropdown from "../components/common/Dropdown";
 import TooltipStock from "../components/common/TooltipStock";
 import "react-modern-drawer/dist/index.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetPortfoliosQuery } from "../features/portfolio/portfolioApiSlice";
+import {
+  selectCurrentPortfolio,
+  setSelectedPortfolio,
+} from "../features/stockdivSlice";
 
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useDispatch();
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const { data: portfolios } = useGetPortfoliosQuery("");
   const { data: userName } = useGetUserNameQuery({});
 
   const currentRoute = location.pathname;
 
-  const goToDonate = () => {
+  function goToDonate() {
     window.open("https://www.paypal.me/StockDiv", "_blank");
-  };
+  }
 
-  const handleLogOut = () => {
+  function handleLogOut() {
     logOut();
     navigate("/login");
-  };
+  }
 
-  const getHeaderPanelByRoute = () => {
+  function getHeaderPanelByRoute() {
     const routeFirstFragment = currentRoute.split("/")[1];
 
     switch (routeFirstFragment) {
@@ -44,6 +52,10 @@ function MainLayout() {
       default:
         <></>;
     }
+  }
+
+  const selectedPortfolioChanged = (e: string) => {
+    dispatch(setSelectedPortfolio(e));
   };
 
   return (
@@ -90,7 +102,11 @@ function MainLayout() {
             </span>
           </div>
           <div className="flex flex-row justify-between px-3">
-            <PortfoliosDropdown />
+            <Dropdown
+              items={portfolios}
+              selectedItem={selectedPortfolio}
+              onItemChanged={selectedPortfolioChanged}
+            />
             <SearchTickerOrName />
           </div>
         </div>

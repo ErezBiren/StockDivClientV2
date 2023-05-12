@@ -14,6 +14,11 @@ export const getTradingColor = (positiveCondition: boolean) => {
 };
 
 export const showNotification = (message: string) => {
+  toast.info(message, {
+    position: toast.POSITION.BOTTOM_CENTER,
+  });
+};
+export const showError = (message: string) => {
   toast.error(message, {
     position: toast.POSITION.BOTTOM_CENTER,
   });
