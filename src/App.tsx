@@ -17,6 +17,7 @@ import TickerPage from "./pages/TickerPage";
 import DividendAlerts from "./pages/DividendAlerts";
 import Screener from "./pages/Screener";
 import MonthlyDividendsView from "./pages/MonthlyDividendsView";
+import Announcements from "./pages/Announcements";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,7 +33,7 @@ const router = createBrowserRouter(
             path="/monthlyDividendsView/:month"
             element={<MonthlyDividendsView />}
           />
-          <Route path="/announcements" element={<></>} />
+          <Route path="/announcements" element={<Announcements/>} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/dividendAlerts" element={<DividendAlerts />} />
           <Route path="/screener" element={<Screener />} />

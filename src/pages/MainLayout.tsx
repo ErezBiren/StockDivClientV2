@@ -54,9 +54,13 @@ function MainLayout() {
     }
   }
 
-  const selectedPortfolioChanged = (e: string) => {
+  function selectedPortfolioChanged(e: string) {
     dispatch(setSelectedPortfolio(e));
-  };
+  }
+
+  function goToAnnouncements(){
+    navigate("/announcements");
+  }
 
   return (
     <div className="flex flex-col gap-10">
@@ -90,7 +94,7 @@ function MainLayout() {
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               <TooltipStock content="Announcements">
-                <span className="cursor-pointer">
+                <span className="cursor-pointer" onClick={goToAnnouncements}>
                   <MdAnnouncement className="fill-iconsColor" />
                 </span>
               </TooltipStock>
