@@ -132,7 +132,18 @@ const HeaderPanelTicker = () => {
     } else return 0;
   }, [dailyChange?.data, tickerPrice?.data]);
 
-  const getTickerDataTooltip = () => {
+  const plPercentage = useCallback(() => {
+    if (tickerAveragePrice?.data !== 0) {
+      return (
+        (Math.abs(tickerPrice.data - tickerAveragePrice.data) /
+          tickerAveragePrice.data) *
+        100 *
+        (tickerPrice.data > tickerAveragePrice.data ? 1 : -1)
+      );
+    } else return 0;
+  }, [tickerAveragePrice, tickerPrice]);
+
+  function getTickerDataTooltip() {
     const notes = tickerUserData.data?.notes ?? "- No Notes -";
 
     const tax = tickerUserData?.data?.tax
@@ -161,7 +172,7 @@ const HeaderPanelTicker = () => {
         <span>{divYield}</span>
       </div>
     );
-  };
+  }
 
   const { show: showContextMenu } = useContextMenu({
     id: MENU_ID,
@@ -179,6 +190,7 @@ const HeaderPanelTicker = () => {
           <span>{ticker}:</span>
           <span>{tickerName?.data?.substring(0, 30)}</span>
           <span className="w-[1px] bg-slate-300 h-6"></span>
+
           <span
             className="cursor-pointer"
             onClick={(e) => {
@@ -190,14 +202,26 @@ const HeaderPanelTicker = () => {
         </div>
       </TooltipStock>
       <Splitter />
-
       <div className="flex flex-col items-center">
-        <span
-          className={`mt-1 text-sm font-semibold ${getTradingColor(
-            tickerPrice?.data - tickerAveragePrice?.data >= 0
-          )}`}
-        >
-          {formatToCurrency(tickerPrice?.data, tickerCurrency?.data)}
+        <span className="flex flex-row items-center gap-1 text-xl">
+          <span
+            className={`mt-1 font-semibold ${getTradingColor(
+              tickerPrice?.data - tickerAveragePrice?.data >= 0
+            )}`}
+          >
+            {formatToCurrency(tickerPrice?.data, tickerCurrency?.data)}
+          </span>
+
+          <span>
+            (
+            <TrendingField
+              positiveCondition={
+                tickerPrice?.data - tickerAveragePrice?.data >= 0
+              }
+              value={plPercentage()}
+            />
+            )
+          </span>
         </span>
       </div>
       <div className="flex flex-row items-center gap-1">
@@ -215,7 +239,7 @@ const HeaderPanelTicker = () => {
           )
         </span>
         <span className="w-[1px] bg-slate-300 h-6"></span>
-        <span>{tickerShares} shares</span>
+        <span className="font-semibold">{tickerShares} shares</span>
       </div>
       <Menu id={MENU_ID}>
         <Item onClick={() => setShowPropertiesDrawer(true)}>
