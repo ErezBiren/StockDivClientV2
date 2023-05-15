@@ -29,7 +29,9 @@ function MainLayout() {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
   const { data: portfolios } = useGetPortfoliosQuery("");
   const { data: userName } = useGetUserNameQuery({});
-  const { data: messages } = useGetUserMessagesQuery("");
+  const { data: messages } = useGetUserMessagesQuery();
+
+  console.log(messages);
 
   const currentRoute = location.pathname;
 
@@ -99,7 +101,13 @@ function MainLayout() {
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
               {messages?.length > 0 && portfolios?.length > 0 && (
                 <TooltipStock content="Announcements">
-                  <span className="cursor-pointer" onClick={goToAnnouncements}>
+                  <span
+                    className="flex flex-row cursor-pointer"
+                    onClick={goToAnnouncements}
+                  >
+                    <span className="bg-[#f44336] text-xs px-2 text-white rounded">
+                      {messages?.length}
+                    </span>
                     <MdAnnouncement className="fill-iconsColor" />
                   </span>
                 </TooltipStock>

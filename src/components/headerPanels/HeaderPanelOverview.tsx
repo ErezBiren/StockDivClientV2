@@ -146,7 +146,7 @@ const HeaderPanelOverview = () => {
           <TrendingField
             positiveCondition={portfolioMarketValue - portfolioInvested >= 0}
             value={plPercentage()}
-          />
+          />)
         </span>
         <div className="flex flex-row items-center gap-1">
           <span

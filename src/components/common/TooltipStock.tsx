@@ -8,7 +8,7 @@ type TooltipStockProps = {
 
 const TooltipStock = ({ content, children }: TooltipStockProps) => {
   return (
-    <Tooltip content={content} className="text-xs light" style="light">
+    <Tooltip content={content} className="text-xs transition-opacity duration-300"  style="light" >
       {children}
     </Tooltip>
   );

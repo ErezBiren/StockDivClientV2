@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice.ts";
+import { IAnnouncement } from "../../utils/interfaces/IAnnouncement.ts";
 import { Credentials } from "../../utils/types.ts";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -22,16 +23,16 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: { name: editName },
       }),
     }),
-    getUserMessages: builder.query({
+    getUserMessages: builder.query<IAnnouncement[], void>({
       query: () => ({
-        url: "user/name",
-        method: "messages",
+        url: "user/messages",
+        method: "GET",
       }),
     }),
     forgotPassword: builder.mutation({
       query: (credentials: Credentials) => ({
         url: "user/forgotPassword",
-        method: "post",
+        method: "POST",
         body: { ...credentials },
       }),
     }),
@@ -43,5 +44,5 @@ export const {
   useLazyGetUserSettingsQuery,
   useGetUserMessagesQuery,
   useSetUserSettingsMutation,
-  useForgotPasswordMutation
+  useForgotPasswordMutation,
 } = usersApiSlice;
