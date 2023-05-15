@@ -1,4 +1,7 @@
-import { useGetUserNameQuery } from "../features/users/usersApiSlice";
+import {
+  useGetUserMessagesQuery,
+  useGetUserNameQuery,
+} from "../features/users/usersApiSlice";
 import { logOut } from "../features/auth/authSlice";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
@@ -26,6 +29,7 @@ function MainLayout() {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
   const { data: portfolios } = useGetPortfoliosQuery("");
   const { data: userName } = useGetUserNameQuery({});
+  const { data: messages } = useGetUserMessagesQuery("");
 
   const currentRoute = location.pathname;
 
@@ -58,7 +62,7 @@ function MainLayout() {
     dispatch(setSelectedPortfolio(e));
   }
 
-  function goToAnnouncements(){
+  function goToAnnouncements() {
     navigate("/announcements");
   }
 
@@ -93,11 +97,13 @@ function MainLayout() {
               </TooltipStock>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
-              <TooltipStock content="Announcements">
-                <span className="cursor-pointer" onClick={goToAnnouncements}>
-                  <MdAnnouncement className="fill-iconsColor" />
-                </span>
-              </TooltipStock>
+              {messages?.length > 0 && portfolios?.length > 0 && (
+                <TooltipStock content="Announcements">
+                  <span className="cursor-pointer" onClick={goToAnnouncements}>
+                    <MdAnnouncement className="fill-iconsColor" />
+                  </span>
+                </TooltipStock>
+              )}
               <TooltipStock content="LogOut">
                 <span className="cursor-pointer" onClick={handleLogOut}>
                   <FiLogOut className="stroke-iconsColor" />
