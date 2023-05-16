@@ -15,14 +15,9 @@ import TrendingField from "../common/TrendingField";
 import { useCallback } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import TooltipStock from "../common/TooltipStock";
-import {
-  Menu,
-  Item,
-  useContextMenu,
-} from "react-contexify";
+import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
-
 
 const HeaderPanelOverview = () => {
   const MENU_ID = "overview-header";
@@ -86,9 +81,9 @@ const HeaderPanelOverview = () => {
     navigate("/screener");
   };
 
-  const renamePortfolio = ()=>{
-    console.log(111)
-  }
+  const renamePortfolio = () => {
+    console.log(111);
+  };
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
@@ -97,31 +92,31 @@ const HeaderPanelOverview = () => {
         <span className="flex items-center gap-4 row">
           <TooltipStock content="Show Dividend Alerts">
             <span className="cursor-pointer" onClick={goToShowDividendAlerts}>
-              <HiBellAlert className="fill-[#f44336] cursor-pointer" />
+              <HiBellAlert className="fill-[#f44336] cursor-pointer w-[25px] h-[25px]" />
             </span>
           </TooltipStock>
           <TooltipStock content="Show Yearly Payment">
             <span
-              className="cursor-pointer fill-iconsColor"
+              className="cursor-pointer"
               onClick={goToYearlyPayment}
             >
-              <BsCalendarRange />
+              <BsCalendarRange  className="fill-iconsColor w-[20px] h-[20px]"/>
             </span>
           </TooltipStock>
 
           <TooltipStock content="Show Current Month">
-            <BiCalendarEvent className="cursor-pointer fill-iconsColor" />
+            <BiCalendarEvent className="cursor-pointer fill-iconsColor w-[25px] h-[25px]" />
           </TooltipStock>
 
           <TooltipStock content="Show Assets">
             <span className="cursor-pointer" onClick={goToAssets}>
-              <BiWalletAlt className="fill-iconsColor" />
+              <BiWalletAlt className="fill-iconsColor w-[25px] h-[25px]" />
             </span>
           </TooltipStock>
 
           <TooltipStock content="Show Screener">
             <span className="cursor-pointer" onClick={goToScreener}>
-              <BiFilter className="fill-iconsColor" />
+              <BiFilter className="fill-iconsColor w-[25px] h-[25px]" />
             </span>
           </TooltipStock>
           <span
@@ -146,7 +141,8 @@ const HeaderPanelOverview = () => {
           <TrendingField
             positiveCondition={portfolioMarketValue - portfolioInvested >= 0}
             value={plPercentage()}
-          />)
+          />
+          )
         </span>
         <div className="flex flex-row items-center gap-1">
           <span
@@ -173,7 +169,8 @@ const HeaderPanelOverview = () => {
       </div>
       <Menu id={MENU_ID}>
         <Item onClick={renamePortfolio}>
-          <MdOutlineDriveFileRenameOutline /> <span className="ml-2">Rename Portfolio</span>
+          <MdOutlineDriveFileRenameOutline />{" "}
+          <span className="ml-2">Rename Portfolio</span>
         </Item>
       </Menu>
     </div>

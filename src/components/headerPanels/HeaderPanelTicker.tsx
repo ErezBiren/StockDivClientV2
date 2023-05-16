@@ -24,10 +24,11 @@ import TooltipStock from "../common/TooltipStock";
 import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { FiMoreVertical } from "react-icons/fi";
-import { MdAddShoppingCart, MdOutlineEditNote } from "react-icons/md";
+import { MdAddShoppingCart, MdCallSplit, MdOutlineEditNote } from "react-icons/md";
 import TickerPropertiesDialog from "../ticker/TickerPropertiesDialog";
 import Drawer from "react-modern-drawer";
 import AddTransactionDialog from "../ticker/AddTransactionDialog";
+import SplitTickerDialog from "../ticker/SplitTickerDialog";
 
 const HeaderPanelTicker = () => {
   const MENU_ID = "ticker-header";
@@ -178,9 +179,10 @@ const HeaderPanelTicker = () => {
     id: MENU_ID,
   });
 
-  const [showPropertiesDrawer, setShowPropertiesDrawer] = useState(false);
-  const [showAddTransactionDrawer, setShowAddTransactionDrawer] =
+  const [showPropertiesDialog, setShowPropertiesDialog] = useState(false);
+  const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
+    const [showSplitTickerDialog, setShowSplitTickerDialog] =    useState(false);
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
@@ -242,19 +244,27 @@ const HeaderPanelTicker = () => {
         <span className="font-semibold">{tickerShares} shares</span>
       </div>
       <Menu id={MENU_ID}>
-        <Item onClick={() => setShowPropertiesDrawer(true)}>
+        <Item onClick={() => setShowPropertiesDialog(true)}>
           <MdOutlineEditNote />
           <span className="ml-2">Properties</span>
         </Item>
-        <Item onClick={() => setShowAddTransactionDrawer(true)}>
-          <MdAddShoppingCart />
+        <Item onClick={() => setShowAddTransactionDialog(true)}>
+          <MdAddShoppingCart className="color-[#1976d2]"/>
           <span className="ml-2">Add Transaction</span>
+        </Item>
+        <Item onClick={() => setShowAddTransactionDialog(true)}>
+          <MdAddShoppingCart className="color-[#1976d2]"/>
+          <span className="ml-2">Change Ticker</span>
+        </Item>
+        <Item onClick={() => setShowSplitTickerDialog(true)}>
+          <MdCallSplit className="color-[#1976d2]"/>
+          <span className="ml-2">Split</span>
         </Item>
       </Menu>
       <Drawer
-        open={showPropertiesDrawer}
+        open={showPropertiesDialog}
         onClose={() => {
-          setShowPropertiesDrawer(false);
+          setShowPropertiesDialog(false);
         }}
         direction="bottom"
         style={{ width: 300, margin: "auto" }}
@@ -262,17 +272,25 @@ const HeaderPanelTicker = () => {
         <TickerPropertiesDialog
           tickerUserData={tickerUserData.data}
           onClose={() => {
-            setShowPropertiesDrawer(false);
+            setShowPropertiesDialog(false);
           }}
         />
       </Drawer>
       <Drawer
-        open={showAddTransactionDrawer}
-        onClose={() => setShowAddTransactionDrawer(false)}
+        open={showAddTransactionDialog}
+        onClose={() => setShowAddTransactionDialog(false)}
         direction="bottom"
         style={{ width: 400, margin: "auto" }}
       >
         <AddTransactionDialog ticker={ticker ?? ""} />
+      </Drawer>
+      <Drawer
+        open={showSplitTickerDialog}
+        onClose={() => setShowSplitTickerDialog(false)}
+        direction="bottom"
+        style={{ width: 400, margin: "auto" }}
+      >
+        <SplitTickerDialog ticker={ticker ?? ""} />
       </Drawer>
     </div>
   );

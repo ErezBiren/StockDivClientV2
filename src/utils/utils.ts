@@ -14,20 +14,14 @@ export const getTradingColor = (positiveCondition: boolean) => {
 };
 
 export const showSuccess = (message: string) => {
-  toast.success(message, {
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast.success(message);
 };
 
 export const showNotification = (message: string) => {
-  toast.info(message, {
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast.info(message);
 };
 export const showError = (message: string) => {
-  toast.error(message, {
-    position: toast.POSITION.BOTTOM_CENTER,
-  });
+  toast.error(message);
 };
 
 export const getRangeColor = (value: number): string => {

@@ -31,8 +31,6 @@ function MainLayout() {
   const { data: userName } = useGetUserNameQuery({});
   const { data: messages } = useGetUserMessagesQuery();
 
-  console.log(messages);
-
   const currentRoute = location.pathname;
 
   function goToDonate() {
@@ -86,7 +84,7 @@ function MainLayout() {
 
               <TooltipStock content="Settings">
                 <span className="cursor-pointer">
-                  <IoMdSettings className="fill-iconsColor" />
+                  <IoMdSettings className="fill-iconsColor w-[20px] h-[20px]" />
                 </span>
               </TooltipStock>
               <TooltipStock content="Overview">
@@ -94,12 +92,12 @@ function MainLayout() {
                   className="cursor-pointer"
                   onClick={() => navigate("/overview")}
                 >
-                  <FaHome className="cursor-pointer fill-iconsColor" />
+                  <FaHome className="cursor-pointer fill-iconsColor w-[20px] h-[20px]" />
                 </span>
               </TooltipStock>
             </span>
             <span className="flex flex-row items-center gap-2 mx-4 my-4">
-              {messages?.length > 0 && portfolios?.length > 0 && (
+              {messages && messages?.length > 0 && portfolios?.length > 0 && (
                 <TooltipStock content="Announcements">
                   <span
                     className="flex flex-row cursor-pointer"
@@ -114,7 +112,7 @@ function MainLayout() {
               )}
               <TooltipStock content="LogOut">
                 <span className="cursor-pointer" onClick={handleLogOut}>
-                  <FiLogOut className="stroke-iconsColor" />
+                  <FiLogOut className="stroke-iconsColor w-[20px] h-[20px]" />
                 </span>
               </TooltipStock>
             </span>

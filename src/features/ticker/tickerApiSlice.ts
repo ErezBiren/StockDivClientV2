@@ -45,6 +45,12 @@ export const tickerApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    spiltTicker: builder.mutation({
+      query: ({ ticker, ratio }: { ticker: string; ratio: number }) => ({
+        url: `transaction/split/${ticker}/${ratio}`,
+        method: "PATCH",
+      }),
+    }),
     getTickerSearch: builder.query({
       query: (dataToSearch: string) => ({
         url: `ticker/search?searchText=${dataToSearch.replace("&", "%26")}`,
@@ -110,4 +116,5 @@ export const {
   useLazyGetTickerAveragePriceQuery,
   useSubmitTickerUserDataMutation,
   useSubmitTransactionMutation,
+  useSpiltTickerMutation,
 } = tickerApiSlice;
