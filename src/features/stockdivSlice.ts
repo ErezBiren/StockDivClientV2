@@ -32,7 +32,7 @@ type StockDivStateType = {
 
 const initialState: StockDivStateType = {
   portfolios: [],
-  selectedPortfolio: "Portfolio",
+  selectedPortfolio: "All Portfolios",
   portfolioCurrency: "",
   settings: {
     dateFormat: "yyyy-MM-dd",

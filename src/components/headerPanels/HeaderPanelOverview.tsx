@@ -96,11 +96,8 @@ const HeaderPanelOverview = () => {
             </span>
           </TooltipStock>
           <TooltipStock content="Show Yearly Payment">
-            <span
-              className="cursor-pointer"
-              onClick={goToYearlyPayment}
-            >
-              <BsCalendarRange  className="fill-iconsColor w-[20px] h-[20px]"/>
+            <span className="cursor-pointer" onClick={goToYearlyPayment}>
+              <BsCalendarRange className="fill-iconsColor w-[20px] h-[20px]" />
             </span>
           </TooltipStock>
 
@@ -161,15 +158,13 @@ const HeaderPanelOverview = () => {
           </span>
           <span className="w-[1px] bg-gray-300 h-6" />
           <span>
-            Yield/YOC:
-            {formatToPercentage(getPortfolioDivYield())}/
-            {formatToPercentage(getPortfolioYOC())}
+            {`Yield/YOC: ${formatToPercentage(getPortfolioDivYield())} / ${formatToPercentage(getPortfolioYOC())}`}
           </span>
         </div>
       </div>
       <Menu id={MENU_ID}>
         <Item onClick={renamePortfolio}>
-          <MdOutlineDriveFileRenameOutline />{" "}
+          <MdOutlineDriveFileRenameOutline />
           <span className="ml-2">Rename Portfolio</span>
         </Item>
       </Menu>
