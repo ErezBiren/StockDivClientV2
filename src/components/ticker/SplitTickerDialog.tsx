@@ -10,7 +10,6 @@ type SplitTickerDialogProps = { ticker: string };
 const SplitTickerDialog = ({ ticker }: SplitTickerDialogProps) => {
   const [ratioFrom, setRatioFrom] = useState(0);
   const [ratioTo, setRatioTo] = useState(0);
-
   const [spiltTicker] = useSpiltTickerMutation();
 
   function handleRatioFromChanged(e: ChangeEvent<HTMLInputElement>) {
@@ -79,9 +78,7 @@ const SplitTickerDialog = ({ ticker }: SplitTickerDialogProps) => {
           <span className="text-xs">Ratio to</span>
         </span>
         <span className="cursor-pointer" onClick={submitSplitTicker}>
-          <TooltipStock
-            content={`Split with ration of ${ratioFrom}/${ratioTo}`}
-          >
+          <TooltipStock content={`Split with ratio of ${ratioFrom}/${ratioTo}`}>
             <MdModeEdit />
           </TooltipStock>
         </span>

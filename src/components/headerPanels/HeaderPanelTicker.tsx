@@ -24,7 +24,13 @@ import TooltipStock from "../common/TooltipStock";
 import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { FiMoreVertical } from "react-icons/fi";
-import { MdAddShoppingCart, MdCallSplit, MdOutlineEditNote } from "react-icons/md";
+import {
+  MdAddShoppingCart,
+  MdCallSplit,
+  MdCancelPresentation,
+  MdModeEdit,
+  MdOutlineEditNote,
+} from "react-icons/md";
 import TickerPropertiesDialog from "../ticker/TickerPropertiesDialog";
 import Drawer from "react-modern-drawer";
 import AddTransactionDialog from "../ticker/AddTransactionDialog";
@@ -182,7 +188,11 @@ const HeaderPanelTicker = () => {
   const [showPropertiesDialog, setShowPropertiesDialog] = useState(false);
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
-    const [showSplitTickerDialog, setShowSplitTickerDialog] =    useState(false);
+  const [showSplitTickerDialog, setShowSplitTickerDialog] = useState(false);
+
+  function closePosition() {
+    //todo: console.log(first)
+  }
 
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
@@ -249,16 +259,20 @@ const HeaderPanelTicker = () => {
           <span className="ml-2">Properties</span>
         </Item>
         <Item onClick={() => setShowAddTransactionDialog(true)}>
-          <MdAddShoppingCart className="color-[#1976d2]"/>
+          <MdAddShoppingCart className="color-[#1976d2]" />
           <span className="ml-2">Add Transaction</span>
         </Item>
         <Item onClick={() => setShowAddTransactionDialog(true)}>
-          <MdAddShoppingCart className="color-[#1976d2]"/>
+          <MdModeEdit className="color-[#1976d2]" />
           <span className="ml-2">Change Ticker</span>
         </Item>
         <Item onClick={() => setShowSplitTickerDialog(true)}>
-          <MdCallSplit className="color-[#1976d2]"/>
+          <MdCallSplit />
           <span className="ml-2">Split</span>
+        </Item>
+        <Item onClick={() => closePosition()}>
+          <MdCancelPresentation className="color-[#1976d2]" />
+          <span className="ml-2">Close position</span>
         </Item>
       </Menu>
       <Drawer
