@@ -24,8 +24,11 @@ import {
 import SettingsDialog from "../components/settings/SettingsDialog";
 import Drawer from "react-modern-drawer";
 import { useState } from "react";
+import ContactDialog from "../components/settings/ContactDialog";
 
 function MainLayout() {
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [showContactDialog, setShowContactDialog] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -69,7 +72,10 @@ function MainLayout() {
     navigate("/announcements");
   }
 
-  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  function closeSettingsAndOpenContact() {
+    setShowSettingsDialog(false);
+    setShowContactDialog(true);
+  }
 
   return (
     <div className="flex flex-col gap-10">
@@ -143,9 +149,18 @@ function MainLayout() {
         direction="bottom"
         style={{ width: 400, margin: "auto" }}
       >
-        <SettingsDialog />
+        <SettingsDialog closeAndOpenContact={closeSettingsAndOpenContact} />
+      </Drawer>
+      <Drawer
+        open={showContactDialog}
+        onClose={() => setShowContactDialog(false)}
+        direction="bottom"
+        style={{ width: 400, margin: "auto" }}
+      >
+        <ContactDialog/>
       </Drawer>
     </div>
+    
   );
 }
 

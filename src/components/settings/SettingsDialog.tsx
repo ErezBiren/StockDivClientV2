@@ -11,7 +11,10 @@ import TooltipStock from "../common/TooltipStock";
 import { showError, showNotification } from "../../utils/utils";
 import { useLazyGetExportTransactionsQuery } from "../../features/users/usersApiSlice";
 
-const SettingsDialog = () => {
+type SettingsDialogProps = {
+  closeAndOpenContact: () => void;
+};
+const SettingsDialog = ({ closeAndOpenContact }: SettingsDialogProps) => {
   function submitNewTransaction(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
   }
@@ -19,7 +22,8 @@ const SettingsDialog = () => {
   const [getExportTransactions] = useLazyGetExportTransactionsQuery();
 
   function exportTransactions() {
-    getExportTransactions("user/exportTransactions").unwrap()
+    getExportTransactions("user/exportTransactions")
+      .unwrap()
       .then((response) => {
         if (!response) {
           showNotification(response);
@@ -79,7 +83,7 @@ const SettingsDialog = () => {
           </span>
         </TooltipStock>
         <TooltipStock content="Contact">
-          <span className="cursor-pointer">
+          <span className="cursor-pointer" onClick={closeAndOpenContact}>
             <MdRateReview />
           </span>
         </TooltipStock>

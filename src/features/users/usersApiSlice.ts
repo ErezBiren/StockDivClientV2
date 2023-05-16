@@ -36,6 +36,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+    contact: builder.mutation({
+      query: (message: string) => ({
+        url: "user/contact",
+        method: "POST",
+        body: { feedback: message },
+      }),
+    }),
     lastReadMessages: builder.mutation({
       query: () => ({
         url: "user/lastReadMessages",
@@ -59,4 +66,5 @@ export const {
   useSetUserSettingsMutation,
   useForgotPasswordMutation,
   useLastReadMessagesMutation,
+  useContactMutation,
 } = usersApiSlice;
