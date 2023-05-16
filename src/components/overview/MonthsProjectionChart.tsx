@@ -1,33 +1,30 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import { ApexOptions } from "apexcharts";
 import useChartsInit from "../../hooks/useChartsInit";
 import { useGetMonthsProjectionQuery } from "../../features/portfolio/portfolioApiSlice";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const MonthsProjectionChart = () => {
- const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const selectedPortfolio = useSelector(selectCurrentPortfolio);
 
-  const {
-    monthsProjectionChartOptionsInit,
-  } = useChartsInit();
+  const { monthsProjectionChartOptionsInit } = useChartsInit();
 
   const [monthsProjectionChartOptions, setMonthsProjectionChartOptions] =
-  useState<ApexOptions>(monthsProjectionChartOptionsInit);
-
+    useState<ApexOptions>(monthsProjectionChartOptionsInit);
 
   const [monthsProjectionChartSeries, setMonthsProjectionChartSeries] =
-  useState<ApexAxisChartSeries>([
-    {
-      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    },
-  ]);
+    useState<ApexAxisChartSeries>([
+      {
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      },
+    ]);
 
   const { data: monthsProjection, isSuccess: isSuccessMonthsProjection } =
     useGetMonthsProjectionQuery(selectedPortfolio);
-  
+
   useEffect(() => {
     if (isSuccessMonthsProjection) {
       setMonthsProjectionChartOptions({

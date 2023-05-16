@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import Chart from "react-apexcharts";
 import { useState, useEffect } from "react";
 import useFormatHelper from "../../hooks/useFormatHelper";

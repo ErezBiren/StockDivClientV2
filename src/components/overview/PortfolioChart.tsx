@@ -1,5 +1,5 @@
 import Chart from "react-apexcharts";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import useChartsInit from "../../hooks/useChartsInit";
 import { useEffect, useState } from "react";

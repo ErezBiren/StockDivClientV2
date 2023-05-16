@@ -1,6 +1,6 @@
 import useFormatHelper from "../../hooks/useFormatHelper";
 import { INews } from "../../utils/interfaces/INews";
-import ChartCard from "../ChartCard";
+import ChartCard from "./ChartCard";
 
 const News = ({ newsItems }: { newsItems: INews[] }) => {
   const { formatToDate } = useFormatHelper();

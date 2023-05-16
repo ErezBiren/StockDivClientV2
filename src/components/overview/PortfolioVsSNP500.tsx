@@ -5,7 +5,7 @@ import { IPriceAndDate } from "../../utils/interfaces/IPriceAndDate";
 import useChartsInit from "../../hooks/useChartsInit";
 import { ApexOptions } from "apexcharts";
 import Chart from "react-apexcharts";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 
 const PortfolioVsSNP500 = () => {

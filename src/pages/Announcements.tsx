@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import ChartCard from "../components/ChartCard";
+import ChartCard from "../components/common/ChartCard";
 import Splitter from "../components/common/Splitter";
 import {
   useGetUserMessagesQuery,

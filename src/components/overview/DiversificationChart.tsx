@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { IDiversification } from "../../utils/interfaces/IDiversification";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { useGetDiversityQuery } from "../../features/portfolio/portfolioApiSlice";

@@ -1,4 +1,4 @@
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import { IDividendHistoryData } from "../../utils/interfaces/IDividendHistoryData";
 import { useEffect } from "react";
 import { useLazyGetAllDividendsQuery } from "../../features/dividend/dividendApiSlice";
@@ -9,8 +9,7 @@ import TrendingField from "../common/TrendingField";
 
 const DividendHistoryData = () => {
   const { ticker } = useParams();
-  const { formatToDate, formatToCurrency } =
-    useFormatHelper();
+  const { formatToDate, formatToCurrency } = useFormatHelper();
   const [triggerDividendData, dividendData] = useLazyGetAllDividendsQuery();
   const [triggerTicketCurrency, tickerCurrency] =
     useLazyGetTickerCurrencyQuery();

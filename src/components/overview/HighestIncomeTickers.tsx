@@ -1,6 +1,6 @@
 import { ApexOptions } from "apexcharts";
 import { useEffect, useState } from "react";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import Chart from "react-apexcharts";
 import useChartsInit from "../../hooks/useChartsInit";
 import { useGetHighestIncomeQuery } from "../../features/portfolio/portfolioApiSlice";

@@ -9,7 +9,7 @@ import {
 } from "../../features/portfolio/portfolioApiSlice";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import useChartsInit from "../../hooks/useChartsInit";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 
 const YearsProjection = () => {
   const selectedPortfolio = useSelector(selectCurrentPortfolio);
@@ -19,9 +19,8 @@ const YearsProjection = () => {
   const { data: portfolioLastTotalDividend } =
     useGetLastTotalDividendQuery(selectedPortfolio);
 
-  const {
-    data: portfolioMarketValue,
-  } = useGetMarketValueQuery(selectedPortfolio);
+  const { data: portfolioMarketValue } =
+    useGetMarketValueQuery(selectedPortfolio);
 
   const [showReinvest, setShowReinvest] = useState(false);
 
@@ -32,17 +31,17 @@ const YearsProjection = () => {
     useGetIncomeLastYearQuery(selectedPortfolio);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [projectionChartSeries] = useState<
-    [{ data: number[] }]
-  >([{ data: [] }]);
+  const [projectionChartSeries] = useState<[{ data: number[] }]>([
+    { data: [] },
+  ]);
 
   const [projectionActualChartSeries, setProjectionActualChartSeries] =
     useState<[{ data: number[] }]>([{ data: [] }]);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [
-    projectionWithReinvestChartSeries,
-  ] = useState<[{ data: number[] }]>([{ data: [] }]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [projectionWithReinvestChartSeries] = useState<[{ data: number[] }]>([
+    { data: [] },
+  ]);
 
   const getPortfolioDivYield = useCallback((): number => {
     return portfolioMarketValue === 0
@@ -56,7 +55,7 @@ const YearsProjection = () => {
     const tempProjectionChartSeries = { ...projectionChartSeries };
     let tempIncomeLastYear = incomeLastYear;
 
-    tempProjectionChartSeries[0].data=[];
+    tempProjectionChartSeries[0].data = [];
 
     for (let i = 0; i < 11; i++) {
       tempProjectionChartSeries[0].data.push(

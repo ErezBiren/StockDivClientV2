@@ -21,6 +21,9 @@ import {
   selectCurrentPortfolio,
   setSelectedPortfolio,
 } from "../features/stockdivSlice";
+import SettingsDialog from "../components/settings/SettingsDialog";
+import Drawer from "react-modern-drawer";
+import { useState } from "react";
 
 function MainLayout() {
   const navigate = useNavigate();
@@ -66,6 +69,8 @@ function MainLayout() {
     navigate("/announcements");
   }
 
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+
   return (
     <div className="flex flex-col gap-10">
       <header className="fixed top-0 z-50 w-full">
@@ -83,7 +88,10 @@ function MainLayout() {
               <span className="font-bold text-indigo">{`Hello ${userName}`}</span>
 
               <TooltipStock content="Settings">
-                <span className="cursor-pointer">
+                <span
+                  className="cursor-pointer"
+                  onClick={() => setShowSettingsDialog(true)}
+                >
                   <IoMdSettings className="fill-iconsColor w-[20px] h-[20px]" />
                 </span>
               </TooltipStock>
@@ -129,6 +137,14 @@ function MainLayout() {
         <div className="flex justify-center">{getHeaderPanelByRoute()}</div>
       </header>
       <Outlet />
+      <Drawer
+        open={showSettingsDialog}
+        onClose={() => setShowSettingsDialog(false)}
+        direction="bottom"
+        style={{ width: 400, margin: "auto" }}
+      >
+        <SettingsDialog />
+      </Drawer>
     </div>
   );
 }

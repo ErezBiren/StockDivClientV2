@@ -1,6 +1,6 @@
 import { ApexOptions } from "apexcharts";
 import useFormatHelper from "../../hooks/useFormatHelper";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import Chart from "react-apexcharts";
 import {
   useLazyGetTickerCurrencyQuery,

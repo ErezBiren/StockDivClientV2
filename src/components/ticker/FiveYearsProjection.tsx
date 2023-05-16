@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import ChartCard from "../ChartCard";
+import ChartCard from "../common/ChartCard";
 import Chart from "react-apexcharts";
 import { useEffect, useState } from "react";
 import { useLazyGetAverageIncreaseQuery } from "../../features/dividend/dividendApiSlice";
@@ -110,7 +110,6 @@ const FiveYearsProjection = () => {
   }, [tickerCurrency]);
 
   useEffect(() => {
-    
     if (!ticker) return;
     triggerGetAverageIncrease(ticker);
     triggerTicketCurrency(ticker);
