@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useLazyGetTickerSearchQuery } from "../../features/ticker/tickerApiSlice";
@@ -14,15 +14,12 @@ const SearchTickerOrName = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate("/ticker/AVGO");
-  }, [])
+  const triggerSearch = (e: KeyboardEvent) => {
+    const dataToSearch = (e.target as HTMLInputElement).value;
+    if (!dataToSearch) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const triggerSearch = (e: any) => {
-    const dataToSearch = e.target.value;
     if (dataToSearch === "" || dataToSearch.length < 3) return;
-    trigger(e.target.value);
+    trigger(dataToSearch);
   };
 
   const goToTickerPage = (ticker: string) => {
