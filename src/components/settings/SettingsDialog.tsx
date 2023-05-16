@@ -8,10 +8,36 @@ import {
   MdRateReview,
 } from "react-icons/md";
 import TooltipStock from "../common/TooltipStock";
+import { showError, showNotification } from "../../utils/utils";
+import { useLazyGetExportTransactionsQuery } from "../../features/users/usersApiSlice";
 
 const SettingsDialog = () => {
   function submitNewTransaction(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+  }
+
+  const [getExportTransactions] = useLazyGetExportTransactionsQuery();
+
+  function exportTransactions() {
+    getExportTransactions("user/exportTransactions").unwrap()
+      .then((response) => {
+        if (!response) {
+          showNotification(response);
+        } else {
+          const blob = new Blob([response]);
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          const fileName = "transactions.csv";
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      })
+      .catch((error) => {
+        showError(error);
+      });
   }
 
   return (
@@ -43,7 +69,7 @@ const SettingsDialog = () => {
           </span>
         </TooltipStock>
         <TooltipStock content="Export transactions">
-          <span className="cursor-pointer">
+          <span className="cursor-pointer" onClick={exportTransactions}>
             <MdFileDownload />
           </span>
         </TooltipStock>

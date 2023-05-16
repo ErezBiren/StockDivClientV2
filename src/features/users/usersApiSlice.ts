@@ -42,10 +42,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
       }),
     }),
+    getExportTransactions: builder.query({
+      query: () => ({
+        url: "user/exportTransactions",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
+  useLazyGetExportTransactionsQuery,
   useGetUserNameQuery,
   useLazyGetUserSettingsQuery,
   useGetUserMessagesQuery,
