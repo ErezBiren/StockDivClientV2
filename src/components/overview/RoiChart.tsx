@@ -13,7 +13,8 @@ import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 const RoiChart = () => {
   const portfolio = useSelector(selectCurrentPortfolio);
 
-  const { data: roiMeterText } = useGetRoiMeterQuery(portfolio);
+  const { data: roiMeterText, isSuccess: isSuccessRoiMeterText } =
+    useGetRoiMeterQuery(portfolio);
 
   const { data: portfolioInvested, isSuccess: isSuccessPortfolioInvested } =
     useGetInvestedQuery(portfolio);
@@ -27,6 +28,13 @@ const RoiChart = () => {
   >([{ data: [0] }, { data: [0] }]);
 
   useEffect(() => {
+    if (
+      !isSuccessRoiMeterText ||
+      !isSuccessPortfolioInvested ||
+      !isSuccessDividendsSoFar
+    )
+      return;
+
     setRoiChartOptions({
       chart: {
         type: "bar",
