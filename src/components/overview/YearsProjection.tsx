@@ -12,33 +12,27 @@ import useChartsInit from "../../hooks/useChartsInit";
 import ChartCard from "../common/ChartCard";
 
 const YearsProjection = () => {
-  const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const portfolio = useSelector(selectCurrentPortfolio);
 
   const { projectionChartOptionsInit } = useChartsInit();
 
   const { data: portfolioLastTotalDividend } =
-    useGetLastTotalDividendQuery(selectedPortfolio);
-
+    useGetLastTotalDividendQuery(portfolio);
   const { data: portfolioMarketValue } =
-    useGetMarketValueQuery(selectedPortfolio);
-
+    useGetMarketValueQuery(portfolio);
   const [showReinvest, setShowReinvest] = useState(false);
-
   const { data: averageIncrease, isSuccess: isSuccessAverageIncrease } =
-    useGetAverageIncreaseQuery(selectedPortfolio);
-
+    useGetAverageIncreaseQuery(portfolio);
   const { data: incomeLastYear, isSuccess: isSuccessIncomeLastYear } =
-    useGetIncomeLastYearQuery(selectedPortfolio);
+    useGetIncomeLastYearQuery(portfolio);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [projectionChartSeries] = useState<[{ data: number[] }]>([
+    const [projectionChartSeries] = useState<[{ data: number[] }]>([
     { data: [] },
   ]);
 
   const [projectionActualChartSeries, setProjectionActualChartSeries] =
     useState<[{ data: number[] }]>([{ data: [] }]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [projectionWithReinvestChartSeries] = useState<[{ data: number[] }]>([
     { data: [] },
   ]);
@@ -71,6 +65,7 @@ const YearsProjection = () => {
           ? averageIncrease.averageIncrease5y
           : averageIncrease.averageIncrease10y);
     }
+
     setProjectionActualChartSeries(tempProjectionChartSeries);
     let divYield = getPortfolioDivYield() / 100;
     let marketValue = portfolioMarketValue;
