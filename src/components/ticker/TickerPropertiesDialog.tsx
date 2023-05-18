@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ITickerUserData } from "../../utils/interfaces/ITickerUserData";
 import TooltipStock from "../common/TooltipStock";
 import { useSubmitTickerUserDataMutation } from "../../features/ticker/tickerApiSlice";
-import { showError, showNotification, showSuccess } from "../../utils/utils";
+import { showError, showSuccess } from "../../utils/utils";
 
 const TickerPropertiesDialog = ({
   tickerUserData,

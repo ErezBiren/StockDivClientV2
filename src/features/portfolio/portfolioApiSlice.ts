@@ -10,13 +10,29 @@ const getDividendQuery = (selectedPortfolio: string, endpoint: string) => ({
   method: "GET",
 });
 
-export const portfolioApiSlice = apiSlice.injectEndpoints({
+const apiWithTags = apiSlice.enhanceEndpoints({addTagTypes: ['all']})
+
+export const portfolioApiSlice = apiWithTags.injectEndpoints({
   endpoints: (builder) => ({
+    renamePortfolio: builder.mutation({
+      query: ({
+        portfolio,
+        newName,
+      }: {
+        portfolio: string;
+        newName: string;
+      }) => ({
+        url: `portfolio/${portfolio}/rename/${newName}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["all"],
+    }),
     getPortfolios: builder.query({
       query: () => ({
         url: "portfolio/all",
         method: "GET",
       }),
+      providesTags: ["all"],
     }),
     getAssets: builder.query({
       query: (selectedPortfolio) =>
@@ -130,4 +146,5 @@ export const {
   useGetNewsQuery,
   useGetLastTotalDividendQuery,
   useGetAssetsQuery,
+  useRenamePortfolioMutation,
 } = portfolioApiSlice;

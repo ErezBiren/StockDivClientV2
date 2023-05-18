@@ -12,12 +12,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import TrendingField from "../common/TrendingField";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import TooltipStock from "../common/TooltipStock";
 import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import Drawer from "react-modern-drawer";
+import ChangePortfolioNameDialog from "../overview/ChangePortfolioNameDialog";
 
 const HeaderPanelOverview = () => {
   const MENU_ID = "overview-header";
@@ -27,15 +29,16 @@ const HeaderPanelOverview = () => {
     id: MENU_ID,
   });
 
-  const selectedPortfolio = useSelector(selectCurrentPortfolio);
+  const [showRenamePortfolioDialog, setShowRenamePortfolioDialog] =
+    useState(false);
+  const portfolio = useSelector(selectCurrentPortfolio);
 
-  const { data: dailyChange } = useGetDailyChangeQuery(selectedPortfolio);
+  const { data: dailyChange } = useGetDailyChangeQuery(portfolio);
   const { data: portfolioLastTotalDividend } =
-    useGetLastTotalDividendQuery(selectedPortfolio);
+    useGetLastTotalDividendQuery(portfolio);
 
-  const { data: portfolioMarketValue } =
-    useGetMarketValueQuery(selectedPortfolio);
-  const { data: portfolioInvested } = useGetInvestedQuery(selectedPortfolio);
+  const { data: portfolioMarketValue } = useGetMarketValueQuery(portfolio);
+  const { data: portfolioInvested } = useGetInvestedQuery(portfolio);
 
   const plPercentage = () => {
     if (portfolioInvested !== 0) {
@@ -81,14 +84,10 @@ const HeaderPanelOverview = () => {
     navigate("/screener");
   };
 
-  const renamePortfolio = () => {
-    console.log(111);
-  };
-
   return (
     <div className="p-2 shadow-lg bg-cardBackground">
       <div className="flex flex-row justify-between border-b-[1px] border-gray-300">
-        <span className="text-2xl justify-self-start">{selectedPortfolio}</span>
+        <span className="text-2xl justify-self-start">{portfolio}</span>
         <span className="flex items-center gap-4 row">
           <TooltipStock content="Show Dividend Alerts">
             <span className="cursor-pointer" onClick={goToShowDividendAlerts}>
@@ -158,16 +157,32 @@ const HeaderPanelOverview = () => {
           </span>
           <span className="w-[1px] bg-gray-300 h-6" />
           <span>
-            {`Yield/YOC: ${formatToPercentage(getPortfolioDivYield())} / ${formatToPercentage(getPortfolioYOC())}`}
+            {`Yield/YOC: ${formatToPercentage(
+              getPortfolioDivYield()
+            )} / ${formatToPercentage(getPortfolioYOC())}`}
           </span>
         </div>
       </div>
       <Menu id={MENU_ID}>
-        <Item onClick={renamePortfolio}>
+        <Item
+          onClick={() => {
+            setShowRenamePortfolioDialog(true);
+          }}
+        >
           <MdOutlineDriveFileRenameOutline />
-          <span className="ml-2">Rename Portfolio</span>
+          <span className="ml-2" >
+            Rename Portfolio
+          </span>
         </Item>
       </Menu>
+      <Drawer
+        open={showRenamePortfolioDialog}
+        onClose={() => setShowRenamePortfolioDialog(false)}
+        direction="bottom"
+        style={{ width: 400, margin: "auto" }}
+      >
+        <ChangePortfolioNameDialog />
+      </Drawer>
     </div>
   );
 };
