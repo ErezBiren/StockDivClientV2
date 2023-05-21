@@ -11,6 +11,8 @@ import { selectCurrentPortfolio } from "../../features/stockdivSlice";
 import useChartsInit from "../../hooks/useChartsInit";
 import ChartCard from "../common/ChartCard";
 
+const NUM_OF_MONTHS = 11;
+
 const YearsProjection = () => {
   const portfolio = useSelector(selectCurrentPortfolio);
 
@@ -51,7 +53,7 @@ const YearsProjection = () => {
 
     tempProjectionChartSeries[0].data = [];
 
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < NUM_OF_MONTHS; i++) {
       tempProjectionChartSeries[0].data.push(
         tempIncomeLastYear *
           (1 +
@@ -76,7 +78,7 @@ const YearsProjection = () => {
 
     tempProjectionWithReinvestChartSeries[0].data = [];
 
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < NUM_OF_MONTHS; i++) {
       tempProjectionWithReinvestChartSeries[0].data.push(
         marketValue * divYield
       );
